@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M.M Public School Mundeshwari – Student List</title>
+<meta name="description"
+content="M.M Public School Mundeshwari Official Website. Online Admission, Notes, Test Series, Demo Class, Student Portal and School Updates.">
+
+<meta name="keywords"
+content="MM Public School Mundeshwari, school website, online admission, student portal, demo class, notes download, Bihar school">
+
+<meta name="author" content="M.M Public School Mundeshwari">
+
+<meta name="robots" content="index, follow">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Search Verification (बाद में code मिलेगा तो यहाँ डालना) -->
+<meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:#edf3ff;
+height:100vh;
+overflow:hidden;
+}
+
+.app{
+display:flex;
+flex-direction:column;
+height:100vh;
+}
+
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 16px;
+background:linear-gradient(135deg,#0b3d91,#2563eb);
+color:#fff;
+}
+
+.header i{
+font-size:20px;
+cursor:pointer;
+}
+
+.school-title{
+font-weight:900;
+font-size:15px;
+}
+
+/* CATEGORY */
+.category-bar{
+display:flex;
+gap:10px;
+padding:12px;
+}
+
+.cat-btn{
+flex:1;
+padding:12px;
+border:none;
+border-radius:12px;
+background:#fff;
+font-weight:900;
+color:#0b3d91;
+box-shadow:0 4px 10px rgba(0,0,0,.1);
+}
+
+.cat-btn.active{
+background:#0b3d91;
+color:#fff;
+}
+
+/* CONTENT */
+.content{
+flex:1;
+overflow:auto;
+padding:14px;
+}
+
+/* 🔥 ULTRA PROFESSIONAL LOADING */
+.loader{
+display:flex;
+justify-content:center;
+align-items:center;
+height:120px;
+gap:6px;
+}
+
+.loader span{
+width:6px;
+height:28px;
+background:#0b3d91;
+border-radius:6px;
+animation:pulse 1s infinite ease-in-out;
+}
+
+.loader span:nth-child(2){animation-delay:.1s;}
+.loader span:nth-child(3){animation-delay:.2s;}
+.loader span:nth-child(4){animation-delay:.3s;}
+.loader span:nth-child(5){animation-delay:.4s;}
+
+@keyframes pulse{
+0%,100%{transform:scaleY(.4);opacity:.5;}
+50%{transform:scaleY(1);opacity:1;}
+}
+
+/* CARD */
+.card{
+position:relative;
+background:#fff;
+padding:18px;
+border-radius:16px;
+margin-bottom:14px;
+box-shadow:0 8px 18px rgba(0,0,0,.08);
+animation:cardShow .5s ease forwards;
+}
+
+@keyframes cardShow{
+from{transform:translateY(20px);opacity:0;}
+to{transform:translateY(0);opacity:1;}
+}
+
+.name{
+font-size:16px;
+font-weight:900;
+color:#0b3d91;
+}
+
+.sid{
+font-size:13px;
+margin-top:6px;
+font-weight:800;
+color:#444;
+}
+
+.school-name{
+font-size:12px;
+margin-top:6px;
+font-weight:900;
+color:#2563eb;
+}
+
+.class-name{
+font-size:12px;
+margin-top:6px;
+font-weight:900;
+color:#16a34a;
+}
+
+.signup-time{
+font-size:11px;
+margin-top:8px;
+color:#ff6600;
+font-weight:900;
+}
+
+/* THREE MENU ICON */
+.card-menu{
+position:absolute;
+top:12px;
+right:12px;
+cursor:pointer;
+font-size:22px;
+color:#0b3d91;
+}
+
+/* BIGGER MENU */
+.menu-box{
+position:absolute;
+top:36px;
+right:10px;
+background:#fff;
+border-radius:14px;
+box-shadow:0 12px 30px rgba(0,0,0,.25);
+display:none;
+z-index:10;
+overflow:hidden;
+min-width:150px;
+}
+
+.menu-item{
+padding:14px 16px;
+font-size:14px;
+font-weight:900;
+cursor:pointer;
+}
+
+.menu-item:hover{
+background:#edf3ff;
+}
+
+/* POPUP */
+.popup{
+position:fixed;
+inset:0;
+background:#0007;
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+}
+
+.popup-box{
+background:#fff;
+padding:22px;
+border-radius:18px;
+width:260px;
+text-align:center;
+box-shadow:0 20px 40px rgba(0,0,0,.3);
+}
+
+.popup-title{
+font-weight:900;
+font-size:16px;
+color:#0b3d91;
+margin-bottom:8px;
+}
+
+.popup-text{
+font-size:13px;
+color:#444;
+}
+
+/* COMING SOON */
+.coming{
+text-align:center;
+padding-top:40px;
+animation:fadeUp .6s ease;
+}
+
+@keyframes fadeUp{
+from{transform:translateY(30px);opacity:0;}
+to{transform:translateY(0);opacity:1;}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="header">
+<i class="fa-solid fa-arrow-left"
+onclick="window.location.href='index.html'"></i>
+
+<div class="school-title">
+MM PUBLIC SCHOOL MUNDESHWARI
+</div>
+
+<div></div>
+</div>
+
+<div class="category-bar">
+<button id="listBtn" class="cat-btn active">
+Student List
+</button>
+
+<button id="infoBtn" class="cat-btn">
+Student Information
+</button>
+</div>
+
+<div id="content" class="content"></div>
+
+</div>
+
+<div id="popup" class="popup">
+<div class="popup-box">
+<div id="popupTitle" class="popup-title"></div>
+<div id="popupText" class="popup-text"></div>
+</div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+authDomain:"apni-duniya-b53d7.firebaseapp.com",
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const content=document.getElementById("content");
+const listBtn=document.getElementById("listBtn");
+const infoBtn=document.getElementById("infoBtn");
+
+const popup=document.getElementById("popup");
+const popupTitle=document.getElementById("popupTitle");
+const popupText=document.getElementById("popupText");
+
+function showPopup(t,m){
+popupTitle.innerText=t;
+popupText.innerText=m;
+popup.style.display="flex";
+setTimeout(()=>popup.style.display="none",2500);
+}
+
+popup.onclick=()=>popup.style.display="none";
+
+/* CLOSE MENU ON OUTSIDE CLICK */
+document.addEventListener("click",()=>{
+document.querySelectorAll(".menu-box")
+.forEach(m=>m.style.display="none");
+});
+
+/* LOAD STUDENTS */
+function loadStudents(){
+
+content.innerHTML=`
+<div class="loader">
+<span></span><span></span><span></span><span></span><span></span>
+</div>
+`;
+
+onValue(ref(db,"students"),snap=>{
+
+content.innerHTML="";
+
+snap.forEach(c=>{
+const d=c.val();
+const schoolId=c.key;
+
+content.innerHTML+=`
+
+<div class="card">
+
+<i class="fa-solid fa-ellipsis-vertical card-menu"
+onclick="toggleMenu(event,'${schoolId}')"></i>
+
+<div id="menu-${schoolId}" class="menu-box">
+
+<div class="menu-item"
+onclick="viewStudent()">View</div>
+
+<div class="menu-item"
+onclick="editStudent()">Edit</div>
+
+<div class="menu-item"
+onclick="deleteStudent()">Delete</div>
+
+</div>
+
+<div class="name">${d.name || "Student"}</div>
+
+<div class="sid">
+School ID : ${schoolId}
+</div>
+
+<div class="school-name">
+School : ${d.school || "MM PUBLIC SCHOOL"}
+</div>
+
+<div class="class-name">
+Class : ${d.class || "Not Assigned"}
+</div>
+
+<div class="signup-time">
+Signup : ${d.time?new Date(d.time).toLocaleString():"-"}
+</div>
+
+</div>
+
+`;
+
+});
+
+},{onlyOnce:true});
+
+}
+
+window.toggleMenu=(e,id)=>{
+e.stopPropagation();
+document.querySelectorAll(".menu-box")
+.forEach(m=>m.style.display="none");
+
+document.getElementById("menu-"+id).style.display="block";
+};
+
+window.viewStudent=()=>{
+infoBtn.click();
+};
+
+window.editStudent=()=>{
+showPopup(
+"Admin Permission Required",
+"Only admin can edit student information."
+);
+};
+
+window.deleteStudent=()=>{
+showPopup(
+"Admin Permission Required",
+"Only admin has permission to delete this student."
+);
+};
+
+function comingSoon(){
+content.innerHTML=`
+<div class="coming">
+<i class="fa-solid fa-user-lock"
+style="font-size:70px;color:#0b3d91;"></i>
+<h3 style="color:#0b3d91;">Student Information Panel</h3>
+<p style="font-size:13px;color:#555;">
+Advanced student profile system coming soon.
+</p>
+</div>
+`;
+}
+
+listBtn.onclick=()=>{
+listBtn.classList.add("active");
+infoBtn.classList.remove("active");
+loadStudents();
+};
+
+infoBtn.onclick=()=>{
+infoBtn.classList.add("active");
+listBtn.classList.remove("active");
+comingSoon();
+};
+
+loadStudents();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Notice Admin Panel</title>
+  
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #edf3ff;
+    }
+    
+    .header {
+      background: #0b3d91;
+      color: #fff;
+      padding: 16px;
+      text-align: center;
+      font-weight: 900;
+    }
+    
+    .card {
+      background: #fff;
+      margin: 14px;
+      padding: 18px;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, .1);
+    }
+    
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+    
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      background: #0b3d91;
+      color: #fff;
+      font-weight: 900;
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div class="header">
+    Notice Upload Admin Panel
+  </div>
+  
+  <div class="card">
+    
+    <input id="titleInput" placeholder="Notice Title">
+    
+    <textarea id="descInput" placeholder="Description"></textarea>
+    
+    <input id="linkInput" placeholder="Link URL">
+    
+    <select id="typeInput">
+      <option value="new">New Notice</option>
+      <option value="old">Old Notice</option>
+    </select>
+    
+    <button id="uploadBtn">Upload Notice</button>
+    
+  </div>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getDatabase, ref, push }
+    from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+      authDomain: "apni-duniya-b53d7.firebaseapp.com",
+      databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+      projectId: "apni-duniya-b53d7"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    
+    uploadBtn.onclick = () => {
+      
+      if (!titleInput.value || !descInput.value) {
+        alert("Fill all details");
+        return;
+      }
+      
+      const type = typeInput.value;
+      
+      push(ref(db, "notice/" + type), {
+        
+        title: titleInput.value,
+        desc: descInput.value,
+        link: linkInput.value,
+        time: Date.now()
+        
+      });
+      
+      /* AUTO NOTIFICATION CREATE */
+      push(ref(db, "notifications"), {
+        text: titleInput.value + " uploaded",
+        type: "normal",
+        time: Date.now()
+      });
+      
+      alert("Notice Uploaded");
+      
+    };
+  </script>
+  
+</body>
+
+</html>

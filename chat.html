@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M.M Public School Mundeshwari – Student Chat</title>
+<meta name="description"
+content="M.M Public School Mundeshwari Official Website. Online Admission, Notes, Test Series, Demo Class, Student Portal and School Updates.">
+
+<meta name="keywords"
+content="MM Public School Mundeshwari, school website, online admission, student portal, demo class, notes download, Bihar school">
+
+<meta name="author" content="M.M Public School Mundeshwari">
+
+<meta name="robots" content="index, follow">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Search Verification (बाद में code मिलेगा तो यहाँ डालना) -->
+<meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:#edf3ff;
+display:flex;
+flex-direction:column;
+height:100vh;
+user-select:none;
+}
+
+/* ===== HEADER (GROUP STYLE) ===== */
+.header{
+background:linear-gradient(135deg,#0b3d91,#2563eb);
+color:#fff;
+padding:14px;
+display:flex;
+align-items:center;
+gap:12px;
+font-weight:900;
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+.avatar{
+width:46px;height:46px;border-radius:50%;
+background:#fff3;
+display:flex;align-items:center;justify-content:center;
+font-size:24px;
+}
+
+.status{
+font-size:12px;font-weight:700;
+display:flex;align-items:center;gap:6px;
+}
+
+.dot{width:8px;height:8px;border-radius:50%;background:#ccc}
+
+/* ===== CHAT AREA ===== */
+.chat-box{
+flex:1;
+overflow:auto;
+padding:14px;
+}
+
+.msg{
+max-width:72%;
+padding:10px 12px;
+border-radius:16px;
+margin-bottom:12px;
+font-size:14px;
+position:relative;
+animation:fadeUp .25s ease;
+}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+.me{
+background:#2563eb;
+color:#fff;
+margin-left:auto;
+}
+
+.other{
+background:#fff;
+color:#000;
+}
+
+.time{
+font-size:10px;
+margin-top:4px;
+opacity:.85;
+text-align:right;
+}
+
+.react{
+position:absolute;
+bottom:-10px;
+right:8px;
+font-size:14px;
+}
+
+/* ===== TYPING ===== */
+.typing{
+font-size:12px;
+padding:6px 14px;
+color:#555;
+display:none;
+}
+
+/* ===== INPUT ===== */
+.input-bar{
+display:flex;
+padding:10px;
+background:#fff;
+box-shadow:0 -8px 20px rgba(0,0,0,.1);
+}
+
+.input-bar input{
+flex:1;
+padding:12px;
+border-radius:22px;
+border:1px solid #ddd;
+outline:none;
+}
+
+.send-btn{
+background:#2563eb;
+color:#fff;
+border:none;
+border-radius:50%;
+width:44px;
+height:44px;
+margin-left:8px;
+font-size:18px;
+}
+
+/* ===== ACTION MENU ===== */
+.action-menu{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#fff;
+border-radius:18px 18px 0 0;
+box-shadow:0 -10px 30px rgba(0,0,0,.3);
+display:none;
+padding:20px;
+z-index:9999;
+animation:up .25s ease;
+}
+
+@keyframes up{
+from{transform:translateY(100%)}
+to{transform:translateY(0)}
+}
+
+.action-btn{
+padding:16px;
+border-radius:14px;
+font-weight:900;
+margin-bottom:12px;
+display:flex;
+align-items:center;
+gap:12px;
+cursor:pointer;
+font-size:15px;
+}
+
+.edit{background:#e6ecff;color:#0b3d91;}
+.delete{background:#ffe6e6;color:#c00000;}
+
+/* ===== PROFESSIONAL DIALOG ===== */
+.dialog{
+position:fixed;
+inset:0;
+background:#0007;
+display:none;
+align-items:center;
+justify-content:center;
+z-index:10000;
+}
+
+.dialog-box{
+background:#fff;
+padding:24px;
+border-radius:20px;
+width:80%;
+max-width:320px;
+text-align:center;
+box-shadow:0 20px 40px rgba(0,0,0,.3);
+}
+
+.dialog-box input{
+width:100%;
+padding:12px;
+border-radius:12px;
+border:1px solid #ddd;
+margin-top:10px;
+}
+
+.ok-btn{
+margin-top:14px;
+background:#2563eb;
+color:#fff;
+border:none;
+padding:12px 18px;
+border-radius:12px;
+font-weight:900;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<div id="avatar" class="avatar">👦</div>
+<div>
+<div id="chatName">Student</div>
+<div class="status">
+<div id="dot" class="dot"></div>
+<span id="onlineStatus">offline</span>
+</div>
+</div>
+</div>
+
+<div id="chatBox" class="chat-box"></div>
+<div id="typing" class="typing">Typing...</div>
+
+<div class="input-bar">
+<input id="msgInput" placeholder="Type message...">
+<button id="sendBtn" class="send-btn">
+<i class="fa-solid fa-paper-plane"></i>
+</button>
+</div>
+
+<!-- ACTION MENU -->
+<div id="actionMenu" class="action-menu">
+<div id="editBtn" class="action-btn edit">
+<i class="fa-solid fa-pen"></i> Edit Message
+</div>
+<div id="deleteBtn" class="action-btn delete">
+<i class="fa-solid fa-trash"></i> Delete Message
+</div>
+</div>
+
+<!-- PROFESSIONAL EDIT DIALOG -->
+<div id="editDialog" class="dialog">
+<div class="dialog-box">
+<div style="font-weight:900;color:#0b3d91">
+Edit your message
+</div>
+<input id="editInput">
+<button id="saveEdit" class="ok-btn">Update</button>
+</div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+import {
+getDatabase,ref,push,onValue,update,remove,get,set,onDisconnect
+}
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+authDomain:"apni-duniya-b53d7.firebaseapp.com",
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+document.addEventListener("contextmenu",e=>e.preventDefault());
+
+const params=new URLSearchParams(location.search);
+const otherUID=params.get("uid");
+const otherName=params.get("name");
+const otherAvatar=params.get("avatar")||"👦";
+
+chatName.innerText=otherName;
+avatar.innerText=otherAvatar;
+
+let myUID="";
+const s=await get(ref(db,"session/currentUser"));
+if(s.exists()) myUID=s.val();
+
+const roomId=[myUID,otherUID].sort().join("_");
+const chatRef=ref(db,"chats/"+roomId);
+
+/* ONLINE */
+const myOnlineRef=ref(db,"online/"+myUID);
+set(myOnlineRef,true);
+onDisconnect(myOnlineRef).remove();
+
+onValue(ref(db,"online/"+otherUID),snap=>{
+if(snap.exists()){
+onlineStatus.innerText="online";
+dot.style.background="#00ff6a";
+}else{
+onlineStatus.innerText="offline";
+dot.style.background="#ccc";
+}
+});
+
+/* TIME */
+function formatTime(ts){
+const d=new Date(ts);
+let h=d.getHours();
+let m=d.getMinutes();
+let ap=h>=12?"PM":"AM";
+h=h%12||12;
+m=m<10?"0"+m:m;
+return h+":"+m+" "+ap;
+}
+
+let selectedKey=null;
+
+/* LOAD CHAT */
+onValue(chatRef,snap=>{
+
+chatBox.innerHTML="";
+
+snap.forEach(c=>{
+
+const msg=c.val();
+const key=c.key;
+
+const div=document.createElement("div");
+div.className="msg "+(msg.sender===myUID?"me":"other");
+
+/* ❤️ DOUBLE TAP REACTION */
+div.ondblclick=()=>{
+update(ref(db,"chats/"+roomId+"/"+key),{
+react:"❤️"
+});
+};
+
+/* LONG PRESS */
+let pressTimer;
+
+div.addEventListener("touchstart",()=>{
+if(msg.sender!==myUID) return;
+pressTimer=setTimeout(()=>{
+selectedKey=key;
+editInput.value=msg.text;
+actionMenu.style.display="block";
+},500);
+});
+
+div.addEventListener("touchend",()=>{
+clearTimeout(pressTimer);
+});
+
+/* SWIPE REPLY VISUAL */
+div.addEventListener("touchmove",(e)=>{
+if(e.touches[0].clientX>120){
+msgInput.value="↩️ "+msg.text+" ";
+}
+});
+
+div.innerHTML=`
+<div>${msg.text}</div>
+<div class="time">${formatTime(msg.time)}</div>
+${msg.react?`<div class="react">${msg.react}</div>`:""}
+`;
+
+chatBox.appendChild(div);
+
+});
+
+});
+
+/* EDIT OPEN */
+editBtn.onclick=()=>{
+actionMenu.style.display="none";
+editDialog.style.display="flex";
+};
+
+/* SAVE EDIT */
+saveEdit.onclick=()=>{
+update(ref(db,"chats/"+roomId+"/"+selectedKey),{
+text:editInput.value
+});
+editDialog.style.display="none";
+};
+
+/* DELETE */
+deleteBtn.onclick=()=>{
+remove(ref(db,"chats/"+roomId+"/"+selectedKey));
+actionMenu.style.display="none";
+};
+
+/* SEND + TYPING */
+msgInput.oninput=()=>{
+typing.style.display="block";
+setTimeout(()=>typing.style.display="none",800);
+};
+
+sendBtn.onclick=()=>{
+const text=msgInput.value.trim();
+if(!text) return;
+
+push(chatRef,{
+text:text,
+sender:myUID,
+time:Date.now(),
+seen:false
+});
+
+msgInput.value="";
+};
+
+</script>
+
+</body>
+</html>

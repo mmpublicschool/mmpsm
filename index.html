@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M.M Public School Mundeshwari – Official School Website</title>
+<meta name="description"
+content="M.M Public School Mundeshwari Official Website. Online Admission, Notes, Test Series, Demo Class, Student Portal and School Updates.">
+
+<meta name="keywords"
+content="MM Public School Mundeshwari, school website, online admission, student portal, demo class, notes download, Bihar school">
+
+<meta name="author" content="M.M Public School Mundeshwari">
+
+<meta name="robots" content="index, follow">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Search Verification (बाद में code मिलेगा तो यहाँ डालना) -->
+<meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<!-- ===== PROFESSIONAL POPUP ===== -->
+<div id="proPopup" class="pro-popup">
+  <div class="pro-box">
+    <h3 id="proTitle">Feature Coming Soon</h3>
+    <p id="proText">
+      This section is currently under development for the M. M Public School
+      learning platform. We are working to provide high-quality courses, notes,
+      tests, and live learning features for students.
+      <br><br>
+      The feature will be available soon with a better and more advanced
+      experience. Please stay connected for upcoming updates 🚀
+    </p>
+    <button onclick="closeProPopup()">OK</button>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+
+<div class="menu-icon">
+<i class="fa-solid fa-bars"></i>
+</div>
+
+<div class="school-box">
+<div class="school-top">M. M PUBLIC SCHOOL</div>
+<div class="school-bottom">MUNDESHWARI</div>
+</div>
+
+<div class="right-icons">
+
+<div class="notification-icon" id="openNotif">
+<i class="fa-regular fa-bell"></i>
+<span class="notif-count" id="notifCount">0</span>
+</div>
+
+<a href="signup.html">
+<i class="fa-solid fa-user-plus"></i>
+</a>
+
+</div>
+</header>
+
+<!-- ===== SIDE MENU ===== -->
+<div class="side-menu" id="sideMenu">
+
+<div class="menu-head">M. M PUBLIC SCHOOL</div>
+
+<a href="index.html" class="menu-item">
+<i class="fa-solid fa-house"></i> Home
+</a>
+
+<a href="notice.html" class="menu-item">
+<i class="fa-solid fa-bullhorn"></i> Notice Board
+</a>
+
+<a href="download.html" class="menu-item">
+<i class="fa-solid fa-download"></i> Download
+</a>
+
+<a href="notes.html" class="menu-item">
+<i class="fa-solid fa-book"></i> Notes
+</a>
+
+<a href="profile.html" class="menu-item">
+<i class="fa-solid fa-user"></i> Profile
+</a>
+
+<a href="admin.html" class="menu-item">
+<i class="fa-solid fa-gear"></i> Admin Panel
+</a>
+
+</div>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<!-- ===== NOTIFICATION POPUP ===== -->
+<div class="notif-popup" id="notifPopup">
+<div class="notif-head">
+Notifications
+<button id="clearNotif">Clear</button>
+</div>
+<div id="notifList"></div>
+</div>
+
+<!-- ===== CONFIRM DIALOG ===== -->
+<div class="confirm-dialog" id="confirmDialog">
+<div class="dialog-box">
+<div class="dialog-title">Clear Notifications</div>
+<div class="dialog-text">
+Are you sure you want to clear all notifications?
+</div>
+<div class="dialog-actions">
+<button class="cancel-btn" id="cancelClear">Cancel</button>
+<button class="ok-btn" id="confirmClear">Clear</button>
+</div>
+</div>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+<div class="hero-box">
+
+<div class="hero-title">Welcome to M. M PUBLIC SCHOOL</div>
+
+<div class="hero-subtitle">
+MUNDESHWARI - Smart Learning • Better Future
+</div>
+
+<div class="hero-buttons">
+<a href="home.html" class="hero-btn explore">Explore Now</a>
+<a href="admission.html" class="hero-btn admission">
+Admission New 2026-27
+</a>
+</div>
+
+</div>
+</section>
+
+<!-- ===== NOTICE ===== -->
+<section class="notice-section">
+
+<div class="notice-box">
+<div class="notice-title new">New Notice</div>
+<div class="notice-scroll">
+<ul id="newNotice"></ul>
+</div>
+</div>
+
+<div class="notice-box">
+<div class="notice-title old">Old Notice</div>
+<div class="notice-scroll">
+<ul id="oldNotice"></ul>
+</div>
+</div>
+
+</section>
+
+<!-- ===== APPS GRID ===== -->
+<section class="apps-section">
+  
+  <a href="#" onclick="openPopup('Paid Courses');return false;" class="app-card">
+    <i class="fa-solid fa-crown"></i><span>Paid Courses</span>
+  </a>
+  
+  <a href="#" onclick="openPopup('Demo Class');return false;" class="app-card">
+    <i class="fa-solid fa-video"></i><span>Demo Class</span>
+  </a>
+  
+  <a href="#" onclick="openPopup('PDF Notes');return false;" class="app-card">
+    <i class="fa-solid fa-file-pdf"></i><span>PDF Notes</span>
+  </a>
+  
+  <a href="#" onclick="openPopup('Test Series');return false;" class="app-card">
+    <i class="fa-solid fa-clipboard-list"></i><span>Test Series</span>
+  </a>
+  
+  <a href="#" onclick="openPopup('Free Test');return false;" class="app-card">
+    <i class="fa-solid fa-gift"></i><span>Free Test</span>
+  </a>
+  
+  <a href="#" onclick="openPopup('Paid Test');return false;" class="app-card">
+    <i class="fa-solid fa-star"></i><span>Paid Test</span>
+  </a>
+  
+  <a href="#" onclick="openPopup('Online Test');return false;" class="app-card">
+    <i class="fa-solid fa-globe"></i><span>Online Test</span>
+  </a>
+  
+  <a href="#" onclick="openPopup('Join Live Class');return false;" class="app-card">
+    <i class="fa-solid fa-chalkboard-user"></i>
+    <span>Join Live Class</span>
+  </a>
+  
+  <a href="#" onclick="openPopup('Free Notes');return false;" class="app-card">
+    <i class="fa-solid fa-book-open"></i><span>Free Notes</span>
+  </a>
+  
+  <a href="#" onclick="openPopup('Timetable');return false;" class="app-card">
+    <i class="fa-solid fa-clock"></i><span>Timetable</span>
+  </a>
+  
+  <a href="#" onclick="openPopup('Ask Doubt');return false;" class="app-card">
+    <i class="fa-solid fa-circle-question"></i><span>Ask Doubt</span>
+  </a>
+  
+</section>
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="bottom-nav">
+
+<a href="index.html" class="nav-item active">
+<i class="fa-solid fa-house"></i><span>Home</span>
+</a>
+
+<a href="download.html" class="nav-item">
+<i class="fa-solid fa-download"></i><span>Download</span>
+</a>
+
+<a href="notes.html" class="nav-item">
+<i class="fa-solid fa-book"></i><span>Notes</span>
+</a>
+
+<a href="profile.html" class="nav-item">
+<i class="fa-solid fa-user"></i><span>Profile</span>
+</a>
+
+</nav>
+
+<script type="module" src="script.js"></script>
+
+<script>
+  function openPopup(name) {
+    
+    const popup = document.getElementById("proPopup");
+    const title = document.getElementById("proTitle");
+    const text = document.getElementById("proText");
+    
+    title.innerText = name;
+    
+    text.innerText =
+      "Ye feature M. M Public School App me jaldi add hone wala hai. " +
+      "Students ke liye special content aur updates yahan milenge. " +
+      "Coming Soon 🚀";
+    
+    popup.style.display = "flex";
+  }
+  
+  function closeProPopup() {
+    document.getElementById("proPopup").style.display = "none";
+  }
+</script>
+
+</body>
+</html>

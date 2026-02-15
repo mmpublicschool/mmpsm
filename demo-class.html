@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M.M Public School Mundeshwari – Demo Classes</title>
+<meta name="description"
+content="M.M Public School Mundeshwari Official Website. Online Admission, Notes, Test Series, Demo Class, Student Portal and School Updates.">
+
+<meta name="keywords"
+content="MM Public School Mundeshwari, school website, online admission, student portal, demo class, notes download, Bihar school">
+
+<meta name="author" content="M.M Public School Mundeshwari">
+
+<meta name="robots" content="index, follow">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Search Verification (बाद में code मिलेगा तो यहाँ डालना) -->
+<meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:#edf3ff;
+}
+
+.header{
+background:linear-gradient(135deg,#0b3d91,#2563eb);
+color:#fff;
+padding:16px;
+font-weight:900;
+text-align:center;
+box-shadow:0 10px 24px rgba(0,0,0,.2);
+}
+
+/* PLAYER */
+.player{
+background:#000;
+position:relative;
+}
+
+video{
+width:100%;
+}
+
+/* SEEK BAR */
+.seek{
+width:100%;
+appearance:none;
+height:5px;
+background:#dbe4ff;
+outline:none;
+}
+
+.seek::-webkit-slider-thumb{
+appearance:none;
+width:14px;
+height:14px;
+background:#0b3d91;
+border-radius:50%;
+}
+
+/* TIME */
+.time{
+display:flex;
+justify-content:space-between;
+font-size:12px;
+font-weight:900;
+padding:4px 10px;
+color:#0b3d91;
+background:#fff;
+}
+
+/* CONTROLS */
+.controls{
+display:flex;
+justify-content:space-around;
+background:#fff;
+padding:12px;
+box-shadow:0 -6px 18px rgba(0,0,0,.15);
+}
+
+.ctrl{
+text-align:center;
+font-size:13px;
+font-weight:900;
+color:#0b3d91;
+cursor:pointer;
+}
+
+.ctrl i{
+font-size:18px;
+display:block;
+margin-bottom:4px;
+}
+
+/* POPUP */
+.popup{
+position:fixed;
+inset:0;
+background:#0007;
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+}
+
+.popup-card{
+background:#fff;
+padding:24px;
+border-radius:18px;
+font-weight:900;
+color:#0b3d91;
+box-shadow:0 20px 40px rgba(0,0,0,.3);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">Demo Class</div>
+
+<div class="player">
+
+<video id="video">
+<!-- 🎓 STUDY DEMO VIDEO -->
+<source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+type="video/mp4">
+</video>
+
+<input type="range" id="seek" class="seek" value="0">
+
+<div class="time">
+<span id="current">0:00</span>
+<span id="duration">0:00</span>
+</div>
+
+</div>
+
+<div class="controls">
+
+<div class="ctrl" id="likeBtn">
+<i class="fa-solid fa-thumbs-up"></i>
+Like
+</div>
+
+<div class="ctrl" id="shareBtn">
+<i class="fa-solid fa-share"></i>
+Share
+</div>
+
+<div class="ctrl" id="fullBtn">
+<i class="fa-solid fa-expand"></i>
+Full
+</div>
+
+</div>
+
+<div id="popup" class="popup">
+<div class="popup-card" id="popupMsg"></div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+import { getDatabase, ref, get, set }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+authDomain:"apni-duniya-b53d7.firebaseapp.com",
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const video=document.getElementById("video");
+const seek=document.getElementById("seek");
+
+const current=document.getElementById("current");
+const duration=document.getElementById("duration");
+
+const popup=document.getElementById("popup");
+const popupMsg=document.getElementById("popupMsg");
+
+let userId=null;
+
+/* CHECK SIGNUP */
+const snap=await get(ref(db,"session/currentUser"));
+if(snap.exists()){
+userId=snap.val();
+}
+
+function show(msg){
+popupMsg.innerText=msg;
+popup.style.display="flex";
+setTimeout(()=>popup.style.display="none",2000);
+}
+
+/* FORMAT TIME */
+function fmt(t){
+const m=Math.floor(t/60);
+const s=Math.floor(t%60);
+return m+":"+(s<10?"0"+s:s);
+}
+
+/* LOAD DURATION */
+video.onloadedmetadata=()=>{
+duration.innerText=fmt(video.duration);
+seek.max=Math.floor(video.duration);
+};
+
+/* UPDATE TIME */
+video.ontimeupdate=()=>{
+current.innerText=fmt(video.currentTime);
+seek.value=Math.floor(video.currentTime);
+};
+
+/* SEEK MOVE */
+seek.oninput=()=>{
+video.currentTime=seek.value;
+};
+
+/* PLAY */
+video.onclick=()=>{
+if(!userId){
+show("Signup required to watch demo class.");
+video.pause();
+return;
+}
+video.paused ? video.play() : video.pause();
+};
+
+/* DOUBLE TAP SEEK */
+let lastTap=0;
+
+video.addEventListener("click",(e)=>{
+
+const now=Date.now();
+
+if(now-lastTap<300){
+
+const rect=video.getBoundingClientRect();
+const x=e.clientX-rect.left;
+
+if(x<rect.width/2){
+video.currentTime-=10;
+}else{
+video.currentTime+=10;
+}
+
+}
+
+lastTap=now;
+
+});
+
+/* LIKE */
+likeBtn.onclick=()=>{
+if(!userId){
+show("Signup required for Like.");
+return;
+}
+set(ref(db,"demoLikes/"+userId),true);
+show("Liked 👍");
+};
+
+/* SHARE */
+shareBtn.onclick=()=>{
+if(!userId){
+show("Signup required for Share.");
+return;
+}
+navigator.share({
+title:"Demo Class",
+url:location.href
+});
+};
+
+/* FULLSCREEN */
+fullBtn.onclick=()=>{
+if(video.requestFullscreen){
+video.requestFullscreen();
+}
+};
+
+</script>
+
+</body>
+</html>

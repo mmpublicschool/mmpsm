@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M.M Public School Mundeshwari – School Notices & Updates</title>
+<meta name="description"
+content="M.M Public School Mundeshwari Official Website. Online Admission, Notes, Test Series, Demo Class, Student Portal and School Updates.">
+
+<meta name="keywords"
+content="MM Public School Mundeshwari, school website, online admission, student portal, demo class, notes download, Bihar school">
+
+<meta name="author" content="M.M Public School Mundeshwari">
+
+<meta name="robots" content="index, follow">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Search Verification (बाद में code मिलेगा तो यहाँ डालना) -->
+<meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:#edf3ff;
+height:100vh;
+overflow:hidden;
+}
+
+.app{
+display:flex;
+flex-direction:column;
+height:100vh;
+}
+
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 16px;
+background:linear-gradient(135deg,#0b3d91,#2563eb);
+color:#fff;
+}
+
+.school-box{text-align:center;}
+.school-top{font-weight:900;font-size:15px;}
+.school-bottom{font-size:11px;color:#ffd700;font-weight:800;}
+
+.header i{font-size:20px;cursor:pointer;}
+
+/* BELL */
+.notification-icon{
+position:relative;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.notification-icon.active i{
+animation:superBell .8s ease-in-out infinite;
+transform-origin:top center;
+}
+
+@keyframes superBell{
+0%{transform:rotate(0deg);}
+25%{transform:rotate(20deg);}
+50%{transform:rotate(-20deg);}
+75%{transform:rotate(12deg);}
+100%{transform:rotate(0deg);}
+}
+
+.notif-count{
+position:absolute;
+top:-6px;
+right:-6px;
+background:red;
+color:#fff;
+font-size:10px;
+padding:2px 6px;
+border-radius:20px;
+font-weight:900;
+}
+
+/* CATEGORY */
+.category-bar{
+display:flex;
+gap:10px;
+padding:10px;
+}
+
+.cat-btn{
+flex:1;
+padding:12px;
+border:none;
+border-radius:12px;
+background:#fff;
+font-weight:900;
+color:#0b3d91;
+box-shadow:0 4px 10px rgba(0,0,0,.1);
+}
+
+.cat-btn.active{
+background:#0b3d91;
+color:#fff;
+}
+
+/* NOTICE AREA */
+.notice-area{
+flex:1;
+overflow:auto;
+padding:14px;
+}
+
+.notice-card{
+background:#fff;
+padding:16px;
+border-radius:16px;
+margin-bottom:14px;
+box-shadow:0 8px 18px rgba(0,0,0,.08);
+}
+
+.notice-title{
+font-size:15px;
+font-weight:900;
+color:#0b3d91;
+}
+
+.notice-desc{
+font-size:13px;
+color:#444;
+margin:8px 0;
+}
+
+/* 🔥 PROFESSIONAL LINK BUTTON */
+.notice-link{
+display:inline-block;
+background:linear-gradient(135deg,#2563eb,#0b3d91);
+color:#fff;
+padding:7px 14px;
+border-radius:20px;
+font-size:12px;
+font-weight:900;
+margin-top:6px;
+}
+
+/* DATE TIME COLOR CHANGE */
+.notice-time{
+font-size:11px;
+color:#ff6600;   /* 👈 अलग color */
+font-weight:900;
+margin-top:8px;
+}
+
+/* SHIMMER */
+.shimmer{
+height:80px;
+border-radius:14px;
+margin-bottom:12px;
+background:linear-gradient(
+90deg,#f0f0f0 25%,#e4e4e4 50%,#f0f0f0 75%);
+background-size:200% 100%;
+animation:shimmer 1.2s infinite;
+}
+
+@keyframes shimmer{
+0%{background-position:-200% 0}
+100%{background-position:200% 0}
+}
+
+/* POPUP */
+.notif-popup{
+position:fixed;
+top:70px;
+right:10px;
+width:280px;
+max-height:360px;
+background:#fff;
+border-radius:18px;
+box-shadow:0 20px 40px rgba(0,0,0,.25);
+display:none;
+z-index:999;
+overflow:auto;
+}
+
+.notif-item{
+padding:14px;
+border-bottom:1px solid #eee;
+}
+
+.notif-title{
+font-weight:900;
+color:#0b3d91;
+font-size:14px;
+}
+
+.notif-desc{
+font-size:13px;
+color:#444;
+margin-top:4px;
+}
+
+.notif-time{
+font-size:11px;
+color:#2563eb;
+font-weight:800;
+margin-top:6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="header">
+
+<i class="fa-solid fa-arrow-left"
+onclick="window.location.href='index.html'"></i>
+
+<div class="school-box">
+<div class="school-top">MM PUBLIC SCHOOL</div>
+<div class="school-bottom">MUNDESHWARI</div>
+</div>
+
+<div class="notification-icon" id="openNotif">
+<i class="fa-regular fa-bell"></i>
+<span id="notifCount" class="notif-count">0</span>
+</div>
+
+</div>
+
+<div class="category-bar">
+<button id="newBtn" class="cat-btn active">New Notice</button>
+<button id="oldBtn" class="cat-btn">Old Notice</button>
+</div>
+
+<div id="noticeArea" class="notice-area">
+<div class="shimmer"></div>
+<div class="shimmer"></div>
+<div class="shimmer"></div>
+</div>
+
+</div>
+
+<div id="notifPopup" class="notif-popup">
+<div id="notifList"></div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+authDomain:"apni-duniya-b53d7.firebaseapp.com",
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+function formatTime(ts){
+return new Date(ts).toLocaleString();
+}
+
+/* LOAD NOTICE */
+function loadNotice(type){
+
+noticeArea.innerHTML=`
+<div class="shimmer"></div>
+<div class="shimmer"></div>
+<div class="shimmer"></div>
+`;
+
+onValue(ref(db,"mmpsm_notice_panel/"+type),snap=>{
+
+noticeArea.innerHTML="";
+
+if(!snap.exists()){
+noticeArea.innerHTML="<div class='notice-card'>No notice uploaded by admin.</div>";
+return;
+}
+
+snap.forEach(c=>{
+const d=c.val();
+
+noticeArea.innerHTML+=`
+<div class="notice-card">
+<div class="notice-title">${d.title}</div>
+<div class="notice-desc">${d.desc}</div>
+<a href="${d.link}" target="_blank" class="notice-link">Open Link</a>
+<div class="notice-time">${formatTime(d.time)}</div>
+</div>`;
+});
+
+},{onlyOnce:true});
+
+}
+
+loadNotice("new");
+
+newBtn.onclick=()=>{
+newBtn.classList.add("active");
+oldBtn.classList.remove("active");
+loadNotice("new");
+};
+
+oldBtn.onclick=()=>{
+oldBtn.classList.add("active");
+newBtn.classList.remove("active");
+loadNotice("old");
+};
+
+/* 🔥 NOTIFICATION FIXED (NEW / OLD TAG) */
+onValue(ref(db,"mmpsm_notice_notifications"),snap=>{
+
+notifList.innerHTML="";
+let total=0;
+
+snap.forEach(c=>{
+const d=c.val();
+total++;
+
+const tag = d.noticeType==="old" ? "[OLD]" : "[NEW]";
+
+notifList.innerHTML+=`
+
+<div class="notif-item">
+
+<div class="notif-title">
+${tag} ${d.title || "Notice"}
+</div>
+
+<div class="notif-desc">
+${d.desc || d.text || ""}
+</div>
+
+<div class="notif-time">
+${formatTime(d.time)}
+</div>
+
+</div>
+
+`;
+
+});
+
+notifCount.innerText=total>9?"9+":total;
+
+if(total>0){
+openNotif.classList.add("active");
+}else{
+openNotif.classList.remove("active");
+}
+
+});
+
+openNotif.onclick=(e)=>{
+e.stopPropagation();
+notifPopup.style.display="block";
+};
+
+document.addEventListener("click",(e)=>{
+if(!notifPopup.contains(e.target)&&!openNotif.contains(e.target)){
+notifPopup.style.display="none";
+}
+});
+
+</script>
+
+</body>
+</html>

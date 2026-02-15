@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lav Admin Panel</title>
+
+<style>
+
+/* ===== BODY ===== */
+body{
+  margin:0;
+  font-family:system-ui, -apple-system, Arial;
+  background:#f3f6fb;
+  overflow-x:hidden;
+}
+
+/* ===== LOGIN PAGE ===== */
+#loginPage{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.login-card{
+  width:100%;
+  max-width:380px;
+  background:#fff;
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.08);
+}
+
+.login-title{
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  margin-top:12px;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+  font-size:15px;
+}
+
+.login-btn{
+  width:100%;
+  padding:15px;
+  margin-top:16px;
+  border:none;
+  border-radius:12px;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+  font-weight:600;
+}
+
+/* ===== DASHBOARD ===== */
+#dashboardPage{
+  display:none;
+  height:100vh;
+  width:100%;
+}
+
+/* HEADER */
+.header{
+  height:60px;
+  background:#ffffff;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+  position:fixed;
+  width:100%;
+  top:0;
+  z-index:10;
+}
+
+.menu-btn{
+  font-size:24px;
+  cursor:pointer;
+}
+
+.title{
+  margin-left:12px;
+  font-weight:700;
+  font-size:17px;
+  color:#0f172a;
+}
+
+/* CONTENT */
+.content{
+  padding:80px 16px 20px;
+  height:100vh;
+  overflow:auto;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+/* CARD PROFESSIONAL */
+.card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:22px 14px;
+  text-align:center;
+  font-weight:600;
+  font-size:15px;
+  color:#0f172a;
+  box-shadow:0 8px 20px rgba(0,0,0,0.06);
+  transition:0.2s;
+}
+
+.card:active{
+  transform:scale(0.96);
+}
+
+/* ===== SIDE MENU ===== */
+.side-menu{
+  position:fixed;
+  top:0;
+  left:0;
+  transform:translateX(-100%);
+  width:250px;
+  height:100%;
+  background:#ffffff;
+  box-shadow:4px 0 18px rgba(0,0,0,0.08);
+  padding:18px;
+  transition:transform 0.25s ease;
+  z-index:30;
+}
+
+/* MENU HEADER */
+.menu-title{
+  font-weight:700;
+  margin-bottom:15px;
+  font-size:16px;
+}
+
+/* MENU CARD STYLE */
+.menu-item{
+  background:#f8fafc;
+  padding:14px;
+  border-radius:14px;
+  margin-bottom:10px;
+  font-weight:600;
+  box-shadow:0 6px 14px rgba(0,0,0,0.05);
+}
+
+.menu-item:active{
+  transform:scale(0.96);
+}
+
+.show-menu{
+  transform:translateX(0);
+}
+
+/* OVERLAY */
+.overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.25);
+  display:none;
+  z-index:20;
+}
+
+.show-overlay{
+  display:block;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="login-card">
+    <div class="login-title">Lav Admin Secure Login</div>
+
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+
+    <button class="login-btn" onclick="login()">Login</button>
+  </div>
+</div>
+
+<!-- SIDE MENU -->
+<div class="side-menu" id="sideMenu">
+
+  <div class="menu-title">Admin Menu</div>
+
+  <div class="menu-item" onclick="goPage('notice-admin.html')">Upload Notice</div>
+  <div class="menu-item" onclick="goPage('notes-admin.html')">Upload Notes</div>
+  <div class="menu-item" onclick="goPage('admin-signup.html')">Check Signup Student List</div>
+  <div class="menu-item" onclick="goPage('admin-notification.html')">Upload Notification</div>
+  <div class="menu-item" onclick="goPage('admin-help-test-series.html')">Check Student Help</div>
+  <div class="menu-item" onclick="logout()">Logout</div>
+
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- DASHBOARD -->
+<div id="dashboardPage">
+
+  <div class="header">
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <div class="title">Lav Admin Dashboard</div>
+  </div>
+
+  <div class="content">
+
+    <div class="grid">
+
+      <div class="card" onclick="goPage('notice-admin.html')">Upload Notice</div>
+      <div class="card" onclick="goPage('notes-admin.html')">Upload Notes</div>
+      <div class="card" onclick="goPage('admin-signup.html')">Check Signup Student List</div>
+      <div class="card" onclick="goPage('admin-notification.html')">Upload Notification</div>
+      <div class="card" onclick="goPage('admin-help-test-series.html')">Check Student Help</div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* LOGIN CHECK */
+window.onload=function(){
+  if(localStorage.getItem("adminLogin")==="true"){
+    showDashboard();
+  }
+}
+
+/* LOGIN */
+function login(){
+  if(username.value==="Lav" && password.value==="123456"){
+    localStorage.setItem("adminLogin","true");
+    showDashboard();
+  }else{
+    alert("Wrong Username or Password");
+  }
+}
+
+/* SHOW DASHBOARD */
+function showDashboard(){
+  loginPage.style.display="none";
+  dashboardPage.style.display="block";
+}
+
+/* MENU CONTROL */
+overlay.onclick=closeMenu;
+
+function toggleMenu(){
+  sideMenu.classList.add("show-menu");
+  overlay.classList.add("show-overlay");
+}
+
+function closeMenu(){
+  sideMenu.classList.remove("show-menu");
+  overlay.classList.remove("show-overlay");
+}
+
+/* PAGE OPEN */
+function goPage(page){
+  closeMenu();
+  setTimeout(()=>{window.location.href=page;},150);
+}
+
+/* LOGOUT */
+function logout(){
+  localStorage.removeItem("adminLogin");
+  location.reload();
+}
+
+</script>
+
+</body>
+</html>

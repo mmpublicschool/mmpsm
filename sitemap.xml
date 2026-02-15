@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://USERNAME.github.io/REPO-NAME/</loc>
+  </url>
+  
+  <url>
+    <loc>https://USERNAME.github.io/REPO-NAME/admission.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://USERNAME.github.io/REPO-NAME/demo-class.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://USERNAME.github.io/REPO-NAME/test-series.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://USERNAME.github.io/REPO-NAME/notice.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://USERNAME.github.io/REPO-NAME/profile.html</loc>
+  </url>
+  
+</urlset>
