@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- ✅ BASIC SEO -->
+<title>M.M Public School Mundeshwari | Student Directory</title>
+
+<meta name="description"
+content="M.M Public School Mundeshwari Student Directory. View all students with their details and photos.">
+
+<meta name="keywords"
+content="MM Public School Mundeshwari, Student List, Student Directory, MMPSM Students">
+
+<meta name="author" content="M.M Public School Mundeshwari">
+<meta name="robots" content="index, follow">
+
+<!-- ✅ GOOGLE VERIFICATION -->
+<meta name="google-site-verification"
+content="KPDw4haUQPcKgIXGNM0EbmGKwXwk76fNJI59VcJzwE0">
+
+<!-- ✅ SOCIAL + GOOGLE LOGO -->
+<meta property="og:title" content="M.M Public School Mundeshwari">
+<meta property="og:description"
+content="Student Directory - View all students">
+
+<meta property="og:image"
+content="https://mmpublicschool.github.io/mmpsm/logo.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mmpsm.wuaze.com/">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    width: 100%;
+}
+
+.header i {
+    font-size: 20px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: 0.2s;
+}
+
+.header i:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.school-title {
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    flex: 1;
+}
+
+/* ===== CATEGORY BAR ===== */
+.category-bar {
+    display: flex;
+    gap: 10px;
+    padding: 16px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 900;
+}
+
+.cat-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    background: #f0f4fa;
+    color: #0a2a66;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.cat-btn.active {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+/* ===== CONTENT AREA ===== */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 16px 30px 16px;
+    scroll-behavior: smooth;
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== PROFESSIONAL LOADER ===== */
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    gap: 8px;
+}
+
+.loader span {
+    width: 8px;
+    height: 40px;
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    border-radius: 8px;
+    animation: pulse 1s infinite ease-in-out;
+}
+
+.loader span:nth-child(2) { animation-delay: 0.1s; height: 45px; }
+.loader span:nth-child(3) { animation-delay: 0.2s; height: 50px; }
+.loader span:nth-child(4) { animation-delay: 0.3s; height: 45px; }
+.loader span:nth-child(5) { animation-delay: 0.4s; height: 40px; }
+
+@keyframes pulse {
+    0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+    50% { transform: scaleY(1); opacity: 1; }
+}
+
+/* ===== STATS CARD ===== */
+.stats-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 2;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0a2a66;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* ===== SEARCH BAR ===== */
+.search-bar {
+    background: white;
+    border-radius: 40px;
+    padding: 8px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 2;
+}
+
+.search-bar i {
+    color: #0a2a66;
+    font-size: 16px;
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+.search-bar input::placeholder {
+    color: #999;
+}
+
+/* ===== STUDENT CARD ===== */
+.card {
+    position: relative;
+    background: white;
+    padding: 18px;
+    border-radius: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    animation: cardShow 0.5s ease forwards;
+    border: 2px solid transparent;
+    transition: 0.3s;
+    display: flex;
+    gap: 15px;
+    z-index: 5;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(10,42,102,0.15);
+    border-color: #0a2a66;
+}
+
+@keyframes cardShow {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== STUDENT AVATAR ===== */
+.student-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f0f4fa;
+    border: 3px solid #0a2a66;
+    flex-shrink: 0;
+}
+
+.student-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.student-avatar i {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: #0a2a66;
+}
+
+/* ===== STUDENT INFO ===== */
+.student-info {
+    flex: 1;
+}
+
+.name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.gender-badge {
+    font-size: 12px;
+    background: #e6ecff;
+    padding: 4px 10px;
+    border-radius: 30px;
+    color: #0a2a66;
+    font-weight: 600;
+}
+
+.sid {
+    font-size: 13px;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sid i {
+    color: #0a2a66;
+    width: 16px;
+}
+
+.class-name {
+    font-size: 13px;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.class-name i {
+    color: #16a34a;
+    width: 16px;
+}
+
+.email-info {
+    font-size: 12px;
+    margin-bottom: 6px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.email-info i {
+    color: #0a2a66;
+    width: 16px;
+}
+
+.signup-time {
+    font-size: 11px;
+    margin-top: 8px;
+    color: #ff9800;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.signup-time i {
+    color: #ff9800;
+}
+
+/* ===== THREE DOT MENU ===== */
+.card-menu {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #0a2a66;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f0f4fa;
+    transition: 0.2s;
+    z-index: 100;
+}
+
+.card-menu:hover {
+    background: #e6ecff;
+}
+
+/* ===== MENU BOX - COMPLETELY FIXED ===== */
+.menu-box {
+    position: fixed;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    display: none;
+    z-index: 99999;
+    overflow: hidden;
+    min-width: 200px;
+    animation: menuShow 0.2s ease;
+    border: 1px solid rgba(10,42,102,0.15);
+}
+
+@keyframes menuShow {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.menu-item {
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #333;
+    transition: 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-item i {
+    width: 20px;
+    font-size: 16px;
+}
+
+.menu-item.view i {
+    color: #0a2a66;
+}
+
+.menu-item.view:hover {
+    background: #e6ecff;
+    color: #0a2a66;
+}
+
+.menu-item.edit i {
+    color: #b85c00;
+}
+
+.menu-item.edit:hover {
+    background: #fff3e0;
+    color: #b85c00;
+}
+
+.menu-item.delete i {
+    color: #dc2626;
+}
+
+.menu-item.delete:hover {
+    background: #fee8e8;
+    color: #dc2626;
+}
+
+/* ===== NO STUDENTS MESSAGE ===== */
+.no-students-message {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 24px;
+    margin: 20px 0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.no-students-message i {
+    font-size: 60px;
+    color: #0a2a66;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.no-students-message h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+.no-students-message p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ===== POPUP ===== */
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+    padding: 16px;
+}
+
+.popup-box {
+    background: white;
+    padding: 28px;
+    border-radius: 32px;
+    width: 90%;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.popup-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.popup-title {
+    font-weight: 800;
+    font-size: 22px;
+    color: #0a2a66;
+    margin-bottom: 12px;
+}
+
+.popup-text {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.popup-note {
+    font-size: 13px;
+    color: #666;
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 16px;
+    margin-top: 12px;
+}
+
+/* ===== COMING SOON ===== */
+.coming {
+    text-align: center;
+    padding: 60px 20px;
+    animation: fadeUp 0.6s ease;
+}
+
+.coming i {
+    font-size: 80px;
+    color: #0a2a66;
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.coming h3 {
+    color: #0a2a66;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.coming p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== MASKED EMAIL ===== */
+.masked-email {
+    font-family: monospace;
+    background: #f0f4fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* ===== BOTTOM SPACE ===== */
+.bottom-space {
+    height: 30px;
+    width: 100%;
+    display: block;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="header">
+    <i class="fa-solid fa-arrow-left" onclick="window.location.href='index.html'"></i>
+
+    <div class="school-title">
+        STUDENT DIRECTORY
+    </div>
+
+    <div></div>
+</div>
+
+<div class="category-bar">
+    <button id="listBtn" class="cat-btn active">
+        <i class="fa-solid fa-list"></i> Student List
+    </button>
+
+    <button id="infoBtn" class="cat-btn">
+        <i class="fa-solid fa-circle-info"></i> Information
+    </button>
+</div>
+
+<div id="content" class="content"></div>
+
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+    <div class="popup-box">
+        <div class="popup-icon" id="popupIcon">🔒</div>
+        <div id="popupTitle" class="popup-title">Admin Access Only</div>
+        <div id="popupText" class="popup-text">This feature is restricted to administrators only.</div>
+        <div class="popup-note" id="popupNote">Contact school admin for access</div>
+    </div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+authDomain:"apni-duniya-b53d7.firebaseapp.com",
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const content=document.getElementById("content");
+const listBtn=document.getElementById("listBtn");
+const infoBtn=document.getElementById("infoBtn");
+
+const popup=document.getElementById("popup");
+const popupIcon=document.getElementById("popupIcon");
+const popupTitle=document.getElementById("popupTitle");
+const popupText=document.getElementById("popupText");
+const popupNote=document.getElementById("popupNote");
+
+function showPopup(icon, title, msg, note = "Contact school admin for access"){
+    popupIcon.innerText = icon;
+    popupTitle.innerText = title;
+    popupText.innerText = msg;
+    popupNote.innerText = note;
+    popup.style.display = "flex";
+    setTimeout(() => popup.style.display = "none", 3000);
+}
+
+popup.onclick = (e) => {
+    if (e.target === popup) popup.style.display = "none";
+};
+
+/* CLOSE MENU ON OUTSIDE CLICK */
+document.addEventListener("click", (e) => {
+    if (!e.target.classList.contains('card-menu') && !e.target.closest('.menu-box')) {
+        document.querySelectorAll(".menu-box").forEach(m => m.style.display = "none");
+    }
+});
+
+/* FORMAT DATE */
+function formatDate(timestamp) {
+    if (!timestamp) return "N/A";
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+    
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Yesterday";
+    if (diff < 7) return diff + " days ago";
+    return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+/* MASK EMAIL */
+function maskEmail(email) {
+    if (!email || email === "No email") return "No email";
+    const [local, domain] = email.split('@');
+    if (!domain) return email;
+    
+    if (local.length <= 3) {
+        return local + '@' + domain;
+    }
+    
+    const maskedLocal = local.substring(0, 3) + '****';
+    return maskedLocal + '@' + domain;
+}
+
+/* GET AVATAR HTML */
+function getAvatarHtml(photoURL, name, gender) {
+    if (photoURL) {
+        return `<img src="${photoURL}" alt="${name}" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fa-solid fa-user\'></i>';">`;
+    } else {
+        return `<i class="fa-solid fa-user"></i>`;
+    }
+}
+
+/* LOAD STUDENTS */
+function loadStudents() {
+    content.innerHTML = `
+        <div class="loader">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    `;
+
+    onValue(ref(db, "students"), (snap) => {
+        content.innerHTML = "";
+        
+        let students = [];
+        snap.forEach(c => {
+            students.push({
+                id: c.key,
+                ...c.val()
+            });
+        });
+
+        if (students.length === 0) {
+            content.innerHTML = `
+                <div class="coming">
+                    <i class="fa-solid fa-users-slash"></i>
+                    <h3>No Students Found</h3>
+                    <p>No students have registered yet.</p>
+                </div>
+                <div class="bottom-space"></div>
+            `;
+            return;
+        }
+
+        // Sort by name
+        students.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+        // Stats card
+        content.innerHTML += `
+            <div class="stats-card">
+                <div class="stat-item">
+                    <div class="stat-value">${students.length}</div>
+                    <div class="stat-label">Total Students</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${students.filter(s => s.gender === 'male').length}</div>
+                    <div class="stat-label">Boys</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${students.filter(s => s.gender === 'female').length}</div>
+                    <div class="stat-label">Girls</div>
+                </div>
+            </div>
+        `;
+
+        // Search bar
+        content.innerHTML += `
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Search students by name or class..." onkeyup="window.filterStudents()">
+            </div>
+        `;
+
+        // Students container
+        content.innerHTML += `<div id="studentsContainer"></div>`;
+        const container = document.getElementById('studentsContainer');
+
+        students.forEach(d => {
+            const schoolId = d.id;
+            const timeStr = formatDate(d.createdAt || d.time);
+            const avatarHtml = getAvatarHtml(d.photoURL, d.name, d.gender);
+            const genderIcon = d.gender === 'female' ? '♀️' : d.gender === 'male' ? '♂️' : '⚥';
+            const maskedEmail = maskEmail(d.email);
+            
+            container.innerHTML += `
+                <div class="card student-card" data-name="${(d.name || '').toLowerCase()}" data-class="${(d.class || '').toLowerCase()}">
+                    <i class="fa-solid fa-ellipsis-vertical card-menu" onclick="toggleMenu(event,'${schoolId}')"></i>
+
+                    <div class="student-avatar">
+                        ${avatarHtml}
+                    </div>
+
+                    <div class="student-info">
+                        <div class="name">
+                            ${d.name || "Student"}
+                            <span class="gender-badge">${genderIcon} ${d.gender || 'Not specified'}</span>
+                        </div>
+
+                        <div class="sid">
+                            <i class="fa-regular fa-id-card"></i> ${schoolId}
+                        </div>
+
+                        <div class="class-name">
+                            <i class="fa-solid fa-graduation-cap"></i> Class: ${d.class || "Not Assigned"}
+                        </div>
+
+                        <div class="email-info">
+                            <i class="fa-regular fa-envelope"></i> <span class="masked-email">${maskedEmail}</span>
+                        </div>
+
+                        <div class="signup-time">
+                            <i class="fa-regular fa-clock"></i> Joined: ${timeStr}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Add bottom space
+        container.innerHTML += `<div class="bottom-space"></div>`;
+
+        // Add filter function
+        window.filterStudents = function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.student-card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name');
+                const className = card.getAttribute('data-class');
+                if (name.includes(searchTerm) || className.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Show "No results" message if no students match search
+            const existingMessage = document.getElementById('noSearchResults');
+            if (existingMessage) existingMessage.remove();
+            
+            if (visibleCount === 0 && searchTerm !== '') {
+                const noResults = document.createElement('div');
+                noResults.id = 'noSearchResults';
+                noResults.className = 'no-students-message';
+                noResults.innerHTML = `
+                    <i class="fa-solid fa-search"></i>
+                    <h3>No Students Found</h3>
+                    <p>No students match your search criteria "${searchTerm}"</p>
+                `;
+                document.getElementById('studentsContainer').appendChild(noResults);
+            }
+        };
+
+    }, { onlyOnce: true });
+}
+
+window.toggleMenu = (e, id) => {
+    e.stopPropagation();
+    
+    // Close all other menus
+    document.querySelectorAll(".menu-box").forEach(m => m.style.display = "none");
+    
+    // Get click position
+    const rect = e.target.getBoundingClientRect();
+    const scrollY = window.scrollY || window.pageYOffset;
+    
+    // Create menu if it doesn't exist
+    let menu = document.getElementById("menu-" + id);
+    if (!menu) {
+        menu = document.createElement('div');
+        menu.id = "menu-" + id;
+        menu.className = "menu-box";
+        menu.innerHTML = `
+            <div class="menu-item view" onclick="viewStudent('${id}')">
+                <i class="fa-regular fa-eye"></i> View Profile
+            </div>
+            <div class="menu-item edit" onclick="editStudent('${id}')">
+                <i class="fa-regular fa-pen-to-square"></i> Edit
+            </div>
+            <div class="menu-item delete" onclick="deleteStudent('${id}')">
+                <i class="fa-regular fa-trash-can"></i> Delete
+            </div>
+        `;
+        document.body.appendChild(menu);
+    }
+    
+    // Position menu near the clicked dot
+    menu.style.position = 'fixed';
+    menu.style.top = (rect.top + 40) + 'px';
+    menu.style.left = (rect.right - 200) + 'px';
+    menu.style.display = 'block';
+};
+
+window.viewStudent = (id) => {
+    document.querySelectorAll(".menu-box").forEach(m => m.style.display = "none");
+    showPopup(
+        "🔒", 
+        "Admin Access Only", 
+        "View Profile feature is restricted to administrators only.",
+        "Please contact school administration for access"
+    );
+};
+
+window.editStudent = (id) => {
+    document.querySelectorAll(".menu-box").forEach(m => m.style.display = "none");
+    showPopup(
+        "✏️", 
+        "Edit Restricted", 
+        "Only administrators can edit student information.",
+        "Contact admin to update student details"
+    );
+};
+
+window.deleteStudent = (id) => {
+    document.querySelectorAll(".menu-box").forEach(m => m.style.display = "none");
+    showPopup(
+        "⚠️", 
+        "Delete Restricted", 
+        "Student deletion requires admin authorization.",
+        "This action cannot be undone"
+    );
+};
+
+function comingSoon() {
+    content.innerHTML = `
+        <div class="coming">
+            <i class="fa-solid fa-circle-info"></i>
+            <h3>Student Information Panel</h3>
+            <p>
+                Advanced student profile system with detailed analytics,
+                attendance tracking, and performance reports coming soon.
+            </p>
+        </div>
+        <div class="bottom-space"></div>
+    `;
+}
+
+listBtn.onclick = () => {
+    listBtn.classList.add("active");
+    infoBtn.classList.remove("active");
+    loadStudents();
+};
+
+infoBtn.onclick = () => {
+    infoBtn.classList.add("active");
+    listBtn.classList.remove("active");
+    comingSoon();
+};
+
+// Remove any stray menus when scrolling
+window.addEventListener('scroll', () => {
+    document.querySelectorAll(".menu-box").forEach(m => m.style.display = "none");
+});
+
+// Initial load
+loadStudents();
+
+</script>
+
+</body>
+</html>

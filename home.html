@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>M.M Public School Mundeshwari – Campus & Facilities</title>
+<!-- ✅ BASIC SEO -->
+<meta name="description"
+content="M.M Public School Mundeshwari Official Website. Explore our campus, academic facilities, student activities, and modern infrastructure.">
+
+<meta name="keywords"
+content="MM Public School Mundeshwari, MM Public School, MMPSM, School Facilities, Digital Learning, Smart Classes">
+
+<meta name="author" content="M.M Public School Mundeshwari">
+<meta name="robots" content="index, follow">
+
+<!-- ✅ GOOGLE VERIFICATION -->
+<meta name="google-site-verification"
+content="KPDw4haUQPcKgIXGNM0EbmGKwXwk76fNJI59VcJzwE0">
+
+<!-- ✅ SOCIAL + GOOGLE LOGO -->
+<meta property="og:title" content="M.M Public School Mundeshwari">
+<meta property="og:description"
+content="Explore our campus, academic facilities, and student activities.">
+
+<meta property="og:image"
+content="https://mmpublicschool.github.io/mmpsm/logo.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mmpsm.wuaze.com/">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+/* ===== HEADER (Profile Page Style) ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    width: 100%;
+}
+
+.header i {
+    font-size: 20px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: 0.2s;
+}
+
+.header i:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.school-box {
+    text-align: center;
+    flex: 1;
+}
+
+.school-top {
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+.school-bottom {
+    font-size: 12px;
+    color: #ffd700;
+    font-weight: 800;
+    margin-top: 2px;
+}
+
+/* ===== HERO ===== */
+.hero {
+    padding: 16px;
+    animation: slideTop 0.6s ease;
+}
+
+.hero-box {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 24px 20px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(10,42,102,0.2);
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.hero-subtitle {
+    font-size: 13px;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+/* ===== SECTION ===== */
+.section {
+    padding: 8px 16px 16px 16px;
+    animation: slideTop 0.8s ease;
+}
+
+.section-title {
+    font-weight: 800;
+    font-size: 18px;
+    color: #0a2a66;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-title i {
+    color: #ff9800;
+    font-size: 20px;
+}
+
+/* ===== GRID ===== */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+/* ===== CARD ===== */
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 12px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(10,42,102,0.15);
+    border-color: #0a2a66;
+}
+
+.card i {
+    font-size: 32px;
+    color: #0a2a66;
+    margin-bottom: 12px;
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+.card span {
+    font-weight: 700;
+    font-size: 13px;
+    display: block;
+    color: #333;
+}
+
+.card.newCard {
+    border: 2px solid #ff9800;
+}
+
+.newTag {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4444;
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(255,68,68,0.3);
+}
+
+/* ===== SCHOOL INFO SECTION ===== */
+.school-info {
+    margin: 16px;
+    padding: 24px;
+    border-radius: 28px;
+    background: white;
+    box-shadow: 0 15px 35px rgba(10,42,102,0.1);
+    animation: slideBottom 1s ease;
+}
+
+.school-info-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.school-info-title i {
+    color: #ff9800;
+}
+
+.school-info-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #444;
+    margin-bottom: 20px;
+    background: #f8faff;
+    padding: 16px;
+    border-radius: 18px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.info-card {
+    background: linear-gradient(135deg, #f0f4fa, #e6ecff);
+    padding: 16px 12px;
+    border-radius: 18px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    transition: 0.3s;
+    color: #0a2a66;
+    border: 1px solid rgba(10,42,102,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.info-card i {
+    font-size: 22px;
+    color: #0a2a66;
+}
+
+.info-card:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #e6ecff, #d6e0ff);
+    box-shadow: 0 10px 20px rgba(10,42,102,0.15);
+}
+
+/* ===== EXTRA FEATURES SECTION ===== */
+.extra-section {
+    padding: 8px 16px 16px 16px;
+}
+
+.extra-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.extra-title i {
+    color: #ff9800;
+}
+
+/* ===== STATS SECTION ===== */
+.stats-section {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 18px;
+    padding: 16px 8px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.stat-card i {
+    font-size: 24px;
+    color: #0a2a66;
+    margin-bottom: 6px;
+}
+
+.stat-number {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #666;
+    font-weight: 600;
+}
+
+/* ===== POPUP ===== */
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 16px;
+}
+
+.popup-box {
+    background: white;
+    width: 90%;
+    max-width: 360px;
+    border-radius: 32px;
+    padding: 28px 20px;
+    animation: scaleUp 0.3s ease;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+}
+
+.popup-title {
+    font-weight: 800;
+    font-size: 20px;
+    color: #0a2a66;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.popup-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.popup-card {
+    background: #f0f4fa;
+    border-radius: 16px;
+    padding: 16px 10px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    transition: 0.2s;
+    color: #0a2a66;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.popup-card i {
+    font-size: 22px;
+    color: #0a2a66;
+}
+
+.popup-card:hover {
+    background: #e6ecff;
+    transform: scale(1.05);
+}
+
+.popup-close {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.popup-close button {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+.popup-close button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(10,42,102,0.4);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes slideTop {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideBottom {
+    from { opacity: 0; transform: translateY(80px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleUp {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes floatIcon {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+
+/* ===== BOTTOM SPACING ===== */
+.bottom-spacing {
+    height: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <i class="fa-solid fa-arrow-left" onclick="window.location.href='index.html'"></i>
+
+    <div class="school-box">
+        <div class="school-top">MM PUBLIC SCHOOL</div>
+        <div class="school-bottom">MUNDESHWARI</div>
+    </div>
+
+    <div></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-box">
+        <div class="hero-title">
+            Explore Our Campus, Programs & Facilities
+        </div>
+        <div class="hero-subtitle">
+            Smart Learning • Modern Infrastructure • Future Ready
+        </div>
+    </div>
+</div>
+
+<!-- STATS SECTION -->
+<div class="stats-section">
+    <div class="stat-card">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Teachers</div>
+    </div>
+    <div class="stat-card">
+        <i class="fa-solid fa-users"></i>
+        <div class="stat-number">1000+</div>
+        <div class="stat-label">Students</div>
+    </div>
+    <div class="stat-card">
+        <i class="fa-solid fa-laptop"></i>
+        <div class="stat-number">10+</div>
+        <div class="stat-label">Smart Labs</div>
+    </div>
+    <div class="stat-card">
+        <i class="fa-solid fa-trophy"></i>
+        <div class="stat-number">25+</div>
+        <div class="stat-label">Awards</div>
+    </div>
+</div>
+
+<!-- SECTION 1 - Academic Facilities -->
+<div class="section">
+    <div class="section-title">
+        <i class="fa-solid fa-graduation-cap"></i> Academic Facilities
+    </div>
+
+    <div class="grid">
+        <div class="card" onclick="openPopup('Digital Learning System')">
+            <i class="fa-solid fa-laptop"></i>
+            <span>Digital Learning</span>
+        </div>
+
+        <div class="card" onclick="openPopup('Expert Faculty Team')">
+            <i class="fa-solid fa-user-graduate"></i>
+            <span>Expert Teachers</span>
+        </div>
+
+        <div class="card" onclick="openPopup('Modern Science Lab')">
+            <i class="fa-solid fa-flask"></i>
+            <span>Science Lab</span>
+        </div>
+
+        <div class="card" onclick="openPopup('Modern Library System')">
+            <i class="fa-solid fa-book"></i>
+            <span>Modern Library</span>
+        </div>
+
+        <div class="card newCard" onclick="openPopup('Computer Lab')">
+            <i class="fa-solid fa-computer"></i>
+            <span>Computer Lab</span>
+            <small class="newTag">NEW</small>
+        </div>
+
+        <div class="card newCard" onclick="openPopup('Language Lab')">
+            <i class="fa-solid fa-language"></i>
+            <span>Language Lab</span>
+            <small class="newTag">NEW</small>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION 2 - Student Activities -->
+<div class="section">
+    <div class="section-title">
+        <i class="fa-solid fa-futbol"></i> Student Activities
+    </div>
+
+    <div class="grid">
+        <div class="card" onclick="openPopup('Sports Activities')">
+            <i class="fa-solid fa-futbol"></i>
+            <span>Sports Activities</span>
+        </div>
+
+        <div class="card" onclick="openPopup('Smart Classroom Technology')">
+            <i class="fa-solid fa-tv"></i>
+            <span>Smart Classes</span>
+        </div>
+
+        <div class="card" onclick="openPopup('Live Class System')">
+            <i class="fa-solid fa-video"></i>
+            <span>Live Classes</span>
+        </div>
+
+        <div class="card" onclick="openPopup('Online Exam System')">
+            <i class="fa-solid fa-globe"></i>
+            <span>Online Tests</span>
+        </div>
+
+        <div class="card newCard" onclick="openPopup('Cultural Activities')">
+            <i class="fa-solid fa-masks-theater"></i>
+            <span>Cultural Events</span>
+            <small class="newTag">NEW</small>
+        </div>
+
+        <div class="card newCard" onclick="openPopup('Robotics Club')">
+            <i class="fa-solid fa-robot"></i>
+            <span>Robotics Club</span>
+            <small class="newTag">NEW</small>
+        </div>
+    </div>
+</div>
+
+<!-- EXTRA FEATURES SECTION 1 -->
+<div class="extra-section">
+    <div class="extra-title">
+        <i class="fa-solid fa-star"></i> Additional Features
+    </div>
+
+    <div class="grid">
+        <div class="card" onclick="openPopup('Yoga & Meditation')">
+            <i class="fa-solid fa-spa"></i>
+            <span>Yoga & Meditation</span>
+        </div>
+        <div class="card" onclick="openPopup('Art & Craft')">
+            <i class="fa-solid fa-paint-brush"></i>
+            <span>Art & Craft</span>
+        </div>
+        <div class="card" onclick="openPopup('Music Room')">
+            <i class="fa-solid fa-music"></i>
+            <span>Music Room</span>
+        </div>
+        <div class="card" onclick="openPopup('Dance Studio')">
+            <i class="fa-solid fa-person-walking"></i>
+            <span>Dance Studio</span>
+        </div>
+        <div class="card" onclick="openPopup('Swimming Pool')">
+            <i class="fa-solid fa-person-swimming"></i>
+            <span>Swimming Pool</span>
+        </div>
+        <div class="card" onclick="openPopup('Transport Facility')">
+            <i class="fa-solid fa-bus"></i>
+            <span>Transport</span>
+        </div>
+    </div>
+</div>
+
+<!-- EXTRA FEATURES SECTION 2 -->
+<div class="extra-section">
+    <div class="extra-title">
+        <i class="fa-solid fa-crown"></i> Premium Features
+    </div>
+
+    <div class="grid">
+        <div class="card newCard" onclick="openPopup('Coding Classes')">
+            <i class="fa-solid fa-code"></i>
+            <span>Coding Classes</span>
+            <small class="newTag">NEW</small>
+        </div>
+        <div class="card newCard" onclick="openPopup('AI Learning')">
+            <i class="fa-solid fa-brain"></i>
+            <span>AI Learning</span>
+            <small class="newTag">NEW</small>
+        </div>
+        <div class="card newCard" onclick="openPopup('3D Printing Lab')">
+            <i class="fa-solid fa-cube"></i>
+            <span>3D Printing</span>
+            <small class="newTag">NEW</small>
+        </div>
+        <div class="card newCard" onclick="openPopup('VR Classroom')">
+            <i class="fa-solid fa-vr-cardboard"></i>
+            <span>VR Classroom</span>
+            <small class="newTag">NEW</small>
+        </div>
+        <div class="card newCard" onclick="openPopup('Space Lab')">
+            <i class="fa-solid fa-rocket"></i>
+            <span>Space Lab</span>
+            <small class="newTag">NEW</small>
+        </div>
+        <div class="card newCard" onclick="openPopup('Green Campus')">
+            <i class="fa-solid fa-leaf"></i>
+            <span>Green Campus</span>
+            <small class="newTag">NEW</small>
+        </div>
+    </div>
+</div>
+
+<!-- SCHOOL INFO SECTION -->
+<div class="school-info">
+    <div class="school-info-title">
+        <i class="fa-solid fa-school"></i> About MM Public School Mundeshwari
+    </div>
+
+    <div class="school-info-text">
+        MM Public School Mundeshwari focuses on advanced digital education,
+        modern smart classrooms, discipline, leadership development,
+        and future-ready learning environment for every student.
+        Our mission is to provide powerful academic excellence with
+        modern technology and safe campus culture.
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <i class="fa-solid fa-microchip"></i>
+            Smart Digital Campus
+        </div>
+        <div class="info-card">
+            <i class="fa-solid fa-chalkboard"></i>
+            Experienced Faculty
+        </div>
+        <div class="info-card">
+            <i class="fa-solid fa-shield"></i>
+            Advanced Security
+        </div>
+        <div class="info-card">
+            <i class="fa-solid fa-building"></i>
+            Modern Infrastructure
+        </div>
+        <div class="info-card">
+            <i class="fa-solid fa-chart-line"></i>
+            Student Growth Programs
+        </div>
+        <div class="info-card">
+            <i class="fa-solid fa-gears"></i>
+            Future Skill Training
+        </div>
+        <div class="info-card">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            Personal Mentoring
+        </div>
+        <div class="info-card">
+            <i class="fa-solid fa-globe"></i>
+            Global Curriculum
+        </div>
+    </div>
+</div>
+
+<!-- EXTRA FEATURES SECTION 3 - More Cards -->
+<div class="extra-section">
+    <div class="extra-title">
+        <i class="fa-solid fa-gem"></i> More Features
+    </div>
+
+    <div class="grid">
+        <div class="card" onclick="openPopup('Career Counseling')">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>Career Counseling</span>
+        </div>
+        <div class="card" onclick="openPopup('Personality Development')">
+            <i class="fa-solid fa-face-smile"></i>
+            <span>Personality Dev</span>
+        </div>
+        <div class="card" onclick="openPopup('Competitive Exam Prep')">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>Competitive Prep</span>
+        </div>
+        <div class="card" onclick="openPopup('Spoken English')">
+            <i class="fa-solid fa-language"></i>
+            <span>Spoken English</span>
+        </div>
+        <div class="card" onclick="openPopup('Medical Facility')">
+            <i class="fa-solid fa-hospital"></i>
+            <span>Medical Facility</span>
+        </div>
+        <div class="card" onclick="openPopup('Cafeteria')">
+            <i class="fa-solid fa-utensils"></i>
+            <span>Cafeteria</span>
+        </div>
+        <div class="card" onclick="openPopup('Indoor Games')">
+            <i class="fa-solid fa-chess-board"></i>
+            <span>Indoor Games</span>
+        </div>
+        <div class="card" onclick="openPopup('Outdoor Sports')">
+            <i class="fa-solid fa-baseball"></i>
+            <span>Outdoor Sports</span>
+        </div>
+    </div>
+</div>
+
+<!-- BOTTOM SPACING -->
+<div class="bottom-spacing"></div>
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+    <div class="popup-box" id="popupBox">
+        <div id="popupTitle" class="popup-title">Facility Details</div>
+        
+        <div class="popup-grid">
+            <div class="popup-card">
+                <i class="fa-solid fa-check-circle"></i>
+                Available
+            </div>
+            <div class="popup-card">
+                <i class="fa-solid fa-clock"></i>
+                Full Time
+            </div>
+            <div class="popup-card">
+                <i class="fa-solid fa-users"></i>
+                All Students
+            </div>
+            <div class="popup-card">
+                <i class="fa-solid fa-star"></i>
+                Premium
+            </div>
+            <div class="popup-card">
+                <i class="fa-solid fa-shield"></i>
+                Safe
+            </div>
+            <div class="popup-card">
+                <i class="fa-solid fa-medal"></i>
+                Certified
+            </div>
+            <div class="popup-card">
+                <i class="fa-solid fa-trophy"></i>
+                Awarded
+            </div>
+            <div class="popup-card">
+                <i class="fa-solid fa-thumbs-up"></i>
+                Recommended
+            </div>
+        </div>
+        
+        <div class="popup-close">
+            <button onclick="closePopup()">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openPopup(title) {
+    document.getElementById("popupTitle").innerText = title + " - Features";
+    document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup() {
+    document.getElementById("popup").style.display = "none";
+}
+
+document.getElementById("popup").addEventListener("click", (e) => {
+    if (!document.getElementById("popupBox").contains(e.target)) {
+        document.getElementById("popup").style.display = "none";
+    }
+});
+</script>
+
+</body>
+</html>

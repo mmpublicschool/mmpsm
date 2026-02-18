@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>M.M Public School | Check Admission Status</title>
+    
+    <!-- Font Awesome 6.5.2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0a2a66;
+            --primary-dark: #1e4b8f;
+            --accent: #ff9800;
+            --success: #10b981;
+            --danger: #dc2626;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f0f4fa 0%, #e6ecff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 30px 20px;
+            border-radius: 32px 32px 0 0;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(10,42,102,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .header h1 i {
+            color: #ffd700;
+            font-size: 28px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* ===== MAIN CARD ===== */
+        .main-card {
+            background: white;
+            border-radius: 0 0 32px 32px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* ===== SEARCH BOX ===== */
+        .search-box {
+            background: var(--gray-50);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 2px solid var(--gray-200);
+            transition: 0.3s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(10,42,102,0.1);
+        }
+
+        .search-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .search-label i {
+            color: var(--accent);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group input {
+            flex: 2;
+            padding: 16px 18px;
+            border: 2px solid var(--gray-200);
+            border-radius: 40px;
+            font-size: 16px;
+            outline: none;
+            transition: 0.2s;
+            background: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .input-group button {
+            flex: 1;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .input-group button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+        }
+
+        .input-group button:active {
+            transform: translateY(0);
+        }
+
+        .search-hint {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .search-hint i {
+            color: var(--accent);
+        }
+
+        /* ===== LOADING ANIMATION ===== */
+        .loading-container {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .status-loader {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .status-loader div {
+            position: absolute;
+            border: 4px solid var(--primary);
+            opacity: 1;
+            border-radius: 50%;
+            animation: status-loader 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+
+        .status-loader div:nth-child(2) {
+            animation-delay: -0.5s;
+        }
+
+        @keyframes status-loader {
+            0% {
+                top: 36px;
+                left: 36px;
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+            4.9% {
+                top: 36px;
+                left: 36px;
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+            5% {
+                top: 36px;
+                left: 36px;
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            100% {
+                top: 0px;
+                left: 0px;
+                width: 72px;
+                height: 72px;
+                opacity: 0;
+            }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .loading-dots span {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: dots 1.4s infinite;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dots {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 6px;
+            animation: progress 2s ease-in-out infinite;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        /* ===== STATUS CARD ===== */
+        .status-card {
+            background: var(--gray-50);
+            border-radius: 24px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 2px solid transparent;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .status-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .status-icon.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-icon.approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-icon.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-icon.processing {
+            background: #cfe2ff;
+            color: #0a58ca;
+        }
+
+        .status-title h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .status-title p {
+            color: var(--gray-600);
+            font-size: 13px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .badge-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-processing {
+            background: #cfe2ff;
+            color: #0a58ca;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: var(--gray-500);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .info-label i {
+            color: var(--primary);
+        }
+
+        .info-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+
+        .timeline {
+            margin: 25px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: var(--gray-600);
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-dot.completed {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .timeline-dot.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(10,42,102,0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(10,42,102,0); }
+            100% { box-shadow: 0 0 0 0 rgba(10,42,102,0); }
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-title {
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 4px;
+        }
+
+        .timeline-date {
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 11px;
+            top: 24px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: var(--gray-300);
+            z-index: 1;
+        }
+
+        .timeline-item:last-child .timeline-line {
+            display: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== NOT FOUND CARD ===== */
+        .not-found-card {
+            background: var(--gray-50);
+            border-radius: 24px;
+            padding: 40px 25px;
+            text-align: center;
+            margin-top: 20px;
+            border: 2px solid var(--danger);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .not-found-icon {
+            font-size: 60px;
+            color: var(--danger);
+            margin-bottom: 20px;
+        }
+
+        .not-found-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--danger);
+            margin-bottom: 10px;
+        }
+
+        .not-found-text {
+            color: var(--gray-600);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* ===== INFO BOX ===== */
+        .info-box {
+            background: #e6ecff;
+            border-left: 4px solid var(--primary);
+            padding: 16px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box i {
+            font-size: 18px;
+        }
+
+        /* ===== TOAST NOTIFICATION ===== */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+        .toast.info { background: var(--primary); }
+        .toast.warning { background: var(--warning); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .input-group {
+                flex-direction: column;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i class="fa-regular fa-magnifying-glass"></i>
+                STATUS CHECK
+                <i class="fa-regular fa-magnifying-glass"></i>
+            </h1>
+            <p>M.M Public School • Admission Status 2026-27</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <!-- Search Box -->
+            <div class="search-box">
+                <div class="search-label">
+                    <i class="fa-regular fa-id-card"></i>
+                    Enter your Admission ID
+                </div>
+                <div class="input-group">
+                    <input type="text" id="admissionId" placeholder="e.g., ADM26001" maxlength="20" autocomplete="off">
+                    <button onclick="checkStatus()">
+                        <i class="fa-regular fa-magnifying-glass"></i>
+                        Check
+                    </button>
+                </div>
+                <div class="search-hint">
+                    <i class="fa-regular fa-lightbulb"></i>
+                    Enter the Admission ID you received after submission
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" style="display: none;">
+                <div class="loading-container">
+                    <div class="status-loader">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="loading-text">
+                        Fetching your application status
+                        <span class="loading-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Status Result -->
+            <div id="statusResult" style="display: none;"></div>
+
+            <!-- Not Found Result -->
+            <div id="notFoundResult" style="display: none;">
+                <div class="not-found-card">
+                    <div class="not-found-icon">
+                        <i class="fa-regular fa-circle-exclamation"></i>
+                    </div>
+                    <h3 class="not-found-title">Application Not Found</h3>
+                    <p class="not-found-text">
+                        No application found with the provided Admission ID.<br>
+                        Please check your ID and try again.
+                    </p>
+                    <button class="btn btn-primary" onclick="tryAgain()">
+                        <i class="fa-regular fa-rotate"></i> Try Again
+                    </button>
+                </div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <i class="fa-regular fa-circle-info"></i>
+                <span>Admission ID is provided to you after successful application submission.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fa-regular fa-circle-check"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // ========== FIREBASE CONFIGURATION ==========
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+            authDomain: "apni-duniya-b53d7.firebaseapp.com",
+            databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+            projectId: "apni-duniya-b53d7",
+            storageBucket: "apni-duniya-b53d7.firebasestorage.app",
+            messagingSenderId: "178853058918",
+            appId: "1:178853058918:web:91dfaa5c5e41446da290a7",
+            measurementId: "G-SW5SH1V2BB"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const analytics = getAnalytics(app);
+
+        // ========== CHECK STATUS FUNCTION ==========
+        window.checkStatus = async function() {
+            const admissionId = document.getElementById('admissionId').value.trim().toUpperCase();
+
+            if (!admissionId) {
+                showToast('Please enter Admission ID', 'warning');
+                return;
+            }
+
+            if (admissionId.length < 5) {
+                showToast('Invalid Admission ID format', 'error');
+                return;
+            }
+
+            // Hide previous results
+            document.getElementById('statusResult').style.display = 'none';
+            document.getElementById('notFoundResult').style.display = 'none';
+            
+            // Show loading
+            document.getElementById('loadingState').style.display = 'block';
+
+            try {
+                // Fetch from Firebase
+                const snapshot = await get(ref(database, 'admissions/' + admissionId));
+                
+                setTimeout(() => {
+                    document.getElementById('loadingState').style.display = 'none';
+
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        displayStatus(data);
+                    } else {
+                        document.getElementById('notFoundResult').style.display = 'block';
+                    }
+                }, 1500); // 1.5 second delay for better UX
+                
+            } catch (error) {
+                console.error('Error fetching status:', error);
+                document.getElementById('loadingState').style.display = 'none';
+                showToast('Error fetching status. Please try again.', 'error');
+            }
+        };
+
+        // ========== DISPLAY STATUS ==========
+        function displayStatus(data) {
+            const statusResult = document.getElementById('statusResult');
+            
+            // Status icons and colors
+            const statusConfig = {
+                'approved': {
+                    icon: 'fa-regular fa-circle-check',
+                    color: '#155724',
+                    bgColor: '#d4edda',
+                    title: 'Application Approved',
+                    badge: 'badge-approved'
+                },
+                'pending': {
+                    icon: 'fa-regular fa-clock',
+                    color: '#856404',
+                    bgColor: '#fff3cd',
+                    title: 'Application Pending',
+                    badge: 'badge-pending'
+                },
+                'rejected': {
+                    icon: 'fa-regular fa-circle-xmark',
+                    color: '#721c24',
+                    bgColor: '#f8d7da',
+                    title: 'Application Rejected',
+                    badge: 'badge-rejected'
+                }
+            };
+
+            const config = statusConfig[data.status] || statusConfig.pending;
+
+            // Format dates
+            const submissionDate = data.timestamp ? new Date(data.timestamp).toLocaleDateString('en-IN') : 'N/A';
+            const lastUpdate = data.lastUpdated ? new Date(data.lastUpdated).toLocaleDateString('en-IN') : submissionDate;
+
+            // Create simple timeline based on status
+            const timelineItems = [
+                {
+                    stage: 'Application Submitted',
+                    date: submissionDate,
+                    status: 'completed'
+                },
+                {
+                    stage: 'Document Verification',
+                    date: data.status !== 'pending' ? submissionDate : 'In Progress',
+                    status: data.status !== 'pending' ? 'completed' : 'active'
+                },
+                {
+                    stage: 'Admin Review',
+                    date: data.status === 'approved' || data.status === 'rejected' ? lastUpdate : 'Pending',
+                    status: data.status === 'approved' || data.status === 'rejected' ? 'completed' : 
+                           data.status === 'pending' ? 'pending' : 'active'
+                },
+                {
+                    stage: 'Final Approval',
+                    date: data.status === 'approved' ? lastUpdate : 
+                           data.status === 'rejected' ? 'Rejected' : 'Pending',
+                    status: data.status === 'approved' ? 'completed' : 
+                           data.status === 'rejected' ? 'completed' : 'pending'
+                }
+            ];
+
+            const timelineHTML = timelineItems.map(item => {
+                let dotClass = '';
+                if (item.status === 'completed') dotClass = 'completed';
+                else if (item.status === 'active') dotClass = 'active';
+                
+                return `
+                    <div class="timeline-item">
+                        <div class="timeline-dot ${dotClass}">
+                            ${item.status === 'completed' ? '<i class="fa-regular fa-check"></i>' : ''}
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">${item.stage}</div>
+                            <div class="timeline-date">${item.date}</div>
+                        </div>
+                        <div class="timeline-line"></div>
+                    </div>
+                `;
+            }).join('');
+
+            // Build status HTML
+            const html = `
+                <div class="status-card">
+                    <div class="status-header">
+                        <div class="status-icon ${data.status}" style="background: ${config.bgColor}; color: ${config.color};">
+                            <i class="${config.icon}"></i>
+                        </div>
+                        <div class="status-title">
+                            <h2 style="color: ${config.color};">${config.title}</h2>
+                            <p>Admission ID: ${data.admissionId || 'N/A'}</p>
+                        </div>
+                    </div>
+
+                    <div class="status-badge ${config.badge}">
+                        Status: ${(data.status || 'pending').toUpperCase()}
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fa-regular fa-user"></i> Student Name
+                            </div>
+                            <div class="info-value">${data.name || 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fa-regular fa-user-tie"></i> Father's Name
+                            </div>
+                            <div class="info-value">${data.fatherName || 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fa-regular fa-school"></i> Applied Class
+                            </div>
+                            <div class="info-value">Class ${data.classApplied || 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fa-regular fa-calendar"></i> Submission Date
+                            </div>
+                            <div class="info-value">${submissionDate}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fa-regular fa-clock"></i> Last Updated
+                            </div>
+                            <div class="info-value">${lastUpdate}</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline">
+                        <h4 style="margin-bottom: 15px; color: var(--primary);">
+                            <i class="fa-regular fa-timeline"></i> Application Timeline
+                        </h4>
+                        ${timelineHTML}
+                    </div>
+
+                    <div class="info-box" style="margin: 20px 0;">
+                        <i class="fa-regular fa-message"></i>
+                        <span>${data.remarks || 'Your application is being processed.'}</span>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-outline" onclick="printStatus()">
+                            <i class="fa-regular fa-print"></i> Print
+                        </button>
+                        <button class="btn btn-primary" onclick="contactAdmin()">
+                            <i class="fa-regular fa-headset"></i> Contact Admin
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            statusResult.innerHTML = html;
+            statusResult.style.display = 'block';
+        }
+
+        // ========== TRY AGAIN ==========
+        window.tryAgain = function() {
+            document.getElementById('admissionId').value = '';
+            document.getElementById('admissionId').focus();
+            document.getElementById('notFoundResult').style.display = 'none';
+        };
+
+        // ========== PRINT STATUS ==========
+        window.printStatus = function() {
+            window.print();
+        };
+
+        // ========== CONTACT ADMIN ==========
+        window.contactAdmin = function() {
+            showToast('Please contact school office: +91 1234567890', 'info');
+        };
+
+        // ========== TOAST NOTIFICATION ==========
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toast.className = 'toast ' + type;
+            toastMessage.textContent = message;
+            toast.style.display = 'flex';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // ========== ENTER KEY SUPPORT ==========
+        document.getElementById('admissionId').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkStatus();
+            }
+        });
+
+        // Auto-focus input on page load
+        window.onload = function() {
+            document.getElementById('admissionId').focus();
+        };
+    </script>
+</body>
+</html>

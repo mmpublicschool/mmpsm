@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- ✅ BASIC SEO -->
+<title>M.M Public School Mundeshwari | Student Chat</title>
+
+<meta name="description"
+content="M.M Public School Mundeshwari Student Chat - Connect with classmates and teachers">
+
+<meta name="keywords"
+content="MM Public School Mundeshwari, Student Chat, MMPSM Chat, School Communication">
+
+<meta name="author" content="M.M Public School Mundeshwari">
+<meta name="robots" content="index, follow">
+
+<!-- ✅ GOOGLE VERIFICATION -->
+<meta name="google-site-verification"
+content="KPDw4haUQPcKgIXGNM0EbmGKwXwk76fNJI59VcJzwE0">
+
+<!-- ✅ SOCIAL + GOOGLE LOGO -->
+<meta property="og:title" content="M.M Public School Mundeshwari">
+<meta property="og:description"
+content="Student Chat System - Connect with classmates">
+<meta property="og:image"
+content="https://mmpublicschool.github.io/mmpsm/logo.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mmpsm.wuaze.com/">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 16px 20px;
+    font-weight: 800;
+    font-size: 18px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.header i {
+    font-size: 22px;
+    color: #ffd700;
+}
+
+/* ===== CATEGORY BAR ===== */
+.category {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 8px;
+}
+
+.cat-btn {
+    flex: 1;
+    padding: 14px 12px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    background: #f0f4fa;
+    color: #0a2a66;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.cat-btn i {
+    font-size: 16px;
+}
+
+.cat-btn.active {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+/* ===== LIST CONTAINER ===== */
+#list {
+    padding: 16px;
+}
+
+/* ===== SEARCH BAR ===== */
+.search-bar {
+    background: white;
+    border-radius: 50px;
+    padding: 10px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.search-bar i {
+    color: #0a2a66;
+    font-size: 16px;
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+.search-bar input::placeholder {
+    color: #999;
+}
+
+/* ===== STATS CARD ===== */
+.stats-card {
+    background: white;
+    border-radius: 24px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0a2a66;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* ===== CARD ===== */
+.card {
+    background: white;
+    border-radius: 24px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-left: 5px solid #2563eb;
+    cursor: pointer;
+    transition: 0.3s;
+    animation: fadeUp 0.4s ease;
+    position: relative;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(10,42,102,0.15);
+}
+
+.card.pinned {
+    border-left: 5px solid #ff9800;
+    background: linear-gradient(135deg, #fff8e1, #ffffff);
+}
+
+/* ===== AVATAR ===== */
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #e6ecff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 3px solid #0a2a66;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar i {
+    font-size: 28px;
+    color: #0a2a66;
+}
+
+/* ===== INFO ===== */
+.info {
+    flex: 1;
+    min-width: 0;
+}
+
+.name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 6px;
+}
+
+.class-badge {
+    display: inline-block;
+    background: #e6ecff;
+    color: #0a2a66;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 30px;
+    margin-left: 8px;
+}
+
+.sid {
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sid i {
+    color: #0a2a66;
+    font-size: 12px;
+}
+
+/* ===== ONLINE STATUS ===== */
+.online-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ccc;
+    margin-left: 8px;
+}
+
+.online-status.online {
+    background: #2ecc71;
+    box-shadow: 0 0 10px #2ecc71;
+}
+
+/* ===== CHAT BADGE ===== */
+.chat-badge {
+    background: #2563eb;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 30px;
+    margin-left: 8px;
+}
+
+/* ===== FAVOURITE ICON ===== */
+.fav-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: #ff9800;
+    font-size: 18px;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.card.pinned .fav-icon {
+    opacity: 1;
+}
+
+/* ===== LOADING ===== */
+.loading {
+    background: white;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    text-align: center;
+    font-weight: 800;
+    color: #0a2a66;
+}
+
+.loading i {
+    font-size: 40px;
+    margin-bottom: 15px;
+    color: #0a2a66;
+    animation: spin 2s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.progress {
+    width: 100%;
+    height: 6px;
+    margin-top: 16px;
+    background: #e0e7ff;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.progress span {
+    display: block;
+    height: 100%;
+    width: 30%;
+    background: linear-gradient(90deg, #0a2a66, #1e4b8f);
+    animation: slideFast 1s ease infinite;
+}
+
+@keyframes slideFast {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
+}
+
+/* ===== EMPTY STATE ===== */
+.empty {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.empty i {
+    font-size: 60px;
+    color: #0a2a66;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+.empty p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== NO RESULTS MESSAGE ===== */
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 24px;
+    margin: 20px 0;
+}
+
+.no-results i {
+    font-size: 50px;
+    color: #0a2a66;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.no-results h4 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 4px;
+}
+
+.no-results p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ===== BOTTOM SPACE ===== */
+.bottom-space {
+    height: 20px;
+    width: 100%;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <i class="fa-regular fa-comment-dots"></i>
+    Student Chat
+    <i class="fa-regular fa-comment-dots"></i>
+</div>
+
+<!-- CATEGORY BUTTON -->
+<div class="category">
+    <button id="allBtn" class="cat-btn active">
+        <i class="fa-solid fa-users"></i> All Students
+    </button>
+    <button id="favBtn" class="cat-btn">
+        <i class="fa-solid fa-star"></i> Favourites
+    </button>
+</div>
+
+<div id="list">
+    <div class="loading">
+        <i class="fa-solid fa-spinner"></i>
+        <div>Loading Students...</div>
+        <div class="progress"><span></span></div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+    apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    authDomain:"apni-duniya-b53d7.firebaseapp.com",
+    databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const list=document.getElementById("list");
+const allBtn=document.getElementById("allBtn");
+const favBtn=document.getElementById("favBtn");
+
+let mode="all";
+let studentsData={};
+let favData={};
+let onlineData={};
+
+// Default avatar based on gender
+function getDefaultAvatar(gender) {
+    return '<i class="fa-solid fa-user"></i>';
+}
+
+// Load online status
+onValue(ref(db, "online"), (snap) => {
+    onlineData = snap.val() || {};
+    render();
+});
+
+/* ===== LOAD FAVOURITES REALTIME ===== */
+onValue(ref(db,"favouriteStudents"), snap => {
+    favData = snap.val() || {};
+    render();
+});
+
+/* ===== LOAD STUDENTS ===== */
+onValue(ref(db,"students"), snap => {
+    studentsData = {};
+    snap.forEach(c => {
+        studentsData[c.key] = c.val();
+    });
+    render();
+});
+
+/* ===== RENDER FUNCTION ===== */
+function render() {
+    let html = '';
+    
+    // Add search bar
+    html += `
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search students by name or class..." onkeyup="window.filterStudents()">
+        </div>
+    `;
+    
+    let keys = Object.keys(studentsData);
+    
+    // Stats
+    const totalStudents = keys.length;
+    const boys = keys.filter(k => studentsData[k].gender === 'male').length;
+    const girls = keys.filter(k => studentsData[k].gender === 'female').length;
+    const online = keys.filter(k => onlineData[k]).length;
+    
+    html += `
+        <div class="stats-card">
+            <div class="stat-item">
+                <div class="stat-value">${totalStudents}</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">${boys}</div>
+                <div class="stat-label">Boys</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">${girls}</div>
+                <div class="stat-label">Girls</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">${online}</div>
+                <div class="stat-label">Online</div>
+            </div>
+        </div>
+    `;
+    
+    // Filter by mode
+    if (mode === "fav") {
+        keys = keys.filter(k => favData[k]);
+    }
+    
+    // Sort favourites top
+    keys.sort((a,b) => {
+        if (favData[a] && !favData[b]) return -1;
+        if (!favData[a] && favData[b]) return 1;
+        return 0;
+    });
+    
+    if (keys.length === 0) {
+        if (mode === "fav") {
+            html += `
+                <div class="empty">
+                    <i class="fa-regular fa-star"></i>
+                    <h3>No Favourites Yet</h3>
+                    <p>Double tap on any student to add to favourites</p>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="empty">
+                    <i class="fa-regular fa-user"></i>
+                    <h3>No Students Found</h3>
+                    <p>No students have registered yet</p>
+                </div>
+            `;
+        }
+        list.innerHTML = html + '<div class="bottom-space"></div>';
+        return;
+    }
+    
+    html += `<div id="studentsContainer">`;
+    
+    keys.forEach(id => {
+        const d = studentsData[id];
+        const isOnline = onlineData[id] ? true : false;
+        const onlineClass = isOnline ? 'online' : '';
+        
+        // Check if photoURL exists
+        let avatarHtml = '';
+        if (d.photoURL && d.photoURL !== '') {
+            avatarHtml = `<img src="${d.photoURL}" alt="${d.name || 'Student'}" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fa-solid fa-user\'></i>';">`;
+        } else {
+            avatarHtml = getDefaultAvatar(d.gender);
+        }
+        
+        const pinnedClass = favData[id] ? 'pinned' : '';
+        const genderIcon = d.gender === 'female' ? '♀️' : d.gender === 'male' ? '♂️' : '⚥';
+        
+        html += `
+            <div class="card ${pinnedClass}" data-id="${id}" data-name="${(d.name || '').toLowerCase()}" data-class="${(d.class || '').toLowerCase()}">
+                <div class="avatar">
+                    ${avatarHtml}
+                </div>
+                <div class="info">
+                    <div class="name">
+                        ${d.name || "Student"}
+                        <span class="class-badge">${d.class || "N/A"}</span>
+                        <span class="online-status ${onlineClass}"></span>
+                    </div>
+                    <div class="sid">
+                        <i class="fa-regular fa-id-card"></i> ${id}
+                        <span class="chat-badge"><i class="fa-regular fa-message"></i> Chat</span>
+                    </div>
+                </div>
+                ${favData[id] ? '<i class="fa-solid fa-star fav-icon"></i>' : ''}
+            </div>
+        `;
+    });
+    
+    html += `</div><div class="bottom-space"></div>`;
+    list.innerHTML = html;
+    
+    // Add click handlers to cards
+    document.querySelectorAll('.card').forEach(card => {
+        const id = card.dataset.id;
+        const d = studentsData[id];
+        
+        let tapTimer = null;
+        let lastTap = 0;
+        
+        card.addEventListener("click", (e) => {
+            const now = Date.now();
+            
+            // Double tap for favourite
+            if (now - lastTap < 300) {
+                clearTimeout(tapTimer);
+                e.preventDefault();
+                
+                if (favData[id]) {
+                    remove(ref(db, "favouriteStudents/" + id));
+                } else {
+                    set(ref(db, "favouriteStudents/" + id), true);
+                }
+                
+                lastTap = 0;
+                return;
+            }
+            
+            // Single tap for chat
+            tapTimer = setTimeout(() => {
+                window.location.href = "chat.html?uid=" + id + "&name=" + encodeURIComponent(d.name || "Student");
+            }, 250);
+            
+            lastTap = now;
+        });
+    });
+    
+    // Add filter function
+    window.filterStudents = function() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.card');
+        let visibleCount = 0;
+        
+        cards.forEach(card => {
+            const name = card.dataset.name;
+            const className = card.dataset.class;
+            if (name.includes(searchTerm) || className.includes(searchTerm)) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        
+        // Show no results message
+        const existingMsg = document.getElementById('noResultsMsg');
+        if (existingMsg) existingMsg.remove();
+        
+        if (visibleCount === 0 && searchTerm !== '') {
+            const msgDiv = document.createElement('div');
+            msgDiv.id = 'noResultsMsg';
+            msgDiv.className = 'no-results';
+            msgDiv.innerHTML = `
+                <i class="fa-solid fa-search"></i>
+                <h4>No Results Found</h4>
+                <p>No students match "${searchTerm}"</p>
+            `;
+            document.getElementById('studentsContainer').appendChild(msgDiv);
+        }
+    };
+}
+
+/* ===== CATEGORY SWITCH ===== */
+allBtn.onclick = () => {
+    mode = "all";
+    allBtn.classList.add("active");
+    favBtn.classList.remove("active");
+    render();
+};
+
+favBtn.onclick = () => {
+    mode = "fav";
+    favBtn.classList.add("active");
+    allBtn.classList.remove("active");
+    render();
+};
+
+</script>
+
+</body>
+</html>

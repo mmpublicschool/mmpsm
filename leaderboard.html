@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Leaderboard - M.M Public School</title>
+
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:#edf3ff;
+}
+
+/* HEADER */
+.header{
+background:linear-gradient(135deg,#0b3d91,#2563eb);
+color:#fff;
+padding:16px;
+font-size:20px;
+font-weight:900;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+/* CATEGORY */
+.tabs{
+display:flex;
+gap:10px;
+padding:12px;
+}
+
+.tab{
+flex:1;
+background:#fff;
+padding:12px;
+border-radius:12px;
+text-align:center;
+font-weight:900;
+box-shadow:0 4px 10px rgba(0,0,0,.1);
+cursor:pointer;
+transition:.3s;
+}
+
+.tab.active{
+background:#0b3d91;
+color:#fff;
+}
+
+#list{
+padding:14px;
+}
+
+/* CARD */
+.card{
+background:#fff;
+border-radius:18px;
+padding:14px;
+margin-bottom:12px;
+display:flex;
+align-items:center;
+gap:12px;
+box-shadow:0 8px 18px rgba(0,0,0,.12);
+animation:cardEnter .35s ease;
+transition:.25s;
+cursor:pointer;
+}
+
+.card:hover{
+transform:scale(1.02);
+}
+
+/* RANK BOX */
+.rank{
+width:38px;
+height:38px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+background:#0b3d91;
+color:#fff;
+position:relative;
+flex-shrink:0;
+}
+
+/* 👑 CROWN TOP 1 */
+.crown{
+position:absolute;
+top:-12px;
+font-size:16px;
+animation:crownJump 1s infinite alternate;
+}
+
+@keyframes crownJump{
+from{transform:translateY(0)}
+to{transform:translateY(-4px)}
+}
+
+/* AVATAR - Image container */
+.avatar{
+width:46px;
+height:46px;
+border-radius:50%;
+overflow:hidden;
+background:#e6ecff;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-shrink:0;
+border:2px solid #0b3d91;
+}
+
+.avatar img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.avatar i{
+font-size:24px;
+color:#0b3d91;
+}
+
+/* TOP COLORS + GLOW */
+.gold{
+background:#fff4c2;
+box-shadow:0 0 18px rgba(255,215,0,.45);
+border-left:5px solid #ffd700;
+}
+
+.silver{
+background:#e9eef5;
+box-shadow:0 0 14px rgba(180,180,180,.35);
+border-left:5px solid #c0c0c0;
+}
+
+.bronze{
+background:#ffe1cc;
+box-shadow:0 0 14px rgba(205,127,50,.35);
+border-left:5px solid #cd7f32;
+}
+
+.info{
+flex:1;
+min-width:0; /* For text truncation */
+}
+
+.name{
+font-size:16px;
+font-weight:900;
+color:#0b3d91;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.score{
+font-size:13px;
+font-weight:900;
+color:#444;
+margin-top:3px;
+display:flex;
+align-items:center;
+gap:4px;
+}
+
+.score i{
+color:#ff9800;
+font-size:12px;
+}
+
+/* 🔥 PROFESSIONAL LOADING (NO SPINNER) */
+.loading-wrap{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.load-card{
+height:70px;
+border-radius:16px;
+background:linear-gradient(
+90deg,#eef2ff 25%,#dbe4ff 50%,#eef2ff 75%);
+background-size:200% 100%;
+animation:shine 1s infinite;
+}
+
+@keyframes shine{
+0%{background-position:-200% 0}
+100%{background-position:200% 0}
+}
+
+/* ENTRY ANIMATION */
+@keyframes cardEnter{
+from{opacity:0;transform:translateY(25px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* PERCENTAGE BADGE */
+.percent-badge{
+background:#0b3d91;
+color:white;
+padding:4px 8px;
+border-radius:20px;
+font-size:11px;
+font-weight:800;
+margin-left:8px;
+}
+
+/* EMPTY STATE */
+.empty-state{
+text-align:center;
+padding:50px 20px;
+background:white;
+border-radius:20px;
+box-shadow:0 8px 18px rgba(0,0,0,.1);
+}
+
+.empty-state i{
+font-size:48px;
+color:#0b3d91;
+margin-bottom:16px;
+}
+
+.empty-state p{
+font-weight:900;
+color:#0b3d91;
+font-size:16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+🏆 Student Leaderboard
+</div>
+
+<div class="tabs">
+<div id="weeklyBtn" class="tab active">Weekly</div>
+<div id="monthlyBtn" class="tab">Monthly</div>
+</div>
+
+<div id="list"></div>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+import { getDatabase, ref, onValue }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+authDomain:"apni-duniya-b53d7.firebaseapp.com",
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const list=document.getElementById("list");
+const weeklyBtn=document.getElementById("weeklyBtn");
+const monthlyBtn=document.getElementById("monthlyBtn");
+
+let current="weekly";
+let studentsData={};
+
+// Load all students data for images
+onValue(ref(db,"students"), snap => {
+    if(snap.exists()) {
+        snap.forEach(child => {
+            studentsData[child.key] = child.val();
+        });
+    }
+});
+
+// Tab click handlers
+weeklyBtn.onclick=()=>{
+weeklyBtn.classList.add("active");
+monthlyBtn.classList.remove("active");
+current="weekly";
+loadData();
+};
+
+monthlyBtn.onclick=()=>{
+monthlyBtn.classList.add("active");
+weeklyBtn.classList.remove("active");
+current="monthly";
+loadData();
+};
+
+function showLoading(){
+list.innerHTML=`
+<div class="loading-wrap">
+<div class="load-card"></div>
+<div class="load-card"></div>
+<div class="load-card"></div>
+</div>`;
+}
+
+function loadData(){
+showLoading();
+if(current==="weekly") loadWeekly();
+else loadMonthly();
+}
+
+// Helper function to get student image or default icon
+function getStudentImage(studentId, studentData) {
+    // First try to get from students collection
+    if (studentsData[studentId] && studentsData[studentId].photoURL) {
+        return `<img src="${studentsData[studentId].photoURL}" alt="Student" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-user\'></i>';">`;
+    }
+    // If student has photoURL in result data
+    else if (studentData && studentData.photoURL) {
+        return `<img src="${studentData.photoURL}" alt="Student" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-user\'></i>';">`;
+    }
+    // Default icon
+    else {
+        return '<i class="fas fa-user"></i>';
+    }
+}
+
+/* WEEKLY */
+function loadWeekly(){
+onValue(ref(db,"results"), snap => {
+    let arr = [];
+    
+    if(snap.exists()){
+        snap.forEach(monthRef => {
+            monthRef.forEach(studentRef => {
+                const d = studentRef.val();
+                
+                // Try to find student in students collection for photo
+                const studentId = studentRef.key;
+                
+                arr.push({
+                    id: studentId,
+                    name: d.name || "Student",
+                    obtained: Number(d.obtainedMarks) || 0,
+                    total: Number(d.totalMarks) || 100,
+                    photoURL: d.photoURL || (studentsData[studentId]?.photoURL)
+                });
+            });
+        });
+    }
+    
+    render(arr);
+});
+}
+
+/* MONTHLY */
+function loadMonthly(){
+onValue(ref(db,"resultsUploadPanel"), snap => {
+    let arr = [];
+    
+    if(snap.exists()){
+        ["signup","manual"].forEach(type => {
+            const sec = snap.child(type);
+            
+            if(sec.exists()){
+                sec.forEach(studentRef => {
+                    const d = studentRef.val();
+                    const studentId = studentRef.key;
+                    
+                    let total = 0;
+                    Object.values(d.subjects || {}).forEach(n => {
+                        total += Number(n);
+                    });
+                    
+                    arr.push({
+                        id: studentId,
+                        name: d.name || "Student",
+                        obtained: total,
+                        total: 600,
+                        photoURL: d.photoURL || (studentsData[studentId]?.photoURL)
+                    });
+                });
+            }
+        });
+    }
+    
+    render(arr);
+});
+}
+
+/* RENDER */
+function render(arr){
+list.innerHTML = "";
+
+if(arr.length === 0){
+    list.innerHTML = `
+    <div class="empty-state">
+        <i class="fas fa-trophy"></i>
+        <p>No data available</p>
+    </div>`;
+    return;
+}
+
+// Sort by obtained marks (highest first)
+arr.sort((a,b) => b.obtained - a.obtained);
+
+// Take top 50 only for performance
+const topStudents = arr.slice(0, 50);
+
+topStudents.forEach((item, i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    
+    // Add medal classes
+    if(i === 0) card.classList.add("gold");
+    else if(i === 1) card.classList.add("silver");
+    else if(i === 2) card.classList.add("bronze");
+    
+    // Calculate percentage
+    const percentage = ((item.obtained / item.total) * 100).toFixed(1);
+    
+    // Crown only for rank 1
+    const crownHTML = i === 0 ? "<div class='crown'>👑</div>" : "";
+    
+    // Get image HTML
+    const imageHtml = getStudentImage(item.id, item);
+    
+    card.innerHTML = `
+        <div class="rank">
+            ${crownHTML}
+            #${i+1}
+        </div>
+        
+        <div class="avatar">
+            ${imageHtml}
+        </div>
+        
+        <div class="info">
+            <div class="name">${item.name}</div>
+            <div class="score">
+                <i class="fas fa-star"></i>
+                ${item.obtained} / ${item.total}
+                <span class="percent-badge">${percentage}%</span>
+            </div>
+        </div>
+    `;
+    
+    // Optional: Click to view student profile
+    card.addEventListener("click", () => {
+        if(item.id) {
+            window.location.href = `profile.html?id=${item.id}`;
+        }
+    });
+    
+    list.appendChild(card);
+});
+}
+
+// Initial load
+loadData();
+
+</script>
+</body>
+</html>

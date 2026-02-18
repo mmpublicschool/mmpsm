@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M.M PUBLIC SCHOOL AI</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#f4f6fb;
+display:flex;
+flex-direction:column;
+height:100vh;
+}
+
+.header{
+background:#0b3d91;
+color:#fff;
+padding:14px;
+text-align:center;
+font-weight:900;
+}
+
+.chat-area{
+flex:1;
+overflow-y:auto;
+padding:14px;
+}
+
+.msg{
+max-width:80%;
+padding:12px 14px;
+border-radius:16px;
+margin-bottom:10px;
+font-size:14px;
+line-height:1.5;
+}
+
+.user{
+background:#0b3d91;
+color:#fff;
+margin-left:auto;
+}
+
+.bot{
+background:#fff;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.input-bar{
+display:flex;
+gap:8px;
+padding:10px;
+background:#fff;
+border-top:1px solid #eee;
+}
+
+.input-bar input{
+flex:1;
+padding:12px;
+border-radius:12px;
+border:1px solid #ddd;
+outline:none;
+}
+
+.send-btn{
+background:#0b3d91;
+color:#fff;
+border:none;
+padding:0 16px;
+border-radius:12px;
+font-weight:900;
+}
+
+.voice-btn{
+background:#eef2ff;
+border:none;
+border-radius:12px;
+padding:0 14px;
+color:#0b3d91;
+font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">M.M PUBLIC SCHOOL AI</div>
+
+<div id="chat" class="chat-area"></div>
+
+<div class="input-bar">
+<button class="voice-btn" id="voiceBtn">
+<i class="fa-solid fa-microphone"></i>
+</button>
+<input id="msgInput" placeholder="Ask anything...">
+<button class="send-btn" id="sendBtn">
+<i class="fa-solid fa-paper-plane"></i>
+</button>
+</div>
+
+<script>
+const chat=document.getElementById("chat");
+const input=document.getElementById("msgInput");
+const sendBtn=document.getElementById("sendBtn");
+
+function addMsg(text,type){
+const div=document.createElement("div");
+div.className="msg "+type;
+chat.appendChild(div);
+
+if(type==="bot"){
+typingEffect(div,text);
+}else{
+div.innerText=text;
+}
+
+chat.scrollTop=chat.scrollHeight;
+}
+
+function typingEffect(el,text){
+let i=0;
+const timer=setInterval(()=>{
+el.innerText+=text.charAt(i);
+i++;
+chat.scrollTop=chat.scrollHeight;
+if(i>=text.length)clearInterval(timer);
+},15);
+}
+
+async function sendMessage(){
+
+const msg=input.value.trim();
+if(!msg)return;
+
+addMsg(msg,"user");
+input.value="";
+
+const typing=document.createElement("div");
+typing.className="msg bot";
+typing.innerText="Typing...";
+chat.appendChild(typing);
+
+const res=await fetch("http://localhost:3000/chat",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+message:msg
+})
+});
+
+const data=await res.json();
+
+chat.removeChild(typing);
+
+addMsg(data.reply,"bot");
+}
+
+sendBtn.onclick=sendMessage;
+
+input.addEventListener("keypress",e=>{
+if(e.key==="Enter")sendMessage();
+});
+
+/* VOICE */
+const voiceBtn=document.getElementById("voiceBtn");
+
+const SpeechRecognition=
+window.SpeechRecognition||
+window.webkitSpeechRecognition;
+
+if(SpeechRecognition){
+const rec=new SpeechRecognition();
+rec.lang="en-US";
+
+voiceBtn.onclick=()=>{
+rec.start();
+};
+
+rec.onresult=e=>{
+input.value=e.results[0][0].transcript;
+};
+}else{
+voiceBtn.style.display="none";
+}
+</script>
+
+</body>
+</html>

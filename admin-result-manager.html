@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin Result Manager · Edit page</title>
+<!-- minimal icons (keep same style) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+/* ========== EXACT SAME DESIGN – only edit opens new page ========== */
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+body {
+  margin: 0;
+  background: #f2f5fc;
+}
+.header {
+  background: #0b2d63;
+  color: white;
+  padding: 1rem 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px rgba(0,20,50,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.header i {
+  font-size: 1.8rem;
+  opacity: 0.9;
+}
+.wrap {
+  padding: 24px 16px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* toggle buttons */
+.toggle-row {
+  display: flex;
+  gap: 12px;
+  background: white;
+  padding: 6px;
+  border-radius: 48px;
+  box-shadow: 0 4px 10px rgba(0, 30, 70, 0.08);
+  margin-bottom: 24px;
+}
+.catBtn {
+  flex: 1;
+  border: none;
+  padding: 14px 8px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 1rem;
+  background: transparent;
+  color: #1f2a44;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.1s ease, color 0.1s;
+}
+.catBtn i {
+  font-size: 1.2rem;
+}
+.catBtn.active {
+  background: #0b2d63;
+  color: white;
+  box-shadow: 0 4px 8px rgba(11,45,99,0.2);
+}
+.catBtn.active i {
+  color: white;
+}
+
+/* loading skeleton (soft pulse) */
+.loading {
+  height: 76px;
+  border-radius: 20px;
+  background: #e9eef6;
+  margin-bottom: 16px;
+  animation: softPulse 1.4s infinite;
+}
+@keyframes softPulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* card – exactly same */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 24px;
+  margin-top: 16px;
+  box-shadow: 0 6px 16px rgba(0, 20, 50, 0.08);
+  border: 1px solid #eef2f8;
+  transition: box-shadow 0.15s;
+}
+.card:hover {
+  box-shadow: 0 10px 22px rgba(0, 30, 70, 0.12);
+}
+
+.title {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #0b2d63;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.title i {
+  color: #2563eb;
+  background: #e5edff;
+  padding: 8px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+}
+
+.row {
+  margin-top: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #1e293b;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-bottom: 1px solid #edf2f9;
+  padding-bottom: 8px;
+}
+.row i {
+  width: 22px;
+  color: #2563eb;
+  font-size: 1rem;
+}
+.row span {
+  font-weight: 600;
+  color: #1e3a6f;
+  min-width: 80px;
+}
+
+/* action buttons */
+.btnRow {
+  display: flex;
+  gap: 14px;
+  margin-top: 20px;
+}
+.editBtn, .delBtn {
+  flex: 1;
+  border: none;
+  padding: 12px 8px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: white;
+  cursor: pointer;
+  transition: filter 0.1s, transform 0.05s;
+}
+.editBtn {
+  background: #2563eb;
+}
+.delBtn {
+  background: #dc2626;
+}
+.editBtn:hover, .delBtn:hover {
+  filter: brightness(0.9);
+}
+.editBtn:active, .delBtn:active {
+  transform: scale(0.98);
+}
+
+/* toast – same */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 60px;
+  font-weight: 500;
+  box-shadow: 0 10px 25px -6px #0b2d63;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 6px solid #34d399;
+  animation: fadeSlide 0.2s ease-out;
+}
+.toast.error {
+  border-left-color: #f87171;
+}
+@keyframes fadeSlide {
+  from { opacity: 0; bottom: 10px; }
+  to { opacity: 1; bottom: 28px; }
+}
+
+/* DELETE confirmation modal (small, same as before) */
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 10, 30, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fade 0.15s;
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+.modalCard {
+  background: white;
+  width: 90%;
+  max-width: 380px;
+  border-radius: 36px;
+  padding: 28px 24px;
+  box-shadow: 0 25px 45px -12px #0b2d63;
+}
+.modalCard h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #0b2d63;
+  font-weight: 600;
+  display: flex;
+  gap: 12px;
+}
+.modalActions {
+  display: flex;
+  gap: 14px;
+  margin-top: 20px;
+}
+.saveBtn, .cancelBtn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.saveBtn {
+  background: #0b2d63;
+  color: white;
+}
+.cancelBtn {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+.saveBtn:hover { filter: brightness(1.1); }
+.cancelBtn:hover { background: #d0dae8; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <i class="fas fa-clipboard-list"></i> RESULT ADMIN
+</div>
+
+<div class="wrap">
+  <div class="toggle-row">
+    <button id="weeklyBtn" class="catBtn active"><i class="fas fa-calendar-week"></i> Weekly</button>
+    <button id="monthlyBtn" class="catBtn"><i class="fas fa-calendar-alt"></i> Monthly</button>
+  </div>
+  <div id="list"></div>
+</div>
+
+<!-- hidden container for delete modal only (edit uses new page) -->
+<div id="modalRoot" style="display:none;"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getDatabase, ref, get, remove } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    authDomain: "apni-duniya-b53d7.firebaseapp.com",
+    databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId: "apni-duniya-b53d7"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const listEl = document.getElementById("list");
+  const weeklyBtn = document.getElementById("weeklyBtn");
+  const monthlyBtn = document.getElementById("monthlyBtn");
+
+  let mode = "weekly";
+
+  // --- simple toast (same) ---
+  function showToast(msg, isError = false) {
+    const old = document.querySelector('.toast');
+    if (old) old.remove();
+    const toast = document.createElement('div');
+    toast.className = isError ? 'toast error' : 'toast';
+    toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  // --- DELETE confirmation modal (same as before, never changes) ---
+  function confirmDelete(path) {
+    const overlay = document.createElement('div');
+    overlay.className = 'modalOverlay';
+    overlay.innerHTML = `
+      <div class="modalCard" style="max-width:360px; text-align:center;">
+        <h2><i class="fas fa-trash-alt" style="color:#dc2626;"></i> Delete?</h2>
+        <p style="margin:20px 0;">Permanently delete this entry?</p>
+        <div class="modalActions">
+          <button class="cancelBtn" id="cancelDel">Cancel</button>
+          <button class="saveBtn" id="confirmDel" style="background:#dc2626;">Delete</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    document.getElementById('cancelDel').addEventListener('click', () => overlay.remove());
+    document.getElementById('confirmDel').addEventListener('click', async () => {
+      overlay.remove();
+      try {
+        await remove(ref(db, path));
+        showToast('Deleted successfully');
+        loadData();
+      } catch (e) {
+        showToast('Delete failed', true);
+      }
+    });
+  }
+
+  window.deleteItem = confirmDelete;
+
+  // --- EDIT now opens a NEW PAGE (same data, separate page) ---
+  window.editItem = function(path, data) {
+    // Serialize data to pass via sessionStorage (clean, no URL limits)
+    // We store under a temporary key, then open blank page which reads it.
+    const editId = 'edit_' + Date.now();
+    sessionStorage.setItem(editId, JSON.stringify({ path, data }));
+    // Open new page (edit.html?key=...). We'll create a simple inline edit page dynamically.
+    // But we need an actual HTML page. To keep everything in one file, we open about:blank and write.
+    const editWin = window.open('about:blank', '_blank');
+    if (!editWin) {
+      alert('Popup blocked! Please allow popups for this site.');
+      return;
+    }
+    // Write a complete edit page into the new window.
+    editWin.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Edit result · Admin</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <style>
+          * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+          body { background: #f2f5fc; margin:0; padding:20px; display: flex; justify-content: center; }
+          .editContainer {
+            max-width: 600px; width:100%; background: white; border-radius: 36px; padding: 32px;
+            box-shadow: 0 25px 45px -12px #0b2d63;
+          }
+          h2 { color: #0b2d63; display: flex; gap:10px; align-items:center; margin-top:0; }
+          label { font-weight:600; margin-top:16px; display:block; color:#1e293b; }
+          input, textarea {
+            width: 100%; padding: 14px 18px; margin: 6px 0 8px; border: 1px solid #cfddee;
+            border-radius: 40px; font-size:1rem; background:#fafcff;
+          }
+          input:focus { border-color:#2563eb; outline:none; background:white; }
+          .btnGroup { display: flex; gap:16px; margin-top:30px; }
+          button {
+            flex:1; padding:16px; border:none; border-radius:60px; font-weight:700; font-size:1.1rem;
+            cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+          }
+          .saveBtn { background:#0b2d63; color:white; }
+          .cancelBtn { background:#e2e8f0; color:#1e293b; }
+          .saveBtn:hover { filter:brightness(1.1); }
+          .cancelBtn:hover { background:#d0dae8; }
+          .row { margin-bottom:4px; }
+        </style>
+      </head>
+      <body>
+        <div class="editContainer" id="editPage">
+          <h2><i class="fas fa-pen" style="color:#2563eb;"></i> Edit result (new page)</h2>
+          <div id="dynamicFields"></div>
+          <div class="btnGroup">
+            <button class="cancelBtn" onclick="window.close()"><i class="fas fa-times"></i> Cancel</button>
+            <button class="saveBtn" id="saveEditBtn"><i class="fas fa-save"></i> Save changes</button>
+          </div>
+        </div>
+        <script>
+          // Read data from sessionStorage using key from opener
+          const storageKey = '${editId}';
+          const item = sessionStorage.getItem(storageKey);
+          if (!item) {
+            document.body.innerHTML = '<p style="color:red;">Error: no data</p>';
+          } else {
+            const { path, data } = JSON.parse(item);
+            const container = document.getElementById('dynamicFields');
+
+            function createField(labelText, value, fieldName) {
+              const div = document.createElement('div');
+              div.innerHTML = '<label>' + labelText + '</label>' +
+                '<input id="field_' + fieldName + '" value="' + (value || '') + '" />';
+              return div;
+            }
+
+            // Basic fields
+            container.appendChild(createField('Full name', data.name, 'name'));
+            container.appendChild(createField('Class', data.class, 'class'));
+            container.appendChild(createField('Grade', data.grade, 'grade'));
+            container.appendChild(createField('School ID', data.schoolId, 'schoolId'));
+
+            // Subjects or weekly
+            if (data.subjects) {
+              for (let sub in data.subjects) {
+                const subDiv = document.createElement('div');
+                subDiv.innerHTML = '<label>' + sub + '</label>' +
+                  '<input id="subj_' + sub + '" value="' + (data.subjects[sub] || '') + '" />';
+                container.appendChild(subDiv);
+              }
+            } else if (data.subject) {
+              container.appendChild(createField('Subject', data.subject, 'subject'));
+              container.appendChild(createField('Obtained marks', data.obtainedMarks, 'obtained'));
+              container.appendChild(createField('Total marks', data.totalMarks, 'total'));
+            }
+
+            // Time hidden but we keep
+            const timeField = document.createElement('input');
+            timeField.type = 'hidden';
+            timeField.id = 'field_time';
+            timeField.value = data.time || Date.now();
+            container.appendChild(timeField);
+
+            document.getElementById('saveEditBtn').onclick = async function() {
+              // build updated object
+              const updated = {
+                name: document.getElementById('field_name')?.value.trim() || data.name,
+                class: document.getElementById('field_class')?.value.trim() || data.class,
+                grade: document.getElementById('field_grade')?.value.trim() || data.grade,
+                schoolId: document.getElementById('field_schoolId')?.value.trim() || data.schoolId,
+                time: Number(document.getElementById('field_time')?.value) || Date.now()
+              };
+
+              if (data.subjects) {
+                const subjects = {};
+                for (let sub in data.subjects) {
+                  const inp = document.getElementById('subj_' + sub);
+                  subjects[sub] = inp ? inp.value.trim() : data.subjects[sub];
+                }
+                updated.subjects = subjects;
+              } else if (data.subject) {
+                updated.subject = document.getElementById('field_subject')?.value.trim() || data.subject;
+                updated.obtainedMarks = document.getElementById('field_obtained')?.value.trim() || data.obtainedMarks;
+                updated.totalMarks = document.getElementById('field_total')?.value.trim() || data.totalMarks;
+              }
+
+              // Use Firebase update via opener (we have access to opener.db)
+              try {
+                const { getDatabase, ref, update } = await import("https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js");
+                const db = getDatabase(opener.firebaseApp); // get app from parent
+                await update(ref(db, path), updated);
+                alert('✅ Updated successfully');
+                opener.showToast('Updated', false);
+                window.close();
+                if (opener) opener.loadData(); // refresh list
+              } catch (err) {
+                alert('❌ Update error: ' + err.message);
+              }
+            };
+          }
+        <\/script>
+      </body>
+      </html>
+    `);
+    editWin.document.close();
+    // We also need to pass firebaseApp reference to child.
+    // The child accesses `opener.firebaseApp` – we attach it to window.
+    // But our app is in module scope, not global. So we expose it:
+    window.firebaseApp = app;   // temporary global for child
+    // Also expose showToast and loadData for child to call.
+    window.showToast = showToast;
+    window.loadData = loadData;
+  };
+
+  // --- card builder (exactly same, only edit button calls new page) ---
+  function createCard(d, path) {
+    let details = '';
+    if (d.subjects) {
+      Object.keys(d.subjects).forEach(sub => {
+        details += `<div class="row"><i class="fas fa-book"></i> <span>${sub}</span> : ${d.subjects[sub]}</div>`;
+      });
+    } else if (d.subject) {
+      details += `
+        <div class="row"><i class="fas fa-book"></i> <span>Subject</span> : ${d.subject}</div>
+        <div class="row"><i class="fas fa-chart-line"></i> <span>Marks</span> : ${d.obtainedMarks || 0} / ${d.totalMarks || 0}</div>
+      `;
+    }
+
+    const timeStr = d.time ? new Date(d.time).toLocaleString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}) : '-';
+
+    return `
+      <div class="card">
+        <div class="title"><i class="fas fa-user"></i> ${d.name || 'Unnamed'}</div>
+        <div class="row"><i class="fas fa-layer-group"></i> <span>Class</span> : ${d.class || '-'}</div>
+        <div class="row"><i class="fas fa-star"></i> <span>Grade</span> : ${d.grade || '-'}</div>
+        <div class="row"><i class="fas fa-id-card"></i> <span>School ID</span> : ${d.schoolId || '-'}</div>
+        ${details}
+        <div class="row"><i class="fas fa-clock"></i> <span>Time</span> : ${timeStr}</div>
+        <div class="btnRow">
+          <button class="editBtn" onclick='editItem("${path}", ${JSON.stringify(d).replace(/'/g, "&apos;")})'><i class="fas fa-edit"></i> Edit</button>
+          <button class="delBtn" onclick="deleteItem('${path}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // --- load data (same) ---
+  window.loadData = async function() {
+    listEl.innerHTML = `<div class="loading"></div><div class="loading"></div>`;
+
+    if (mode === 'weekly') {
+      const snap = await get(ref(db, 'results'));
+      listEl.innerHTML = '';
+      if (!snap.exists()) {
+        listEl.innerHTML = `<div class="card"><div class="title"><i class="fas fa-info-circle"></i> No weekly data</div></div>`;
+        return;
+      }
+      snap.forEach(stu => {
+        stu.forEach(child => {
+          listEl.innerHTML += createCard(child.val(), `results/${stu.key}/${child.key}`);
+        });
+      });
+    } else {
+      const paths = ['resultsUploadPanel/signup', 'resultsUploadPanel/manual'];
+      listEl.innerHTML = '';
+      for (const p of paths) {
+        const snap = await get(ref(db, p));
+        if (snap.exists()) {
+          snap.forEach(child => {
+            listEl.innerHTML += createCard(child.val(), `${p}/${child.key}`);
+          });
+        }
+      }
+      if (listEl.innerHTML === '') {
+        listEl.innerHTML = `<div class="card"><div class="title"><i class="fas fa-database"></i> No monthly entries</div></div>`;
+      }
+    }
+  };
+
+  weeklyBtn.onclick = () => {
+    mode = 'weekly';
+    weeklyBtn.classList.add('active');
+    monthlyBtn.classList.remove('active');
+    loadData();
+  };
+  monthlyBtn.onclick = () => {
+    mode = 'monthly';
+    monthlyBtn.classList.add('active');
+    weeklyBtn.classList.remove('active');
+    loadData();
+  };
+
+  loadData();
+</script>
+</body>
+</html>

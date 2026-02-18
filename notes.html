@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>M.M Public School | Study Notes</title>
+<!-- ✅ BASIC SEO -->
+<meta name="description"
+content="M.M Public School Mundeshwari - Study Notes, PDF Notes, Chapter-wise Notes for all classes">
+
+<meta name="keywords"
+content="MM Public School Mundeshwari, Study Notes, PDF Notes, Chapter Notes, Class Notes">
+
+<meta name="author" content="M.M Public School Mundeshwari">
+<meta name="robots" content="index, follow">
+
+<!-- ✅ GOOGLE VERIFICATION -->
+<meta name="google-site-verification"
+content="KPDw4haUQPcKgIXGNM0EbmGKwXwk76fNJI59VcJzwE0">
+
+<!-- ✅ SOCIAL + GOOGLE LOGO -->
+<meta property="og:title" content="M.M Public School Mundeshwari">
+<meta property="og:description"
+content="Study Notes - Chapter-wise PDF Notes for all classes">
+
+<meta property="og:image"
+content="https://mmpublicschool.github.io/mmpsm/logo.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mmpsm.wuaze.com/">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+    padding-bottom: 70px;
+    width: 100%;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    width: 100%;
+}
+
+.menu-icon {
+    font-size: 20px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    flex-shrink: 0;
+    transition: 0.2s;
+}
+
+.menu-icon:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.school-box {
+    text-align: center;
+    flex: 1;
+}
+
+.school-top {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.school-bottom {
+    font-size: 11px;
+    opacity: 0.9;
+    margin-top: 2px;
+    color: #ffd700;
+}
+
+.right-icons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.right-icons i {
+    font-size: 18px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: 0.2s;
+}
+
+.right-icons i:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.right-icons a {
+    color: white;
+    text-decoration: none;
+}
+
+.notification-icon {
+    position: relative;
+}
+
+.notif-count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ff4444;
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid white;
+}
+
+.bell-blink i {
+    animation: bellShake 1s infinite;
+}
+
+@keyframes bellShake {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(15deg); }
+    75% { transform: rotate(-15deg); }
+}
+
+/* ===== NOTIFICATION POPUP ===== */
+.notif-popup {
+    position: fixed;
+    top: 70px;
+    right: 12px;
+    width: 300px;
+    max-height: 400px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    z-index: 1500;
+    display: none;
+    overflow: hidden;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.notif-head {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.notif-head button {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.notif-head button:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+#notifList {
+    max-height: 330px;
+    overflow-y: auto;
+}
+
+.notif-item {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.notif-item:hover {
+    background: #f8f9ff;
+}
+
+.notif-class {
+    display: inline-block;
+    background: #0a2a66;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 30px;
+    margin-bottom: 8px;
+}
+
+.notif-title {
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.notif-desc {
+    color: #666;
+    line-height: 1.5;
+}
+
+.notif-time {
+    font-size: 10px;
+    color: #ff9800;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.empty-msg {
+    padding: 30px 20px;
+    text-align: center;
+    color: #666;
+    font-size: 13px;
+}
+
+/* ===== ADMIN DIALOG ===== */
+.admin-dialog {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 16px;
+}
+
+.admin-dialog-box {
+    background: white;
+    padding: 32px;
+    border-radius: 32px;
+    width: 90%;
+    max-width: 340px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.admin-dialog-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.admin-dialog-title {
+    font-weight: 800;
+    font-size: 22px;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+.admin-dialog-text {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.admin-dialog-input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 2px solid #e0e7ff;
+    font-size: 14px;
+    background: #f8fafd;
+    outline: none;
+    transition: 0.2s;
+    margin-bottom: 12px;
+}
+
+.admin-dialog-input:focus {
+    border-color: #0a2a66;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(10,42,102,0.1);
+}
+
+.admin-dialog-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.admin-dialog-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.admin-dialog-btn.cancel {
+    background: #f0f0f0;
+    color: #495057;
+}
+
+.admin-dialog-btn.cancel:hover {
+    background: #e0e0e0;
+}
+
+.admin-dialog-btn.confirm {
+    background: #0a2a66;
+    color: white;
+}
+
+.admin-dialog-btn.confirm:hover {
+    background: #1e4b8f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+/* ===== CONFIRM DIALOG ===== */
+.confirm-dialog {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 16px;
+}
+
+.dialog-box {
+    background: white;
+    padding: 28px;
+    border-radius: 32px;
+    width: 90%;
+    max-width: 300px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.3s ease;
+}
+
+.dialog-title {
+    font-weight: 800;
+    font-size: 20px;
+    color: #0a2a66;
+    margin-bottom: 12px;
+}
+
+.dialog-text {
+    color: #666;
+    margin-bottom: 24px;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.dialog-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.cancel-btn, .ok-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+.cancel-btn {
+    background: #f0f0f0;
+    color: #495057;
+}
+
+.cancel-btn:hover {
+    background: #e0e0e0;
+}
+
+.ok-btn {
+    background: #0a2a66;
+    color: white;
+}
+
+.ok-btn:hover {
+    background: #1e4b8f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+    padding: 16px 16px 8px 16px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #0a2a66;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title i {
+    color: #ff9800;
+    font-size: 22px;
+}
+
+/* ===== STATS CARD ===== */
+.stats-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin: 16px;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0a2a66;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* ===== CATEGORY BAR ===== */
+.category-bar {
+    display: flex;
+    gap: 10px;
+    padding: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.category-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.category-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 13px;
+    background: white;
+    color: #0a2a66;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+
+.category-btn.active {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+/* ===== NOTES GRID ===== */
+.apps-section {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+}
+
+/* ===== NOTE CARD ===== */
+.app-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #0a2a66;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.app-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(10,42,102,0.15);
+    border-color: #0a2a66;
+}
+
+.app-card i {
+    font-size: 40px;
+    color: #dc2626;
+    filter: drop-shadow(0 4px 8px rgba(220,38,38,0.2));
+}
+
+.app-card span {
+    font-weight: 800;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.class-badge {
+    background: #e6ecff;
+    color: #0a2a66;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 30px;
+    margin-top: 4px;
+}
+
+/* ===== BUTTON GROUP ===== */
+.button-group {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.download-btn, .view-btn {
+    flex: 1;
+    padding: 8px 4px;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 11px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: transparent;
+    color: #0a2a66;
+    border: 1px solid #0a2a66;
+}
+
+.download-btn:hover {
+    background: #0a2a66;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.view-btn:hover {
+    background: #0a2a66;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(10,42,102,0.3);
+}
+
+.download-btn i, .view-btn i {
+    font-size: 12px;
+}
+
+/* ===== PDF VIEWER ===== */
+#pdfViewer {
+    position: fixed;
+    inset: 0;
+    background: #1a1a1a;
+    display: none;
+    z-index: 9999;
+    flex-direction: column;
+}
+
+#pdfHeader {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#pdfHeader span {
+    font-weight: 800;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#pdfHeader span i {
+    font-size: 18px;
+}
+
+#pdfActions {
+    display: flex;
+    gap: 8px;
+}
+
+.pdf-action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    border: none;
+    color: white;
+    font-size: 18px;
+}
+
+.pdf-action-btn:hover {
+    background: rgba(255,255,255,0.25);
+    transform: scale(1.1);
+}
+
+#pdfFrame {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: white;
+}
+
+/* ===== PDF OPTIONS MENU ===== */
+.pdf-options {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border-radius: 60px;
+    padding: 12px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: none;
+    gap: 20px;
+    z-index: 10001;
+    animation: slideUp 0.2s ease;
+}
+
+.pdf-option-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    min-width: 60px;
+}
+
+.pdf-option-item i {
+    font-size: 24px;
+    color: #0a2a66;
+}
+
+.pdf-option-item span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #333;
+}
+
+.pdf-option-item:hover i {
+    transform: scale(1.2);
+    color: #ff9800;
+}
+
+/* ===== LOADING SCREEN ===== */
+#loadingScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    z-index: 99999;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(255,255,255,0.2);
+    border-top: 5px solid #ffd700;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loadingCount {
+    font-size: 32px;
+    font-weight: 800;
+    color: #ffd700;
+    margin-bottom: 8px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    grid-column: span 2;
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.empty-state i {
+    font-size: 60px;
+    color: #0a2a66;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-top: 1px solid #f0f0f0;
+}
+
+.nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #999;
+    font-size: 11px;
+    padding: 8px;
+    transition: 0.2s;
+    gap: 4px;
+}
+
+.nav-item.active {
+    color: #0a2a66;
+}
+
+.nav-item i {
+    font-size: 20px;
+}
+
+.nav-item.active i {
+    color: #0a2a66;
+}
+
+.nav-item span {
+    font-weight: 500;
+}
+
+/* ===== POPULAR TAGS ===== */
+.tags-section {
+    padding: 0 16px 16px 16px;
+}
+
+.tags-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background: white;
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0a2a66;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tag i {
+    color: #ff9800;
+}
+
+/* ===== NEW BADGE ===== */
+.new-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4444;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 30px;
+    box-shadow: 0 2px 10px rgba(255,68,68,0.3);
+    z-index: 10;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== ADMIN DIALOG ===== -->
+<div id="adminDialog" class="admin-dialog">
+    <div class="admin-dialog-box">
+        <div class="admin-dialog-icon">🔐</div>
+        <div class="admin-dialog-title">Admin Login</div>
+        <div class="admin-dialog-text">
+            Please enter your credentials to access admin panel.
+        </div>
+        <input type="text" id="adminUsername" class="admin-dialog-input" placeholder="Username" value="mmpublicschoo">
+        <input type="password" id="adminPassword" class="admin-dialog-input" placeholder="Password" value="MMPSM">
+        <div class="admin-dialog-actions">
+            <button class="admin-dialog-btn cancel" id="cancelAdmin">Cancel</button>
+            <button class="admin-dialog-btn confirm" id="confirmAdmin">Login</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== PDF OPTIONS MENU ===== -->
+<div id="pdfOptions" class="pdf-options">
+    <div class="pdf-option-item" onclick="downloadCurrentPdf()">
+        <i class="fa-regular fa-circle-down"></i>
+        <span>Download</span>
+    </div>
+    <div class="pdf-option-item" onclick="shareCurrentPdf()">
+        <i class="fa-regular fa-share-from-square"></i>
+        <span>Share</span>
+    </div>
+    <div class="pdf-option-item" onclick="printCurrentPdf()">
+<i class="fa-solid fa-print"></i>        <span>Print</span>
+    </div>
+    <div class="pdf-option-item" onclick="closePdfOptions()">
+<i class="fa-solid fa-xmark"></i>        <span>Close</span>
+    </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+
+<div class="menu-icon" id="menuBtn">
+<i class="fa-solid fa-bars"></i>
+</div>
+
+<div class="school-box">
+<div class="school-top">M. M PUBLIC SCHOOL</div>
+<div class="school-bottom">MUNDESHWARI</div>
+</div>
+
+<div class="right-icons">
+<div class="notification-icon" id="openNotif">
+<i class="fa-regular fa-bell"></i>
+<span class="notif-count" id="notifCount">0</span>
+</div>
+
+<a href="signup.html">
+<i class="fa-solid fa-user-plus"></i>
+</a>
+</div>
+
+</header>
+
+<!-- 🔔 NOTIFICATION POPUP -->
+<div class="notif-popup" id="notifPopup">
+<div class="notif-head">
+<span><i class="fa-regular fa-bell"></i> Notes Updates</span>
+<button id="clearNotif">Clear</button>
+</div>
+<div id="notifList"></div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-dialog" id="confirmDialog">
+<div class="dialog-box">
+<div class="dialog-title">Clear Notifications</div>
+<div class="dialog-text">Are you sure you want to delete all notes notifications?</div>
+<div class="dialog-actions">
+<button class="cancel-btn" id="cancelClear">Cancel</button>
+<button class="ok-btn" id="confirmClear">Delete</button>
+</div>
+</div>
+</div>
+
+<!-- STATS CARD -->
+<div class="stats-card" id="statsCard">
+    <div class="stat-item">
+        <div class="stat-value" id="totalNotes">0</div>
+        <div class="stat-label">Total Notes</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="totalDownloads">0</div>
+        <div class="stat-label">Downloads</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="popularClass">-</div>
+        <div class="stat-label">Popular</div>
+    </div>
+</div>
+
+<!-- CATEGORY FILTER -->
+<div class="category-bar" id="categoryBar">
+    <button class="category-btn active" data-class="all">All Classes</button>
+    <button class="category-btn" data-class="6">Class 6</button>
+    <button class="category-btn" data-class="7">Class 7</button>
+    <button class="category-btn" data-class="8">Class 8</button>
+    <button class="category-btn" data-class="9">Class 9</button>
+    <button class="category-btn" data-class="10">Class 10</button>
+    <button class="category-btn" data-class="11">Class 11</button>
+    <button class="category-btn" data-class="12">Class 12</button>
+</div>
+
+<!-- SECTION TITLE -->
+<div class="section-title">
+    <i class="fa-solid fa-book-open"></i>
+    Study Notes
+</div>
+
+<!-- NOTES GRID -->
+<section class="apps-section" id="notesList"></section>
+
+<!-- POPULAR TAGS -->
+<div class="tags-section">
+    <div class="tags-container" id="tagsContainer">
+        <span class="tag"><i class="fa-regular fa-star"></i> Mathematics</span>
+        <span class="tag"><i class="fa-regular fa-star"></i> Science</span>
+        <span class="tag"><i class="fa-regular fa-star"></i> English</span>
+        <span class="tag"><i class="fa-regular fa-star"></i> Hindi</span>
+        <span class="tag"><i class="fa-regular fa-star"></i> SST</span>
+    </div>
+</div>
+
+<!-- ===== PDF VIEWER ===== -->
+<div id="pdfViewer">
+    <div id="pdfHeader">
+        <span><i class="fa-regular fa-file-pdf"></i> <span id="pdfName">PDF Viewer</span></span>
+<div id="pdfActions">
+    <div class="pdf-action-btn" onclick="showPdfOptions()">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+    </div>
+    <div class="pdf-action-btn" onclick="closePdf()">
+        <i class="fa-solid fa-xmark"></i>
+    </div>
+</div>
+    </div>
+    <iframe id="pdfFrame"></iframe>
+</div>
+
+<!-- ===== LOADING SCREEN ===== -->
+<div id="loadingScreen">
+    <div class="loading-spinner"></div>
+    <span id="loadingCount">0</span>%
+    <span style="font-size:14px; margin-top:8px;">Downloading...</span>
+</div>
+
+<!-- ===== SUCCESS DIALOG ===== -->
+<div class="confirm-dialog" id="successDialog">
+    <div class="dialog-box">
+        <div class="dialog-title">✅ Download Successful!</div>
+        <div class="dialog-text">Your PDF has been downloaded successfully.</div>
+        <div class="dialog-actions">
+            <button class="ok-btn" id="okSuccess">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SIDE MENU ===== -->
+<div class="side-menu" id="sideMenu" style="position:fixed; top:0; left:-280px; width:280px; height:100vh; background:white; z-index:2000; transition:0.3s; box-shadow:2px 0 30px rgba(0,0,0,0.15); overflow-y:auto;">
+    <div class="menu-head" style="background:linear-gradient(135deg,#0a2a66,#1e4b8f); color:white; padding:30px 20px; text-align:center;">
+        <div style="font-size:20px; font-weight:800;">M.M PUBLIC SCHOOL</div>
+        <div style="font-size:13px; opacity:0.8;">Mundeshwari</div>
+    </div>
+    <a href="index.html" class="menu-item" style="display:flex; align-items:center; gap:16px; padding:18px 20px; color:#333; text-decoration:none; border-bottom:1px solid #f0f0f0;">
+        <i class="fa-solid fa-house"></i> Home
+    </a>
+    <a href="notes.html" class="menu-item active" style="display:flex; align-items:center; gap:16px; padding:18px 20px; color:#333; text-decoration:none; border-bottom:1px solid #f0f0f0;">
+        <i class="fa-solid fa-book"></i> Notes
+    </a>
+    <a href="profile.html" class="menu-item" style="display:flex; align-items:center; gap:16px; padding:18px 20px; color:#333; text-decoration:none; border-bottom:1px solid #f0f0f0;">
+        <i class="fa-solid fa-user"></i> Profile
+    </a>
+    <!-- Downloads in Side Menu Only -->
+    <a href="download.html" class="menu-item" style="display:flex; align-items:center; gap:16px; padding:18px 20px; color:#333; text-decoration:none; border-bottom:1px solid #f0f0f0; position:relative;">
+        <i class="fa-solid fa-download"></i> Downloads
+        <span style="background:#ff4444; color:white; font-size:10px; padding:2px 6px; border-radius:30px; margin-left:auto;">New</span>
+    </a>
+    <!-- Admin Panel in Side Menu -->
+    <div class="menu-item" onclick="openAdminDialog()" style="display:flex; align-items:center; gap:16px; padding:18px 20px; color:#333; text-decoration:none; border-bottom:1px solid #f0f0f0; cursor:pointer;">
+        <i class="fa-solid fa-shield-halved" style="color:#0a2a66;"></i>
+        Admin Panel
+        <span style="background:#ff4444; color:white; font-size:10px; padding:2px 8px; border-radius:30px; margin-left:auto;">Admin</span>
+    </div>
+</div>
+<div class="menu-overlay" id="menuOverlay" style="position:fixed; top:0; left:0; width:100%; height:100vh; background:rgba(0,0,0,0.5); z-index:1999; display:none; backdrop-filter:blur(3px);"></div>
+
+<!-- ===== NAVIGATION (Without Downloads) ===== -->
+<nav class="bottom-nav">
+<a href="index.html" class="nav-item">
+<i class="fa-solid fa-house"></i>
+<span>Home</span>
+</a>
+<a href="notes.html" class="nav-item active">
+<i class="fa-solid fa-book"></i>
+<span>Notes</span>
+</a>
+<a href="profile.html" class="nav-item">
+<i class="fa-solid fa-user"></i>
+<span>Profile</span>
+</a>
+</nav>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue, push, get, child, update, remove, set } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+    apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+// DOM Elements
+const list = document.getElementById("notesList");
+const loading = document.getElementById("loadingScreen");
+const loadingCount = document.getElementById("loadingCount");
+const successDialog = document.getElementById("successDialog");
+const okSuccess = document.getElementById("okSuccess");
+const pdfViewer = document.getElementById("pdfViewer");
+const pdfFrame = document.getElementById("pdfFrame");
+const pdfName = document.getElementById("pdfName");
+const pdfOptions = document.getElementById("pdfOptions");
+const totalNotes = document.getElementById("totalNotes");
+const totalDownloads = document.getElementById("totalDownloads");
+const popularClass = document.getElementById("popularClass");
+
+// Admin Dialog Elements
+const adminDialog = document.getElementById("adminDialog");
+const cancelAdmin = document.getElementById("cancelAdmin");
+const confirmAdmin = document.getElementById("confirmAdmin");
+const adminUsername = document.getElementById("adminUsername");
+const adminPassword = document.getElementById("adminPassword");
+
+// Menu Elements
+const menuBtn = document.getElementById("menuBtn");
+const sideMenu = document.getElementById("sideMenu");
+const menuOverlay = document.getElementById("menuOverlay");
+
+let currentFilter = "all";
+let notesData = [];
+let currentPdfLink = "";
+let currentPdfTitle = "";
+
+/* ===== MENU TOGGLE ===== */
+menuBtn.onclick = () => {
+    sideMenu.style.left = "0";
+    menuOverlay.style.display = "block";
+};
+
+menuOverlay.onclick = () => {
+    sideMenu.style.left = "-280px";
+    menuOverlay.style.display = "none";
+};
+
+/* ===== OPEN ADMIN DIALOG ===== */
+window.openAdminDialog = () => {
+    // ⚠️ FIXED: Username/password ab pre-fill nahi hoga
+    adminUsername.value = "";  // Empty kiya
+    adminPassword.value = "";  // Empty kiya
+    adminDialog.style.display = "flex";
+};
+
+cancelAdmin.onclick = () => {
+    adminDialog.style.display = "none";
+};
+
+confirmAdmin.onclick = () => {
+    const username = adminUsername.value.trim();
+    const password = adminPassword.value.trim();
+    
+    if (username === "mmpublicschoo" && password === "MMPSM") {
+        adminDialog.style.display = "none";
+        window.location.href = "notes-admin.html";
+    } else {
+        alert("❌ Invalid username or password");
+    }
+};
+
+// Close dialog on outside click
+adminDialog.addEventListener('click', (e) => {
+    if (e.target === adminDialog) {
+        adminDialog.style.display = "none";
+    }
+});
+
+/* ===== PDF OPTIONS ===== */
+window.showPdfOptions = () => {
+    pdfOptions.style.display = "flex";
+};
+
+window.closePdfOptions = () => {
+    pdfOptions.style.display = "none";
+};
+
+window.downloadCurrentPdf = () => {
+    if (currentPdfLink) {
+        window.downloadFile(currentPdfTitle, currentPdfLink, "all");
+        pdfOptions.style.display = "none";
+    }
+};
+
+window.shareCurrentPdf = () => {
+    if (navigator.share) {
+        navigator.share({
+            title: currentPdfTitle,
+            text: 'Check out this PDF from M.M Public School',
+            url: currentPdfLink,
+        });
+    } else {
+        // Fallback
+        navigator.clipboard.writeText(currentPdfLink);
+        alert("📋 Link copied to clipboard!");
+    }
+    pdfOptions.style.display = "none";
+};
+
+window.printCurrentPdf = () => {
+    const printWindow = window.open(currentPdfLink);
+    printWindow.onload = () => {
+        printWindow.print();
+    };
+    pdfOptions.style.display = "none";
+};
+
+/* ===== TIME AGO ===== */
+function timeAgo(ts){
+    const diff = Math.floor((Date.now() - ts) / 60000);
+    if(diff < 1) return "Just now";
+    if(diff === 1) return "1 min ago";
+    if(diff < 60) return diff + " min ago";
+    const hours = Math.floor(diff / 60);
+    if(hours === 1) return "1 hour ago";
+    if(hours < 24) return hours + " hours ago";
+    const days = Math.floor(hours / 24);
+    if(days === 1) return "Yesterday";
+    return days + " days ago";
+}
+
+/* ===== VIEW PDF ===== */
+window.openPdf = (link, name) => {
+    currentPdfLink = link;
+    currentPdfTitle = name;
+    pdfName.innerText = name || "PDF Viewer";
+    pdfViewer.style.display = "flex";
+    pdfFrame.src = link;
+    pdfOptions.style.display = "none";
+};
+
+window.closePdf = () => {
+    pdfViewer.style.display = "none";
+    pdfFrame.src = "";
+    pdfOptions.style.display = "none";
+};
+
+/* ===== DOWNLOAD FILE ===== */
+window.downloadFile = async (name, link, className) => {
+    loading.style.display = "flex";
+    let num = 0;
+
+    const timer = setInterval(() => {
+        num++;
+        loadingCount.innerText = num;
+        if(num >= 100) {
+            clearInterval(timer);
+            loading.style.display = "none";
+
+            // Trigger download
+            const a = document.createElement("a");
+            a.href = link;
+            a.download = name + ".pdf";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            // Track download
+            const downloadsRef = ref(db, "downloads");
+            get(downloadsRef).then(snap => {
+                let foundKey = null;
+                let oldCount = 0;
+                
+                if(snap.exists()) {
+                    snap.forEach(c => {
+                        const d = c.val();
+                        if(d.name === name) {
+                            foundKey = c.key;
+                            oldCount = d.count || 0;
+                        }
+                    });
+                }
+                
+                if(foundKey) {
+                    update(ref(db, "downloads/" + foundKey), {
+                        count: oldCount + 1,
+                        time: Date.now()
+                    });
+                } else {
+                    push(ref(db, "downloads"), {
+                        name: name,
+                        link: link,
+                        class: className,
+                        time: Date.now(),
+                        count: 1
+                    });
+                }
+            });
+
+            successDialog.style.display = "flex";
+        }
+    }, 15);
+};
+
+okSuccess.onclick = () => {
+    successDialog.style.display = "none";
+};
+
+/* ===== CATEGORY FILTER ===== */
+document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.onclick = () => {
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.class;
+        filterNotes();
+    };
+});
+
+function filterNotes() {
+    list.innerHTML = "";
+    
+    const filtered = currentFilter === "all" 
+        ? notesData 
+        : notesData.filter(n => n.class === currentFilter);
+
+    if(filtered.length === 0) {
+        list.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-regular fa-folder-open"></i>
+                <h3>No Notes Found</h3>
+                <p>No notes available for ${currentFilter === "all" ? "any class" : "Class " + currentFilter}</p>
+            </div>
+        `;
+        return;
+    }
+
+    filtered.forEach(d => {
+        const isNew = (Date.now() - (d.time || 0)) < 7 * 24 * 60 * 60 * 1000; // 7 days
+        
+        list.innerHTML += `
+            <div class="app-card" style="position:relative;">
+                ${isNew ? '<span class="new-badge">New</span>' : ''}
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>${d.name}</span>
+                <div class="class-badge">Class ${d.class}</div>
+                <div class="button-group">
+                    <button onclick="downloadFile('${d.name.replace(/'/g, "\\'")}','${d.link}','${d.class}')" class="download-btn">
+                        <i class="fa-regular fa-circle-down"></i> Download 
+                    </button>
+                    <button onclick="openPdf('${d.link}','${d.name.replace(/'/g, "\\'")}')" class="view-btn">
+                        <i class="fa-regular fa-eye"></i> view 
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+/* ===== LOAD NOTES ===== */
+onValue(ref(db, "notes"), snap => {
+    notesData = [];
+    
+    if(!snap.exists()) {
+        list.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-regular fa-file-pdf"></i>
+                <h3>No Notes Available</h3>
+                <p>PDF notes will be uploaded soon by school administration.</p>
+            </div>
+        `;
+        totalNotes.innerText = "0";
+        return;
+    }
+
+    snap.forEach(c => {
+        const d = c.val();
+        notesData.push({
+            id: c.key,
+            name: d.name,
+            link: d.link,
+            class: d.class || "6",
+            time: d.time
+        });
+    });
+
+    totalNotes.innerText = notesData.length;
+    filterNotes();
+});
+
+/* ===== LOAD DOWNLOADS STATS ===== */
+onValue(ref(db, "downloads"), snap => {
+    let total = 0;
+    if(snap.exists()) {
+        snap.forEach(c => {
+            total += c.val().count || 0;
+        });
+    }
+    totalDownloads.innerText = total;
+});
+
+/* ===== LOAD POPULAR CLASS ===== */
+onValue(ref(db, "downloads"), snap => {
+    let classCounts = {};
+    
+    if(snap.exists()) {
+        snap.forEach(c => {
+            const d = c.val();
+            if(d.class) {
+                classCounts[d.class] = (classCounts[d.class] || 0) + (d.count || 0);
+            }
+        });
+    }
+    
+    let popular = "N/A";
+    let maxCount = 0;
+    
+    for(let [cls, count] of Object.entries(classCounts)) {
+        if(count > maxCount) {
+            maxCount = count;
+            popular = "Class " + cls;
+        }
+    }
+    
+    popularClass.innerText = popular;
+});
+
+/* ===== NOTES NOTIFICATION SYSTEM ===== */
+const openNotif = document.getElementById("openNotif");
+const notifPopup = document.getElementById("notifPopup");
+const notifList = document.getElementById("notifList");
+const notifCount = document.getElementById("notifCount");
+const clearNotif = document.getElementById("clearNotif");
+const confirmDialog = document.getElementById("confirmDialog");
+const cancelClear = document.getElementById("cancelClear");
+const confirmClear = document.getElementById("confirmClear");
+
+openNotif.onclick = e => {
+    e.stopPropagation();
+    notifPopup.style.display = "block";
+};
+
+document.addEventListener("click", e => {
+    if(!notifPopup.contains(e.target) && !openNotif.contains(e.target)) {
+        notifPopup.style.display = "none";
+    }
+});
+
+clearNotif.onclick = () => {
+    confirmDialog.style.display = "flex";
+};
+
+cancelClear.onclick = () => {
+    confirmDialog.style.display = "none";
+};
+
+confirmClear.onclick = async () => {
+    await set(ref(db, "notes_notifications"), null);
+    confirmDialog.style.display = "none";
+    notifPopup.style.display = "none";
+};
+
+// Listen only for notes notifications
+onValue(ref(db, "notes_notifications"), snap => {
+    notifList.innerHTML = "";
+    let arr = [];
+    let total = 0;
+
+    if(!snap.exists()) {
+        notifList.innerHTML = `
+            <div class="empty-msg">
+                <i class="fa-regular fa-bell-slash"></i>
+                No notes updates
+            </div>`;
+        notifCount.innerText = "0";
+        openNotif.classList.remove("bell-blink");
+        return;
+    }
+
+    snap.forEach(c => {
+        const d = c.val();
+        arr.push(d);
+    });
+
+    arr.sort((a, b) => b.time - a.time);
+
+    arr.slice(0, 15).forEach(d => {
+        total++;
+        notifList.innerHTML += `
+            <div class="notif-item">
+                <span class="notif-class">Class ${d.class || 'N/A'}</span>
+                <div class="notif-title">${d.title || 'New Notes'}</div>
+                <div class="notif-desc">${d.desc || 'New PDF notes have been uploaded'}</div>
+                <div class="notif-time">
+                    <i class="fa-regular fa-clock"></i> ${timeAgo(d.time)}
+                </div>
+            </div>
+        `;
+    });
+
+    notifCount.innerText = total > 9 ? "9+" : total;
+
+    if(total > 0) {
+        openNotif.classList.add("bell-blink");
+    }
+});
+
+// Click outside to close pdf options
+document.addEventListener('click', (e) => {
+    if (!pdfOptions.contains(e.target) && !e.target.closest('.pdf-action-btn')) {
+        pdfOptions.style.display = "none";
+    }
+});
+</script>
+
+</body>
+</html>

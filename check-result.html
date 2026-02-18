@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Check Result</title>
+
+<style>
+
+html,body{
+margin:0;
+overflow-x:hidden;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:#eef2ff;
+}
+
+/* HEADER */
+.header{
+background:linear-gradient(135deg,#0b3d91,#2563eb);
+color:#fff;
+padding:18px;
+font-weight:900;
+font-size:22px;
+text-align:center;
+box-shadow:0 8px 18px rgba(0,0,0,.2);
+}
+
+.wrap{
+padding:20px;
+max-width:500px;
+margin:auto;
+}
+
+input{
+width:100%;
+box-sizing:border-box;   /* ⭐ यही main fix है */
+padding:15px;
+border:none;
+border-radius:14px;
+margin-top:14px;
+font-size:16px;
+font-weight:900;
+background:#fff;
+box-shadow:0 4px 10px rgba(0,0,0,.08);
+outline:none;
+}
+
+button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+margin-top:14px;
+font-size:16px;
+font-weight:900;
+background:#0b3d91;
+color:#fff;
+box-shadow:0 6px 16px rgba(0,0,0,.18);
+}
+
+.namePreview{
+margin-top:12px;
+font-weight:900;
+color:#0b3d91;
+}
+
+/* POPUP */
+.popup{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.45);
+display:none;
+align-items:center;
+justify-content:center;
+padding:18px;
+z-index:999;
+}
+
+.box{
+position:relative;
+background:#fff;
+border-radius:20px;
+padding:20px;
+width:100%;
+max-width:420px;
+max-height:85vh;
+overflow:auto;
+animation:popUp .35s ease;
+}
+
+@keyframes popUp{
+from{transform:translateY(40px);opacity:0}
+to{transform:translateY(0);opacity:1}
+}
+
+.closeBtn{
+position:absolute;
+right:16px;
+top:14px;
+font-size:18px;
+font-weight:900;
+color:#0b3d91;
+cursor:pointer;
+}
+
+.title{
+text-align:center;
+font-weight:900;
+font-size:18px;
+color:#0b3d91;
+margin-top:6px;
+}
+
+.line{
+height:3px;
+width:60px;
+background:#2563eb;
+margin:8px auto 14px;
+border-radius:50px;
+}
+
+.topRow{
+display:flex;
+justify-content:space-between;
+font-weight:900;
+color:#0b3d91;
+font-size:13px;
+}
+
+/* SUBJECT CARD FINAL STYLE */
+.sub{
+display:flex;
+justify-content:space-between;
+padding:14px;
+border-radius:14px;
+margin-top:8px;
+font-weight:900;
+background:#f4f6ff;
+box-shadow:0 4px 10px rgba(0,0,0,.08);
+font-size:15px;
+}
+
+.sub span:first-child{
+color:#000;   /* subject name black */
+}
+
+.mark{
+color:#2563eb;
+font-weight:900;
+}
+
+.infoLine{
+height:2px;
+background:#e1e7ff;
+margin-top:14px;
+border-radius:50px;
+}
+
+.extra{
+margin-top:12px;
+font-weight:900;
+color:#000;
+}
+
+.pass{color:#16a34a;}
+.fail{color:#dc2626;}
+
+.loadingBox{
+background:#fff;
+padding:20px;
+border-radius:14px;
+font-weight:900;
+text-align:center;
+}
+
+.bar{
+height:6px;
+background:#e1e7ff;
+border-radius:50px;
+overflow:hidden;
+margin-top:12px;
+}
+
+.bar span{
+display:block;
+height:100%;
+width:40%;
+background:#0b3d91;
+animation:move 1s linear infinite;
+}
+
+@keyframes move{
+0%{transform:translateX(-120%)}
+100%{transform:translateX(260%)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">MM Public School</div>
+
+<div class="wrap">
+
+<input id="schoolId" placeholder="Enter School ID">
+<div class="namePreview" id="namePreview"></div>
+
+<button onclick="checkResult()">Check Result</button>
+
+</div>
+
+<div class="popup" id="resultPopup">
+<div class="box" id="resultBox"></div>
+</div>
+
+<div class="popup" id="loadingPopup">
+<div class="loadingBox">
+Checking Result...
+<div class="bar"><span></span></div>
+</div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+import { getDatabase, ref, get }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+authDomain:"apni-duniya-b53d7.firebaseapp.com",
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const schoolInput=document.getElementById("schoolId");
+const namePreview=document.getElementById("namePreview");
+
+/* AUTO CAPITAL + NAME PREVIEW */
+schoolInput.addEventListener("input",async ()=>{
+schoolInput.value=schoolInput.value.toUpperCase();
+const id=schoolInput.value.trim();
+if(!id){namePreview.innerHTML="";return;}
+
+let found=null;
+const paths=["resultsUploadPanel/signup","resultsUploadPanel/manual"];
+
+for(let p of paths){
+const snap=await get(ref(db,p));
+if(snap.exists()){
+snap.forEach(c=>{
+if(c.val().schoolId===id) found=c.val();
+});
+}
+}
+
+if(found){
+namePreview.innerHTML="Name : "+found.name;
+}else{
+namePreview.innerHTML="Name not matched, you can still check result.";
+}
+
+});
+
+window.checkResult=async function(){
+
+const id=schoolInput.value.trim();
+
+if(id.length<5){
+showMessage("Invalid School ID");
+return;
+}
+
+document.getElementById("loadingPopup").style.display="flex";
+
+let resultData=null;
+const paths=["resultsUploadPanel/signup","resultsUploadPanel/manual"];
+
+for(let p of paths){
+const snap=await get(ref(db,p));
+if(snap.exists()){
+snap.forEach(c=>{
+if(c.val().schoolId===id){
+resultData=c.val();
+}
+});
+}
+if(resultData) break;
+}
+
+setTimeout(()=>{
+
+document.getElementById("loadingPopup").style.display="none";
+
+if(!resultData){
+showMessage("Result not found");
+return;
+}
+
+/* CALCULATION */
+const s=resultData.subjects;
+
+const total=
+Number(s.hindi)+
+Number(s.english)+
+Number(s.math)+
+Number(s.science)+
+Number(s.social)+
+Number(s.sanskrit);
+
+const percent=(total/600*100).toFixed(2);
+const status = percent>=33 ? "PASS" : "FAIL";
+const statusClass = percent>=33 ? "pass":"fail";
+
+const t=new Date(resultData.time||Date.now());
+const timeShow=t.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+
+const box=document.getElementById("resultBox");
+
+box.innerHTML=`
+
+<div class="closeBtn" onclick="closePopup()">✕</div>
+
+<div class="title">CHECK RESULT DETAILS</div>
+<div class="line"></div>
+
+<div class="topRow">
+<div>${resultData.schoolId}</div>
+<div>${timeShow}</div>
+</div>
+
+<div class="sub"><span>Hindi</span><span class="mark">100 / ${s.hindi}</span></div>
+<div class="sub"><span>English</span><span class="mark">100 / ${s.english}</span></div>
+<div class="sub"><span>Mathematics</span><span class="mark">100 / ${s.math}</span></div>
+<div class="sub"><span>Science</span><span class="mark">100 / ${s.science}</span></div>
+<div class="sub"><span>Social Science</span><span class="mark">100 / ${s.social}</span></div>
+<div class="sub"><span>Sanskrit</span><span class="mark">100 / ${s.sanskrit}</span></div>
+
+<div class="infoLine"></div>
+
+<div class="extra">Student Name : ${resultData.name}</div>
+<div class="extra">Class : ${resultData.class || "-"}</div>
+<div class="extra">Total Marks : 600 / ${total}</div>
+<div class="extra">Total Percentage : ${percent}%</div>
+<div class="extra ${statusClass}">Result Status : ${status}</div>
+
+`;
+
+document.getElementById("resultPopup").style.display="flex";
+
+},700);
+
+}
+
+function showMessage(msg){
+const box=document.getElementById("resultBox");
+box.innerHTML=`<div class="title">${msg}</div>`;
+document.getElementById("resultPopup").style.display="flex";
+}
+
+window.closePopup=function(){
+document.getElementById("resultPopup").style.display="none";
+schoolInput.value="";
+namePreview.innerHTML="";
+}
+
+</script>
+
+</body>
+</html>

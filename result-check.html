@@ -1,0 +1,355 @@
+<!DOCTYPE html>  <html>  
+<head>  
+<meta name="viewport" content="width=device-width,initial-scale=1.0">  
+<title>MM Public School Result</title>  <style>  
+  
+body{  
+margin:0;  
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;  
+background:#edf3ff;  
+overflow-x:hidden;  
+}  
+  
+/* HEADER */  
+.header{  
+background:linear-gradient(135deg,#0b3d91,#2563eb);  
+color:#fff;  
+padding:18px;  
+text-align:center;  
+font-size:22px;  
+font-weight:900;  
+letter-spacing:1px;  
+box-shadow:0 10px 30px rgba(0,0,0,.2);  
+text-shadow:0 3px 6px rgba(0,0,0,.3);  
+}  
+  
+.wrap{padding:14px;}  
+  
+.card{  
+background:#fff;  
+padding:16px;  
+border-radius:18px;  
+box-shadow:0 10px 24px rgba(0,0,0,.1);  
+}  
+  
+input{  
+width:100%;  
+box-sizing:border-box;  
+padding:14px;  
+border-radius:14px;  
+border:1px solid #ddd;  
+margin-bottom:12px;  
+font-weight:900;  
+text-transform:uppercase;  
+outline:none;  
+}  
+  
+/* BUTTONS TIGHT */  
+.okbtn,.closeBtn{  
+width:48%;  
+display:inline-block;  
+padding:13px;  
+border:none;  
+border-radius:14px;  
+font-weight:900;  
+color:#fff;  
+}  
+  
+.okbtn{  
+background:linear-gradient(45deg,#0b3d91,#2563eb);  
+}  
+  
+.closeBtn{  
+background:#ff3b30;  
+}  
+  
+/* POPUP */  
+.popup{  
+position:fixed;  
+inset:0;  
+background:#0008;  
+display:none;  
+align-items:center;  
+justify-content:center;  
+z-index:9999;  
+}  
+  
+.popup-box{  
+background:#fff;  
+width:92%;  
+max-width:350px;  
+border-radius:22px;  
+padding:18px;  
+box-shadow:0 20px 40px rgba(0,0,0,.3);  
+animation:fadeUp .3s ease;  
+}  
+  
+.title{  
+font-size:18px;  
+font-weight:900;  
+color:#0b3d91;  
+text-align:center;  
+margin-bottom:4px;  
+}  
+  
+.subTitle{  
+text-align:center;  
+font-weight:900;  
+color:#2563eb;  
+margin-bottom:10px;  
+}  
+  
+.result-card{  
+background:#f5f8ff;  
+padding:12px;  
+border-radius:14px;  
+margin-bottom:10px;  
+box-shadow:0 4px 12px rgba(0,0,0,.08);  
+}  
+  
+.label{  
+font-size:12px;  
+font-weight:900;  
+color:#2563eb;  
+}  
+  
+.value{  
+font-size:14px;  
+font-weight:900;  
+color:#333;  
+margin-top:2px;  
+}  
+  
+/* PROFESSIONAL LOADING */  
+.loading-container{  
+display:flex;  
+flex-direction:column;  
+align-items:center;  
+justify-content:center;  
+padding:30px 0;  
+gap:15px;  
+}  
+  
+.spinner{  
+width:50px;  
+height:50px;  
+border:4px solid #e0e7ff;  
+border-top:4px solid #2563eb;  
+border-radius:50%;  
+animation:spin 1s linear infinite;  
+}  
+  
+.loading-text{  
+font-weight:900;  
+color:#0b3d91;  
+font-size:16px;  
+letter-spacing:1px;  
+}  
+  
+@keyframes spin{  
+0%{transform:rotate(0deg)}  
+100%{transform:rotate(360deg)}  
+}  
+  
+@keyframes fadeUp{  
+from{opacity:0;transform:translateY(40px)}  
+to{opacity:1;transform:translateY(0)}  
+}  
+  
+</style>  </head>  <body>  <div class="header">  
+MM PUBLIC SCHOOL  
+</div>  <div class="wrap">  
+<div class="card">  
+<input id="schoolId" placeholder="Enter School ID">  
+</div>  
+</div>  <!-- POPUP -->  <div id="popup" class="popup">  
+<div class="popup-box">  <div class="title">RESULT DETAILS</div>  
+<div class="subTitle">WEEKLY TEST</div>  <div id="resultBox"></div>  <div style="display:flex;justify-content:space-between;">  
+<button id="checkBtn" class="okbtn">Check Result</button>  
+<button id="closeBtn" class="closeBtn">Close</button>  
+</div>  </div>  
+</div>  <script type="module">  
+  
+import { initializeApp }  
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";  
+  
+import { getDatabase, ref, get }  
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";  
+  
+const firebaseConfig={  
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",  
+authDomain:"apni-duniya-b53d7.firebaseapp.com",  
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",  
+projectId:"apni-duniya-b53d7"  
+};  
+  
+const app=initializeApp(firebaseConfig);  
+const db=getDatabase(app);  
+  
+const popup=document.getElementById("popup");  
+const resultBox=document.getElementById("resultBox");  
+const schoolId=document.getElementById("schoolId");  
+  
+let timeoutId;  
+  
+/* AUTO CAPITAL + AUTO POPUP PREVIEW WITH DELAY */  
+schoolId.addEventListener("input",()=>{  
+  
+schoolId.value=schoolId.value.toUpperCase();  
+const sid=schoolId.value.trim();  
+  
+if(!sid){  
+popup.style.display="none";  
+return;  
+}  
+  
+// Clear previous timeout  
+if(timeoutId) clearTimeout(timeoutId);  
+  
+// Set new timeout for 2 seconds  
+timeoutId=setTimeout(async()=>{  
+  
+popup.style.display="flex";  
+  
+/* PROFESSIONAL LOADING */  
+resultBox.innerHTML=`  
+<div class="loading-container">  
+<div class="spinner"></div>  
+<div class="loading-text">CHECKING RESULT...</div>  
+</div>  
+`;  
+  
+const snap=await get(ref(db,"results/"+sid));  
+  
+if(!snap.exists()){  
+resultBox.innerHTML=  
+"<div class='result-card'><div class='value'>School ID not matched. Please check and try again.</div></div>";  
+return;  
+}  
+  
+snap.forEach(r=>{  
+const d=r.val();  
+  
+resultBox.innerHTML=`  
+  
+<div class="result-card" style="display:flex;justify-content:space-between;">  
+<div class="value">${sid}</div>  
+<div class="value">${formatTime(d.time)}</div>  
+</div>  
+  
+<div class="result-card">  
+<div class="label">Student Name</div>  
+<div class="value">${d.name}</div>  
+</div>  
+  
+`;  
+  
+});  
+  
+},2000); // 2 second delay  
+  
+});  
+  
+/* TIME FORMAT */  
+function formatTime(t){  
+const d=new Date(t);  
+let h=d.getHours();  
+let m=d.getMinutes().toString().padStart(2,"0");  
+let ampm=h>=12?"PM":"AM";  
+h=h%12||12;  
+return h+":"+m+" "+ampm;  
+}  
+  
+/* CHECK RESULT */  
+checkBtn.onclick=async()=>{  
+  
+// PROFESSIONAL LOADING  
+resultBox.innerHTML=`  
+<div class="loading-container">  
+<div class="spinner"></div>  
+<div class="loading-text">CHECKING RESULT...</div>  
+</div>  
+`;  
+  
+const sid=schoolId.value.trim();  
+const snap=await get(ref(db,"results/"+sid));  
+  
+if(!snap.exists()){  
+resultBox.innerHTML="<div class='result-card'><div class='value'>Result not found.</div></div>";  
+return;  
+}  
+  
+let totalObtained=0;  
+let totalMarks=0;  
+let subjectsHTML="";  
+let name="";  
+let uploadTime="";  
+  
+snap.forEach(r=>{  
+const d=r.val();  
+  
+name=d.name;  
+uploadTime=formatTime(d.time);  
+  
+totalObtained+=Number(d.obtainedMarks);  
+totalMarks+=Number(d.totalMarks);  
+  
+subjectsHTML+=`  
+<div class="result-card">  
+<div class="label">${d.subject}</div>  
+<div class="value">${d.obtainedMarks} / ${d.totalMarks}</div>  
+</div>  
+`;  
+  
+});  
+  
+const percent=((totalObtained/totalMarks)*100).toFixed(2);  
+  
+let status="FAIL";  
+if(percent>=60) status="FIRST DIVISION";  
+else if(percent>=45) status="SECOND DIVISION";  
+else if(percent>=33) status="PASS";  
+  
+resultBox.innerHTML=`  
+  
+<div class="result-card" style="display:flex;justify-content:space-between;">  
+<div class="value">${sid}</div>  
+<div class="value">${uploadTime}</div>  
+</div>  
+  
+<div class="result-card">  
+<div class="label">Student Name</div>  
+<div class="value">${name}</div>  
+</div>  
+  
+${subjectsHTML}  
+  
+<div class="result-card">  
+<div class="label">Total Marks</div>  
+<div class="value">${totalObtained} / ${totalMarks}</div>  
+</div>  
+  
+<div class="result-card">  
+<div class="label">Percentage</div>  
+<div class="value">${percent}%</div>  
+</div>  
+  
+<div class="result-card">  
+<div class="label">Result Status</div>  
+<div class="value">${status}</div>  
+</div>  
+  
+`;  
+  
+};  
+  
+/* CLOSE */  
+closeBtn.onclick=()=>{  
+popup.style.display="none";  
+schoolId.value="";  
+resultBox.innerHTML="";  
+};  
+  
+</script>  </body>  
+</html>
+

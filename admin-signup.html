@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Admin Panel - M.M Public School</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+    padding-bottom: 20px;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.school-box {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.school-top {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.school-top i {
+    color: #ffd700;
+    font-size: 28px;
+}
+
+.school-bottom {
+    font-size: 14px;
+    opacity: 0.9;
+    color: #ffd700;
+}
+
+/* ===== ADMIN BADGE ===== */
+.admin-badge {
+    background: white;
+    border-radius: 50px;
+    padding: 16px 20px;
+    margin: 16px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.1);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.admin-badge i {
+    font-size: 28px;
+    color: #0a2a66;
+    background: #e6ecff;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.admin-badge-text h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 4px;
+}
+
+.admin-badge-text p {
+    font-size: 13px;
+    color: #666;
+}
+
+/* ===== STATS CARD ===== */
+.stats-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin: 16px;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0a2a66;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+    padding: 16px 16px 8px 16px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #0a2a66;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title i {
+    color: #ff9800;
+    font-size: 22px;
+}
+
+/* ===== STUDENT GRID ===== */
+.apps-section {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 16px;
+    width: 100%;
+}
+
+/* ===== STUDENT CARD ===== */
+.app-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.app-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+}
+
+.app-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(10,42,102,0.15);
+    border-color: #0a2a66;
+}
+
+/* ===== STUDENT HEADER ===== */
+.student-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e6ecff;
+}
+
+.student-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e6ecff, #d6e0ff);
+    border: 3px solid #0a2a66;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.student-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.student-avatar i {
+    font-size: 36px;
+    color: #0a2a66;
+}
+
+.student-info {
+    flex: 1;
+}
+
+.student-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 4px;
+}
+
+.student-id {
+    font-size: 13px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.student-id i {
+    color: #0a2a66;
+}
+
+/* ===== DETAILS GRID ===== */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.detail-item {
+    background: #f8fafd;
+    border-radius: 16px;
+    padding: 12px;
+    border: 1px solid #e0e7ff;
+}
+
+.detail-label {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.detail-label i {
+    color: #0a2a66;
+    font-size: 12px;
+}
+
+.detail-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0a2a66;
+    word-break: break-word;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.edit-btn, .delete-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, #ffd700, #ffb300);
+    color: #0a2a66;
+    box-shadow: 0 4px 15px rgba(255,193,7,0.3);
+}
+
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,193,7,0.4);
+}
+
+.delete-btn {
+    background: #dc2626;
+    color: white;
+    box-shadow: 0 4px 15px rgba(220,38,38,0.3);
+}
+
+.delete-btn:hover {
+    transform: translateY(-2px);
+    background: #b91c1c;
+    box-shadow: 0 8px 25px rgba(220,38,38,0.4);
+}
+
+/* ===== EDIT DIALOG ===== */
+.confirm-dialog {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 16px;
+}
+
+.dialog-box {
+    background: white;
+    padding: 28px;
+    border-radius: 32px;
+    width: 90%;
+    max-width: 450px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.dialog-title {
+    font-weight: 800;
+    font-size: 22px;
+    color: #0a2a66;
+    margin-bottom: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.dialog-text {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+/* ===== FORM FIELDS WITH LABELS ===== */
+.form-field {
+    margin-bottom: 16px;
+}
+
+.form-field label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0a2a66;
+    margin-bottom: 6px;
+}
+
+.form-field label i {
+    width: 18px;
+    color: #ff9800;
+}
+
+.form-field input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 2px solid #e0e7ff;
+    font-size: 14px;
+    background: #f8fafd;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-field input:focus {
+    border-color: #0a2a66;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(10,42,102,0.1);
+}
+
+.dialog-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.cancel-btn, .ok-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.cancel-btn {
+    background: #f0f0f0;
+    color: #495057;
+}
+
+.cancel-btn:hover {
+    background: #e0e0e0;
+}
+
+.ok-btn {
+    background: #0a2a66;
+    color: white;
+}
+
+.ok-btn:hover {
+    background: #1e4b8f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-msg {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    grid-column: 1 / -1;
+}
+
+.empty-msg i {
+    font-size: 60px;
+    color: #0a2a66;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-msg h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+.empty-msg p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ===== SEARCH BAR ===== */
+.search-bar {
+    background: white;
+    border-radius: 50px;
+    padding: 10px 18px;
+    margin: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.search-bar i {
+    color: #0a2a66;
+    font-size: 16px;
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+.search-bar input::placeholder {
+    color: #999;
+}
+
+/* ===== BACK BUTTON ===== */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0a2a66;
+    text-decoration: none;
+    font-weight: 700;
+    margin: 16px 16px 0 16px;
+    padding: 12px 20px;
+    background: white;
+    border-radius: 40px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: #f0f4fa;
+    transform: translateX(-5px);
+}
+
+.back-btn i {
+    font-size: 14px;
+}
+
+/* ===== PASSWORD VISIBLE ===== */
+.password-visible {
+    font-family: monospace;
+    background: #fff3cd;
+    padding: 4px 8px;
+    border-radius: 8px;
+    display: inline-block;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Back Button -->
+<a href="index.html" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i> Back to Home
+</a>
+
+<!-- Header -->
+<header class="header">
+    <div class="school-box">
+        <div class="school-top">
+            <i class="fa-solid fa-shield-halved"></i>
+            ADMIN PANEL
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="school-bottom">M. M PUBLIC SCHOOL</div>
+    </div>
+</header>
+
+<!-- Admin Badge -->
+<div class="admin-badge">
+    <i class="fa-solid fa-user-shield"></i>
+    <div class="admin-badge-text">
+        <h3>Administrator Dashboard</h3>
+        <p>Manage student accounts and data</p>
+    </div>
+</div>
+
+<!-- Stats Card -->
+<div class="stats-card" id="statsCard">
+    <div class="stat-item">
+        <div class="stat-value" id="totalStudents">0</div>
+        <div class="stat-label">Total Students</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="boysCount">0</div>
+        <div class="stat-label">Boys</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="girlsCount">0</div>
+        <div class="stat-label">Girls</div>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div class="search-bar">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="searchInput" placeholder="Search students by name or ID...">
+</div>
+
+<!-- Section Title -->
+<div class="section-title">
+    <i class="fa-solid fa-users"></i>
+    Student Full Details
+</div>
+
+<!-- Student List -->
+<section class="apps-section" id="studentList"></section>
+
+<!-- ===== EDIT DIALOG ===== -->
+<div id="editDialog" class="confirm-dialog">
+    <div class="dialog-box">
+        <div class="dialog-title">
+            <i class="fa-regular fa-pen-to-square"></i> Edit Student
+        </div>
+
+        <div class="form-field">
+            <label><i class="fa-regular fa-user"></i> Student Name</label>
+            <input type="text" id="editName" placeholder="Enter full name">
+        </div>
+
+        <div class="form-field">
+            <label><i class="fa-regular fa-calendar"></i> Date of Birth</label>
+            <input type="text" id="editDob" placeholder="YYYY-MM-DD">
+        </div>
+
+        <div class="form-field">
+            <label><i class="fa-regular fa-id-card"></i> Aadhaar Number</label>
+            <input type="text" id="editAadhaar" placeholder="12 digit Aadhaar">
+        </div>
+
+        <div class="form-field">
+            <label><i class="fa-regular fa-phone"></i> Mobile Number</label>
+            <input type="text" id="editMobile" placeholder="10 digit mobile">
+        </div>
+
+        <div class="form-field">
+            <label><i class="fa-regular fa-envelope"></i> Email Address</label>
+            <input type="email" id="editEmail" placeholder="student@gmail.com">
+        </div>
+
+        <div class="form-field">
+            <label><i class="fa-regular fa-user"></i> Username</label>
+            <input type="text" id="editUsername" placeholder="Username">
+        </div>
+
+        <div class="form-field">
+            <label><i class="fa-regular fa-lock"></i> Password</label>
+            <input type="text" id="editPassword" placeholder="Password">
+        </div>
+
+        <div class="form-field">
+            <label><i class="fa-regular fa-mars"></i> Gender</label>
+            <input type="text" id="editGender" placeholder="male/female/other">
+        </div>
+
+        <div class="dialog-actions">
+            <button class="cancel-btn" id="cancelEdit">
+                <i class="fa-regular fa-xmark"></i> Cancel
+            </button>
+            <button class="ok-btn" id="saveEdit">
+                <i class="fa-regular fa-check"></i> Save Changes
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== DELETE DIALOG ===== -->
+<div id="deleteDialog" class="confirm-dialog">
+    <div class="dialog-box">
+        <div class="dialog-title">
+            <i class="fa-regular fa-trash-can"></i> Delete Student
+        </div>
+        <div class="dialog-text">
+            Are you sure you want to delete this student account?<br>
+            This action cannot be undone.
+        </div>
+
+        <div class="dialog-actions">
+            <button class="cancel-btn" id="cancelDelete">
+                <i class="fa-regular fa-xmark"></i> Cancel
+            </button>
+            <button class="ok-btn" id="confirmDelete">
+                <i class="fa-regular fa-trash-can"></i> Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+    apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const list = document.getElementById("studentList");
+const searchInput = document.getElementById("searchInput");
+const totalStudents = document.getElementById("totalStudents");
+const boysCount = document.getElementById("boysCount");
+const girlsCount = document.getElementById("girlsCount");
+
+let selectedKey = "";
+let editKey = "";
+let allStudents = [];
+
+// Format date
+function formatDate(dateStr) {
+    if (!dateStr) return "N/A";
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+    });
+}
+
+// Mask Aadhaar
+function maskAadhaar(aadhaar) {
+    if (!aadhaar) return "N/A";
+    return aadhaar.replace(/(\d{4})\d{4}(\d{4})/, '$1XXXX$2');
+}
+
+// Get avatar HTML
+function getAvatarHtml(photoURL, gender) {
+    if (photoURL) {
+        return `<img src="${photoURL}" alt="Student" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fa-solid fa-user\'></i>';">`;
+    } else {
+        return `<i class="fa-solid fa-user"></i>`;
+    }
+}
+
+// Update stats
+function updateStats(students) {
+    const total = students.length;
+    const boys = students.filter(s => s.gender === 'male').length;
+    const girls = students.filter(s => s.gender === 'female').length;
+    
+    totalStudents.innerText = total;
+    boysCount.innerText = boys;
+    girlsCount.innerText = girls;
+}
+
+// Filter students
+function filterStudents(searchTerm) {
+    const term = searchTerm.toLowerCase();
+    return allStudents.filter(s => 
+        s.name?.toLowerCase().includes(term) ||
+        s.key?.toLowerCase().includes(term)
+    );
+}
+
+// Render students
+function renderStudents(students) {
+    list.innerHTML = "";
+
+    if (students.length === 0) {
+        list.innerHTML = `
+            <div class="empty-msg">
+                <i class="fa-regular fa-users-slash"></i>
+                <h3>No Students Found</h3>
+                <p>No students match your search criteria</p>
+            </div>
+        `;
+        return;
+    }
+
+    students.forEach(s => {
+        const d = s.data;
+        const avatarHtml = getAvatarHtml(d.photoURL, d.gender);
+        const formattedDob = formatDate(d.dob);
+        const maskedAadhaar = maskAadhaar(d.aadhaar);
+
+        list.innerHTML += `
+            <div class="app-card" data-id="${s.key}">
+                <div class="student-header">
+                    <div class="student-avatar">${avatarHtml}</div>
+                    <div class="student-info">
+                        <div class="student-name">${d.name || "Unknown"}</div>
+                        <div class="student-id">
+                            <i class="fa-regular fa-id-card"></i> ${s.key}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fa-regular fa-calendar"></i> DOB
+                        </div>
+                        <div class="detail-value">${formattedDob}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fa-regular fa-id-card"></i> Aadhaar
+                        </div>
+                        <div class="detail-value">${maskedAadhaar}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fa-regular fa-phone"></i> Mobile
+                        </div>
+                        <div class="detail-value">${d.mobile || "N/A"}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fa-regular fa-envelope"></i> Email
+                        </div>
+                        <div class="detail-value">${d.email || "N/A"}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fa-regular fa-user"></i> Username
+                        </div>
+                        <div class="detail-value">${d.username || "N/A"}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fa-regular fa-lock"></i> Password
+                        </div>
+                        <div class="detail-value password-visible">${d.password || "N/A"}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fa-regular fa-mars"></i> Gender
+                        </div>
+                        <div class="detail-value">${d.gender || "N/A"}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fa-regular fa-clock"></i> Joined
+                        </div>
+                        <div class="detail-value">${formatDate(d.createdAt)}</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="edit-btn" onclick="openEdit(
+                        '${s.key}',
+                        '${d.name?.replace(/'/g, "\\'") || ""}',
+                        '${d.dob || ""}',
+                        '${d.aadhaar || ""}',
+                        '${d.mobile || ""}',
+                        '${d.email?.replace(/'/g, "\\'") || ""}',
+                        '${d.username?.replace(/'/g, "\\'") || ""}',
+                        '${d.password?.replace(/'/g, "\\'") || ""}',
+                        '${d.gender || ""}'
+                    )">
+                        <i class="fa-regular fa-pen-to-square"></i> Edit
+                    </button>
+                    <button class="delete-btn" onclick="openDelete('${s.key}')">
+                        <i class="fa-regular fa-trash-can"></i> Delete
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Load students
+onValue(ref(db, "students"), snap => {
+    allStudents = [];
+    
+    if (!snap.exists()) {
+        list.innerHTML = `
+            <div class="empty-msg">
+                <i class="fa-regular fa-users-slash"></i>
+                <h3>No Students Found</h3>
+                <p>No student accounts have been created yet.</p>
+            </div>
+        `;
+        totalStudents.innerText = "0";
+        boysCount.innerText = "0";
+        girlsCount.innerText = "0";
+        return;
+    }
+
+    snap.forEach(c => {
+        allStudents.push({
+            key: c.key,
+            data: c.val()
+        });
+    });
+
+    updateStats(allStudents.map(s => s.data));
+    
+    // Apply current search filter
+    const filtered = filterStudents(searchInput.value);
+    renderStudents(filtered);
+});
+
+// Search functionality
+searchInput.addEventListener('input', () => {
+    const filtered = filterStudents(searchInput.value);
+    renderStudents(filtered);
+});
+
+// Edit functions
+window.openEdit = (key, name, dob, aadhaar, mobile, email, username, password, gender) => {
+    editKey = key;
+
+    document.getElementById('editName').value = name || '';
+    document.getElementById('editDob').value = dob || '';
+    document.getElementById('editAadhaar').value = aadhaar || '';
+    document.getElementById('editMobile').value = mobile || '';
+    document.getElementById('editEmail').value = email || '';
+    document.getElementById('editUsername').value = username || '';
+    document.getElementById('editPassword').value = password || '';
+    document.getElementById('editGender').value = gender || '';
+
+    document.getElementById('editDialog').style.display = "flex";
+};
+
+document.getElementById('cancelEdit').onclick = () => {
+    document.getElementById('editDialog').style.display = "none";
+};
+
+document.getElementById('saveEdit').onclick = () => {
+    update(ref(db, "students/" + editKey), {
+        name: document.getElementById('editName').value,
+        dob: document.getElementById('editDob').value,
+        aadhaar: document.getElementById('editAadhaar').value,
+        mobile: document.getElementById('editMobile').value,
+        email: document.getElementById('editEmail').value,
+        username: document.getElementById('editUsername').value,
+        password: document.getElementById('editPassword').value,
+        gender: document.getElementById('editGender').value
+    });
+
+    document.getElementById('editDialog').style.display = "none";
+};
+
+// Delete functions
+window.openDelete = (key) => {
+    selectedKey = key;
+    document.getElementById('deleteDialog').style.display = "flex";
+};
+
+document.getElementById('cancelDelete').onclick = () => {
+    document.getElementById('deleteDialog').style.display = "none";
+};
+
+document.getElementById('confirmDelete').onclick = () => {
+    remove(ref(db, "students/" + selectedKey));
+    document.getElementById('deleteDialog').style.display = "none";
+};
+
+// Close dialogs on outside click
+document.getElementById('editDialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('editDialog')) {
+        document.getElementById('editDialog').style.display = "none";
+    }
+});
+
+document.getElementById('deleteDialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('deleteDialog')) {
+        document.getElementById('deleteDialog').style.display = "none";
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>S.C.C.M Coaching | Secure Login</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+min-height:100vh;
+background:linear-gradient(135deg,#0a2a66,#1e4b8f);
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+/* ===== LOGIN BOX ===== */
+.login-box{
+background:#fff;
+width:100%;
+max-width:360px;
+border-radius:28px;
+padding:32px 26px;
+text-align:center;
+box-shadow:0 30px 70px rgba(0,0,0,.35);
+animation:slideIn .6s ease;
+}
+
+@keyframes slideIn{
+from{opacity:0;transform:translateY(60px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* LOGO */
+.logo{
+width:90px;
+margin-bottom:14px;
+}
+
+/* TITLE */
+h2{
+font-size:22px;
+font-weight:900;
+color:#0a2a66;
+margin-bottom:6px;
+}
+
+.subtitle{
+font-size:12px;
+color:#777;
+margin-bottom:22px;
+}
+
+/* INPUT */
+.input-group{
+margin-bottom:16px;
+position:relative;
+}
+
+.input-group i{
+position:absolute;
+left:14px;
+top:14px;
+color:#0a2a66;
+}
+
+input{
+width:100%;
+padding:14px 14px 14px 42px;
+border-radius:14px;
+border:2px solid #e4e8f0;
+outline:none;
+font-size:14px;
+background:#f6f8fc;
+}
+
+input:focus{
+border-color:#0a2a66;
+background:#fff;
+box-shadow:0 0 0 3px rgba(10,42,102,.1);
+}
+
+/* BUTTON */
+.login-btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+font-weight:900;
+color:#fff;
+background:linear-gradient(135deg,#0a2a66,#1e4b8f);
+cursor:pointer;
+margin-top:8px;
+box-shadow:0 10px 25px rgba(10,42,102,.4);
+transition:.25s;
+}
+
+.login-btn:hover{
+transform:translateY(-2px);
+}
+
+/* INFO */
+.secure-text{
+margin-top:18px;
+font-size:11px;
+color:#888;
+line-height:1.6;
+}
+
+/* ===== POPUP ===== */
+.dialog{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+backdrop-filter:blur(6px);
+}
+
+.dialog-box{
+background:#fff;
+padding:26px;
+border-radius:24px;
+width:90%;
+max-width:300px;
+text-align:center;
+animation:scalePop .3s ease;
+}
+
+@keyframes scalePop{
+from{transform:scale(.7);opacity:0}
+to{transform:scale(1);opacity:1}
+}
+
+.dialog-icon{
+font-size:38px;
+color:#dc2626;
+margin-bottom:8px;
+}
+
+.dialog-title{
+font-weight:900;
+color:#0a2a66;
+margin-bottom:6px;
+}
+
+.dialog-text{
+font-size:13px;
+color:#555;
+margin-bottom:14px;
+}
+
+.dialog-btn{
+padding:12px 20px;
+border:none;
+border-radius:30px;
+background:#0a2a66;
+color:#fff;
+font-weight:700;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+<img src="logo.png" class="logo">
+
+<h2>S.C.C.M Coaching</h2>
+<div class="subtitle">Official Student Secure Login</div>
+
+<div class="input-group">
+<i class="fa-regular fa-user"></i>
+<input type="text" id="username" placeholder="Enter Username">
+</div>
+
+<div class="input-group">
+<i class="fa-solid fa-lock"></i>
+<input type="password" id="password" placeholder="Enter Password">
+</div>
+
+<button class="login-btn" onclick="loginSccm()">
+<i class="fa-solid fa-right-to-bracket"></i>
+ Login
+</button>
+
+<div class="secure-text">
+Only registered coaching students are allowed.<br>
+Unauthorized access is restricted.
+</div>
+
+</div>
+
+<!-- ===== ERROR POPUP ===== -->
+<div class="dialog" id="dialog">
+<div class="dialog-box">
+<div class="dialog-icon">
+<i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+<div class="dialog-title">Login Failed</div>
+<div class="dialog-text">
+Invalid Username or Password.<br>
+Please check your credentials.
+</div>
+<button class="dialog-btn" onclick="closeDialog()">OK</button>
+</div>
+</div>
+
+<script>
+
+function loginSccm(){
+
+const u=document.getElementById("username").value.trim();
+const p=document.getElementById("password").value.trim();
+
+/* 🔥 DEMO LOGIN (बाद में Firebase से जोड़ेंगे) */
+if(u==="sccm" && p==="sccm2026001"){
+window.location.href="sccm-dashboard.html";
+}else{
+document.getElementById("dialog").style.display="flex";
+}
+}
+
+function closeDialog(){
+document.getElementById("dialog").style.display="none";
+}
+
+/* OUTSIDE CLICK CLOSE */
+document.getElementById("dialog").addEventListener("click",function(e){
+if(e.target===this){
+closeDialog();
+}
+});
+
+</script>
+
+</body>
+</html>
