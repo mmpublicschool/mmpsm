@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<!-- ✅ BASIC SEO -->
+<title>M.M Public School Mundeshwari | Chat</title>
+
+<meta name="description" content="M.M Public School Mundeshwari Student Chat">
+<meta name="keywords" content="MM Public School, Student Chat">
+<meta name="author" content="M.M Public School Mundeshwari">
+<meta name="robots" content="index, follow">
+
+<!-- ✅ SOCIAL + GOOGLE LOGO -->
+<meta property="og:title" content="M.M Public School Mundeshwari">
+<meta property="og:description" content="Student Chat System">
+<meta property="og:image" content="https://mmpublicschool.github.io/mmpsm/logo.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mmpsm.wuaze.com/">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">"
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #edf3ff;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    user-select: none;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: #fff;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 900;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.back-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #fff;
+    overflow: hidden;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar i {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #0a2a66;
+    background: #e6ecff;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.status {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ccc;
+    transition: 0.3s;
+}
+
+.dot.online {
+    background: #2ecc71;
+    box-shadow: 0 0 10px #2ecc71;
+}
+
+/* ===== CHAT AREA ===== */
+.chat-box {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    background: #f5f8ff;
+    scroll-behavior: smooth;
+}
+
+.date-divider {
+    text-align: center;
+    margin: 16px 0;
+    font-size: 11px;
+    font-weight: 700;
+    color: #666;
+    position: relative;
+}
+
+.date-divider span {
+    background: #e6ecff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.msg {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    margin-bottom: 8px;
+    position: relative;
+    animation: fadeUp 0.25s ease;
+    word-wrap: break-word;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.msg.me {
+    background: linear-gradient(135deg, #2563eb, #1e4b8f);
+    color: #fff;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+.msg.other {
+    background: #fff;
+    color: #1a1a1a;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.msg-text {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.msg-time {
+    font-size: 10px;
+    margin-top: 4px;
+    opacity: 0.7;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.msg-time i {
+    font-size: 12px;
+}
+
+.msg-reaction {
+    position: absolute;
+    bottom: -10px;
+    right: 8px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 2px 8px;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+    cursor: pointer;
+}
+
+.msg-reaction:hover {
+    transform: scale(1.05);
+}
+
+/* ===== TYPING INDICATOR ===== */
+.typing {
+    font-size: 12px;
+    padding: 8px 16px;
+    color: #666;
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #666;
+    animation: typingDot 1.4s infinite;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingDot {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ===== INPUT BAR ===== */
+.input-bar {
+    display: flex;
+    padding: 12px;
+    background: #fff;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    gap: 8px;
+    align-items: center;
+}
+
+.input-bar input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 30px;
+    border: 1px solid #e0e7ff;
+    outline: none;
+    font-size: 14px;
+    transition: 0.2s;
+    background: #f8fafd;
+}
+
+.input-bar input:focus {
+    border-color: #2563eb;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.send-btn {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+}
+
+.send-btn:hover {
+    transform: scale(1.05);
+    background: #1e4b8f;
+}
+
+.send-btn:active {
+    transform: scale(0.95);
+}
+
+/* ===== ACTION MENU ===== */
+.action-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+    display: none;
+    padding: 20px;
+    z-index: 9999;
+    animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.action-menu::before {
+    content: '';
+    width: 40px;
+    height: 4px;
+    background: #ddd;
+    border-radius: 4px;
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.action-btn {
+    padding: 16px;
+    border-radius: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.action-btn.edit {
+    background: #e6ecff;
+    color: #0a2a66;
+}
+
+.action-btn.delete {
+    background: #fee8e8;
+    color: #dc2626;
+}
+
+.action-btn:hover {
+    transform: translateX(5px);
+}
+
+/* ===== DIALOG ===== */
+.dialog {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.dialog-box {
+    background: #fff;
+    padding: 28px;
+    border-radius: 28px;
+    width: 85%;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+}
+
+.dialog-title {
+    font-weight: 800;
+    font-size: 18px;
+    color: #0a2a66;
+    margin-bottom: 16px;
+}
+
+.dialog-box input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: 2px solid #e0e7ff;
+    margin: 16px 0;
+    font-size: 14px;
+    outline: none;
+}
+
+.dialog-box input:focus {
+    border-color: #2563eb;
+}
+
+.dialog-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.dialog-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.dialog-btn.cancel {
+    background: #f1f3f5;
+    color: #495057;
+}
+
+.dialog-btn.save {
+    background: #2563eb;
+    color: #fff;
+}
+
+/* ===== TOAST ===== */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a1a;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 10001;
+    display: none;
+    animation: toastIn 0.3s ease;
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ===== REACTION PICKER ===== */
+.reaction-picker {
+    position: fixed;
+    bottom: 100px;
+    left: 16px;
+    background: #fff;
+    border-radius: 40px;
+    padding: 8px 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: none;
+    z-index: 9998;
+    animation: popIn 0.2s ease;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.reaction-picker span {
+    font-size: 24px;
+    padding: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-block;
+}
+
+.reaction-picker span:hover {
+    transform: scale(1.2);
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-chat {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.empty-chat i {
+    font-size: 48px;
+    color: #2563eb;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-chat p {
+    font-size: 14px;
+    font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <div class="back-btn" onclick="history.back()">
+        <i class="fa-solid fa-arrow-left"></i>
+    </div>
+    
+    <div class="avatar" id="avatar">
+        <img id="profileImg" src="" style="display: none;" alt="">
+        <i id="defaultIcon" class="fa-solid fa-user" style="display: none;"></i>
+    </div>
+    
+    <div class="user-info">
+        <div class="user-name" id="chatName">Student</div>
+        <div class="status">
+            <span class="dot" id="dot"></span>
+            <span id="onlineStatus">offline</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== CHAT AREA ===== -->
+<div id="chatBox" class="chat-box"></div>
+
+<!-- ===== TYPING INDICATOR ===== -->
+<div id="typing" class="typing">
+    <span>typing</span>
+    <div class="typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+
+<!-- ===== INPUT BAR ===== -->
+<div class="input-bar">
+    <input id="msgInput" placeholder="Type a message..." maxlength="500">
+    <button id="sendBtn" class="send-btn">
+        <i class="fa-solid fa-paper-plane"></i>
+    </button>
+</div>
+
+<!-- ===== REACTION PICKER ===== -->
+<div class="reaction-picker" id="reactionPicker">
+    <span onclick="addReaction('❤️')">❤️</span>
+    <span onclick="addReaction('👍')">👍</span>
+    <span onclick="addReaction('😂')">😂</span>
+    <span onclick="addReaction('😮')">😮</span>
+    <span onclick="addReaction('😢')">😢</span>
+    <span onclick="addReaction('🙏')">🙏</span>
+</div>
+
+<!-- ===== ACTION MENU ===== -->
+<div id="actionMenu" class="action-menu">
+    <div id="editBtn" class="action-btn edit">
+        <i class="fa-solid fa-pen"></i> Edit Message
+    </div>
+    <div id="deleteBtn" class="action-btn delete">
+        <i class="fa-solid fa-trash"></i> Delete Message
+    </div>
+    <div id="reactBtn" class="action-btn edit">
+        <i class="fa-regular fa-heart"></i> Add Reaction
+    </div>
+</div>
+
+<!-- ===== EDIT DIALOG ===== -->
+<div id="editDialog" class="dialog">
+    <div class="dialog-box">
+        <div class="dialog-title">Edit Message</div>
+        <input id="editInput" maxlength="500">
+        <div class="dialog-actions">
+            <button class="dialog-btn cancel" onclick="document.getElementById('editDialog').style.display='none'">Cancel</button>
+            <button id="saveEdit" class="dialog-btn save">Update</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== DELETE CONFIRM DIALOG ===== -->
+<div id="deleteDialog" class="dialog">
+    <div class="dialog-box">
+        <div class="dialog-title">Delete Message?</div>
+        <p style="color:#666; margin-bottom:20px;">This cannot be undone</p>
+        <div class="dialog-actions">
+            <button class="dialog-btn cancel" onclick="document.getElementById('deleteDialog').style.display='none'">Cancel</button>
+            <button id="confirmDelete" class="dialog-btn save" style="background:#dc2626;">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast" class="toast">Message copied</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, update, remove, get, set, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+    apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    authDomain:"apni-duniya-b53d7.firebaseapp.com",
+    databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// Get URL params
+const params = new URLSearchParams(location.search);
+const otherUID = params.get("uid");
+const otherName = params.get("name");
+
+// Get my UID from session
+let myUID = "";
+let myPhoto = "";
+let otherPhoto = "";
+let selectedKey = null;
+let selectedMsg = null;
+let reactionTarget = null;
+
+// Load current user
+const sessionSnap = await get(ref(db, "session/currentUser"));
+if (sessionSnap.exists()) {
+    myUID = sessionSnap.val().schoolId || sessionSnap.val();
+    
+    // Get my photo
+    const myData = await get(ref(db, "students/" + myUID));
+    if (myData.exists()) {
+        myPhoto = myData.val().photoURL || "";
+    }
+}
+
+// Get other student's photo
+const otherData = await get(ref(db, "students/" + otherUID));
+if (otherData.exists()) {
+    otherPhoto = otherData.val().photoURL || "";
+    document.getElementById("chatName").innerText = otherData.val().name || otherName;
+    
+    // Set avatar
+    const profileImg = document.getElementById("profileImg");
+    const defaultIcon = document.getElementById("defaultIcon");
+    
+    if (otherPhoto) {
+        profileImg.src = otherPhoto;
+        profileImg.style.display = "block";
+        defaultIcon.style.display = "none";
+    } else {
+        profileImg.style.display = "none";
+        defaultIcon.style.display = "flex";
+    }
+}
+
+// Create room ID
+const roomId = [myUID, otherUID].sort().join("_");
+const chatRef = ref(db, "chats/" + roomId);
+
+// Online status
+const myOnlineRef = ref(db, "online/" + myUID);
+set(myOnlineRef, true);
+onDisconnect(myOnlineRef).remove();
+
+onValue(ref(db, "online/" + otherUID), snap => {
+    const dot = document.getElementById("dot");
+    const status = document.getElementById("onlineStatus");
+    
+    if (snap.exists()) {
+        dot.classList.add("online");
+        status.innerText = "online";
+    } else {
+        dot.classList.remove("online");
+        status.innerText = "offline";
+    }
+});
+
+// Format time
+function formatTime(timestamp) {
+    const date = new Date(timestamp);
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return hours + ':' + minutes + ' ' + ampm;
+}
+
+// Format date
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (date.toDateString() === today.toDateString()) {
+        return 'Today';
+    } else if (date.toDateString() === yesterday.toDateString()) {
+        return 'Yesterday';
+    } else {
+        return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+    }
+}
+
+// Show toast
+function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.style.display = "block";
+    setTimeout(() => toast.style.display = "none", 2000);
+}
+
+// Load chat messages
+onValue(chatRef, snap => {
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML = "";
+    
+    let lastDate = "";
+    let messages = [];
+    
+    snap.forEach(child => {
+        messages.push({
+            key: child.key,
+            ...child.val()
+        });
+    });
+    
+    // Sort by time
+    messages.sort((a, b) => a.time - b.time);
+    
+    if (messages.length === 0) {
+        chatBox.innerHTML = `
+            <div class="empty-chat">
+                <i class="fa-regular fa-comments"></i>
+                <p>No messages yet<br>Say hello! 👋</p>
+            </div>
+        `;
+        return;
+    }
+    
+    messages.forEach(msg => {
+        const msgDate = formatDate(msg.time);
+        
+        // Add date divider
+        if (msgDate !== lastDate) {
+            const divider = document.createElement("div");
+            divider.className = "date-divider";
+            divider.innerHTML = `<span>${msgDate}</span>`;
+            chatBox.appendChild(divider);
+            lastDate = msgDate;
+        }
+        
+        const div = document.createElement("div");
+        div.className = "msg " + (msg.sender === myUID ? "me" : "other");
+        div.setAttribute("data-key", msg.key);
+        div.setAttribute("data-text", msg.text);
+        
+        // Message content
+        div.innerHTML = `
+            <div class="msg-text">${msg.text.replace(/\n/g, '<br>')}</div>
+            <div class="msg-time">
+                ${formatTime(msg.time)}
+                ${msg.sender === myUID ? '<i class="fa-solid fa-check-double"></i>' : ''}
+            </div>
+            ${msg.react ? `<div class="msg-reaction" data-reaction="${msg.react}">${msg.react}</div>` : ''}
+        `;
+        
+        // Double tap for reaction
+        div.addEventListener("dblclick", (e) => {
+            e.stopPropagation();
+            reactionTarget = msg.key;
+            document.getElementById("reactionPicker").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("reactionPicker").style.display = "none";
+            }, 3000);
+        });
+        
+        // Long press for actions (only own messages)
+        if (msg.sender === myUID) {
+            let pressTimer;
+            
+            div.addEventListener("touchstart", (e) => {
+                pressTimer = setTimeout(() => {
+                    selectedKey = msg.key;
+                    selectedMsg = msg;
+                    document.getElementById("editInput").value = msg.text;
+                    document.getElementById("actionMenu").style.display = "block";
+                }, 500);
+            });
+            
+            div.addEventListener("touchend", () => clearTimeout(pressTimer));
+            div.addEventListener("touchmove", () => clearTimeout(pressTimer));
+        }
+        
+        // Click on reaction to remove (only own messages)
+        const reactionDiv = div.querySelector(".msg-reaction");
+        if (reactionDiv && msg.sender === myUID) {
+            reactionDiv.addEventListener("click", (e) => {
+                e.stopPropagation();
+                update(ref(db, `chats/${roomId}/${msg.key}`), {
+                    react: null
+                });
+                showToast("Reaction removed");
+            });
+        }
+        
+        chatBox.appendChild(div);
+    });
+    
+    // Scroll to bottom
+    chatBox.scrollTop = chatBox.scrollHeight;
+});
+
+// Send message
+document.getElementById("sendBtn").onclick = () => {
+    const input = document.getElementById("msgInput");
+    const text = input.value.trim();
+    
+    if (!text) return;
+    
+    push(chatRef, {
+    text: text,
+    sender: myUID,
+    receiver: otherUID, // ⭐️ यह नई लाइन डालनी है
+    time: Date.now(),
+    seen: false
+});
+    
+    input.value = "";
+};
+
+// Enter key to send
+document.getElementById("msgInput").addEventListener("keypress", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        document.getElementById("sendBtn").click();
+    }
+});
+
+// Typing indicator
+let typingTimeout;
+document.getElementById("msgInput").addEventListener("input", () => {
+    const typingRef = ref(db, "typing/" + roomId + "/" + myUID);
+    set(typingRef, true);
+    
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+        set(typingRef, null);
+    }, 1000);
+});
+
+// Show typing indicator
+onValue(ref(db, "typing/" + roomId), snap => {
+    const typingDiv = document.getElementById("typing");
+    if (snap.exists() && snap.val()[otherUID]) {
+        typingDiv.style.display = "flex";
+    } else {
+        typingDiv.style.display = "none";
+    }
+});
+
+// Action menu buttons
+document.getElementById("editBtn").onclick = () => {
+    document.getElementById("actionMenu").style.display = "none";
+    document.getElementById("editDialog").style.display = "flex";
+};
+
+document.getElementById("deleteBtn").onclick = () => {
+    document.getElementById("actionMenu").style.display = "none";
+    document.getElementById("deleteDialog").style.display = "flex";
+};
+
+document.getElementById("reactBtn").onclick = () => {
+    document.getElementById("actionMenu").style.display = "none";
+    if (selectedKey) {
+        reactionTarget = selectedKey;
+        document.getElementById("reactionPicker").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("reactionPicker").style.display = "none";
+        }, 3000);
+    }
+};
+
+// Save edit
+document.getElementById("saveEdit").onclick = () => {
+    update(ref(db, `chats/${roomId}/${selectedKey}`), {
+        text: document.getElementById("editInput").value,
+        edited: true
+    });
+    document.getElementById("editDialog").style.display = "none";
+    showToast("Message updated");
+};
+
+// Confirm delete
+document.getElementById("confirmDelete").onclick = () => {
+    remove(ref(db, `chats/${roomId}/${selectedKey}`));
+    document.getElementById("deleteDialog").style.display = "none";
+    showToast("Message deleted");
+};
+
+// Add reaction function (global)
+window.addReaction = (reaction) => {
+    if (reactionTarget) {
+        update(ref(db, `chats/${roomId}/${reactionTarget}`), {
+            react: reaction
+        });
+        document.getElementById("reactionPicker").style.display = "none";
+        showToast("Reaction added");
+        reactionTarget = null;
+    }
+};
+
+// Close menus on outside click
+document.addEventListener("click", (e) => {
+    if (!e.target.closest(".action-menu") && !e.target.closest(".msg")) {
+        document.getElementById("actionMenu").style.display = "none";
+    }
+    if (!e.target.closest(".reaction-picker")) {
+        document.getElementById("reactionPicker").style.display = "none";
+    }
+});
+</script>
+
+</body>
+</html>
