@@ -1,0 +1,905 @@
+<!DOCTYPE html> 
+<html>  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+<title>Online Test</title>  
+<style>  
+/* ===== RESET & BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f8fafc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== HEADER - FIXED ===== */
+.header {
+    height: 56px;
+    background: #1e40af;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+    flex: 1;
+    padding: 16px;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ===== STATUS BOX - NO SCROLL NEEDED ===== */
+#status .box {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* ===== TEST INFO CARD - COMPACT ===== */
+.headCard {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    padding: 16px;
+    border-radius: 18px;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.testId {
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.testTitle {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 4px;
+}
+
+.proLine {
+    height: 3px;
+    width: 50px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    margin-top: 8px;
+}
+
+/* ===== PROGRESS ROW - COMPACT ===== */
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0 4px;
+}
+
+#progress {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 14px;
+    background: #f1f5f9;
+    padding: 6px 14px;
+    border-radius: 30px;
+}
+
+#timer {
+    background: #dcfce7;
+    color: #166534;
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 16px;
+    font-family: monospace;
+}
+
+/* ===== QUESTION AREA - FIXED HEIGHT ===== */
+#question {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f172a;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    padding: 4px 0;
+}
+
+.qIndex {
+    color: #3b82f6;
+    font-weight: 700;
+    margin-right: 8px;
+    font-size: 20px;
+}
+
+.qText {
+    font-size: 18px;
+    color: #1e293b;
+}
+
+/* ===== OPTIONS - FIXED LAYOUT ===== */
+#options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 12px 0;
+}
+
+.option {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+}
+
+.option.active {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #1e3a8a;
+    font-weight: 600;
+}
+
+.tick {
+    color: #3b82f6;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* ===== BUTTON ROW - FIXED ===== */
+.btnRow {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+button {
+    flex: 1;
+    height: 52px;
+    border: none;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#prevBtn {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+#nextBtn {
+    background: #1e40af;
+    color: white;
+    box-shadow: 0 4px 12px rgba(30,64,175,0.3);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* ===== LEADERBOARD CARD - COMPACT ===== */
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+    border: 1px solid #e2e8f0;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.left img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #1e40af;
+}
+
+.rank {
+    font-weight: 700;
+    color: #1e40af;
+    font-size: 15px;
+    min-width: 45px;
+}
+
+.time {
+    font-weight: 600;
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-family: monospace;
+}
+
+/* ===== RANK COLORS ===== */
+.gold {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-color: #fbbf24;
+}
+.silver {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    border-color: #94a3b8;
+}
+.bronze {
+    background: linear-gradient(135deg, #fff7ed, #fed7aa);
+    border-color: #f97316;
+}
+
+/* ===== DETAIL CARDS - COMPACT ===== */
+.detailWrapper {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.detailCard {
+    background: #f8fafc;
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-left: 4px solid #1e40af;
+}
+
+.detailTitle {
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 10px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge {
+    background: #1e40af;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+/* ===== ALERT ===== */
+.alert {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 16px;
+    border-radius: 18px;
+    font-weight: 600;
+    text-align: center;
+    font-size: 15px;
+    margin-top: 16px;
+    border-left: 4px solid #dc2626;
+}
+
+/* ===== SHAKE ANIMATION ===== */
+.shake {
+    animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+}
+
+/* ===== SPINNER ===== */
+.spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #1e40af;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== LOADING OVERLAY ===== */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.loading-content {
+    background: white;
+    padding: 28px 32px;
+    border-radius: 28px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    max-width: 280px;
+    width: 90%;
+}
+
+.loading-content h3 {
+    color: #0f172a;
+    font-size: 18px;
+    margin: 12px 0 4px;
+}
+
+.loading-content p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* ===== RESULT POPUP ===== */
+.result-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.result-content {
+    background: white;
+    width: 90%;
+    max-width: 340px;
+    border-radius: 32px;
+    padding: 24px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+}
+
+.result-badge {
+    background: #10b981;
+    color: white;
+    padding: 6px 18px;
+    border-radius: 40px;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.result-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 16px;
+}
+
+.result-score {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: white;
+    padding: 20px;
+    border-radius: 20px;
+    margin: 16px 0;
+}
+
+.score-number {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.score-label {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-top: 4px;
+}
+
+.result-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #f8fafc;
+    padding: 14px;
+    border-radius: 18px;
+    margin: 16px 0;
+}
+
+.result-user img {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid #1e40af;
+}
+
+.user-info {
+    text-align: left;
+}
+
+.user-name {
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.user-time {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.countdown-timer {
+    background: #fff1f0;
+    border-radius: 18px;
+    padding: 14px;
+    text-align: center;
+}
+
+.countdown-number {
+    font-size: 32px;
+    font-weight: 800;
+    color: #dc2626;
+    line-height: 1;
+}
+
+.countdown-label {
+    color: #7f1d1d;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* ===== NO SCROLL NEEDED - ALL CONTENT FITS ===== */
+.box {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+hr {
+    margin: 12px 0;
+    border: none;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.4s ease forwards;
+}
+</style>  
+</head>  
+<body>  
+<div class="header">📱 S.C.C.M - Online Test</div>  
+<div class="container">  
+    <!-- STATUS AREA (TEST INFO/WATING) -->
+    <div id="status"></div>  
+    
+    <!-- EXAM AREA -->
+    <div id="examArea" style="display:none">  
+        <div class="box">  
+            <div id="testInfo"></div>  
+            <hr>  
+            <div class="row">  
+                <div id="progress"></div>  
+                <div id="timer"></div>  
+            </div>  
+        </div>  
+        
+        <div class="box">  
+            <div id="question"></div>  
+            <div id="options"></div>  
+            <div class="btnRow">  
+                <button id="prevBtn">← पिछला</button>  
+                <button id="nextBtn">अगला →</button>  
+            </div>  
+        </div>  
+    </div>  
+    
+    <!-- LEADERBOARD AREA -->
+    <div id="boardArea"></div>  
+</div>  
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="loading-overlay" style="display: none;">
+    <div class="loading-content">
+        <div class="spinner"></div>
+        <h3>लोड हो रहा है...</h3>
+        <p>कृपया प्रतीक्षा करें</p>
+    </div>
+</div>
+
+<!-- RESULT POPUP -->
+<div id="resultPopup" class="result-popup">
+    <div class="result-content">
+        <div id="popupHead"></div>
+        <div id="popupUser"></div>
+        <div class="countdown-timer">
+            <div class="countdown-number" id="popupTimer">5</div>
+            <div class="countdown-label">लीडरबोर्ड दिखने में</div>
+        </div>
+    </div>
+</div>
+
+<script type="module">  
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";  
+import { getDatabase, ref, get, onValue, set } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";  
+
+const app = initializeApp({  
+    apiKey: "AIzaSyCy1r8BXbe-W9UBsCrFDFgkHy-j7lYFwYg",  
+    databaseURL: "https://mmpublicschoolmundeshwar-233a4-default-rtdb.firebaseio.com"  
+});  
+
+const db = getDatabase(app);  
+const userId = localStorage.getItem("userId");  
+
+// UI Elements
+const statusBox = document.getElementById("status");  
+const examArea = document.getElementById("examArea");  
+const boardArea = document.getElementById("boardArea");  
+const qBox = document.getElementById("question");  
+const optBox = document.getElementById("options");  
+const progressBox = document.getElementById("progress");  
+const timerBox = document.getElementById("timer");  
+const testInfo = document.getElementById("testInfo");  
+const loadingScreen = document.getElementById("loadingScreen");  
+const resultPopup = document.getElementById("resultPopup");  
+const popupHead = document.getElementById("popupHead");  
+const popupUser = document.getElementById("popupUser");  
+const popupTimer = document.getElementById("popupTimer");  
+
+function showLoading(message = "लोड हो रहा है...") {  
+    loadingScreen.style.display = "flex";  
+    loadingScreen.querySelector("h3").textContent = message;  
+}  
+
+function hideLoading() {  
+    loadingScreen.style.display = "none";  
+}  
+
+function formatTime(sec) {  
+    let m = Math.floor(sec / 60);  
+    let s = sec % 60;  
+    return m + ":" + ("0" + s).slice(-2);  
+}  
+
+let questions = [];  
+let answers = [];  
+let current = 0;  
+let examStarted = false;  
+let examStartTime = 0;  
+let timerInterval = null;  
+
+// Load Test
+showLoading();  
+const snap = await get(ref(db, "onlineTest/current"));  
+hideLoading();  
+
+if (!snap.exists()) {  
+    statusBox.innerHTML = `  
+        <div class="detailWrapper">  
+            <div class="alert">  
+                ⚠️ कोई टेस्ट उपलब्ध नहीं है<br>  
+                कृपया एडमिन द्वारा टेस्ट अपलोड करने की प्रतीक्षा करें  
+            </div>  
+        </div>  
+    `;  
+    throw new Error("No test");  
+}  
+
+const data = snap.val();  
+questions = data.questions;  
+
+testInfo.innerHTML = `  
+    <div class="headCard">  
+        <div class="testId">टेस्ट आईडी: ${data.testId}</div>  
+        <div class="testTitle">${data.title}</div>  
+        <div class="proLine"></div>  
+    </div>  
+`;  
+
+const startTime = data.startTime;  
+const endTime = data.endTime;  
+
+function onlyTime(ms) {  
+    return new Date(ms).toLocaleTimeString([], {  
+        hour: '2-digit',  
+        minute: '2-digit'  
+    });  
+}  
+
+// Master Engine
+const engine = setInterval(() => {  
+    const now = Date.now();  
+
+    // Late Student
+    if (now > endTime && !examStarted) {  
+        statusBox.innerHTML = `  
+            <div class="detailWrapper">  
+                <div class="detailCard">  
+                    <div class="detailTitle">📋 टेस्ट जानकारी</div>  
+                    <span class="badge">टेस्ट आईडी: ${data.testId}</span>  
+                    <div style="margin-top:8px;"><b>शीर्षक:</b> ${data.title}</div>  
+                </div>  
+                <div class="detailCard">  
+                    <div class="detailTitle">📝 परीक्षा विवरण</div>  
+                    <div><b>कुल प्रश्न:</b> ${questions.length}</div>  
+                    <div style="margin-top:8px;"><b>समय:</b> ${onlyTime(startTime)} - ${onlyTime(endTime)}</div>  
+                </div>  
+                <div class="alert">  
+                    ⏰ टेस्ट समाप्त हो चुका है<br>  
+                    अगले टेस्ट की प्रतीक्षा करें  
+                </div>  
+            </div>  
+        `;  
+        clearInterval(engine);  
+        return;  
+    }  
+
+    // Wait Mode
+    if (now < startTime) {  
+        const waitTime = Math.floor((startTime - now) / 1000);  
+        const minutes = Math.floor(waitTime / 60);  
+        const seconds = waitTime % 60;  
+        
+        statusBox.innerHTML = `  
+            <div class="detailWrapper">  
+                <div class="detailCard" style="text-align:center;">  
+                    <span class="badge">⏳ टेस्ट शुरू होने वाला है</span>  
+                    <div style="font-size:16px; font-weight:600; margin:12px 0;">${data.title}</div>  
+                    <div style="font-size:42px; font-weight:800; color:#dc2626;">  
+                        ${minutes}:${seconds.toString().padStart(2,'0')}  
+                    </div>  
+                    <div style="color:#64748b;">शुरू होने में शेष समय</div>  
+                </div>  
+            </div>  
+        `;  
+        return;  
+    }  
+
+    // Start Exam
+    if (!examStarted) {  
+        startExam();  
+    }  
+}, 1000);  
+
+function startExam() {  
+    examStarted = true;  
+    examStartTime = Date.now();  
+    statusBox.style.display = "none";  
+    examArea.style.display = "block";  
+    showQuestion();  
+
+    timerInterval = setInterval(() => {  
+        let diff = endTime - Date.now();  
+        if (diff <= 0) {  
+            clearInterval(timerInterval);  
+            finishExam();  
+            return;  
+        }  
+        let m = Math.floor(diff / 60000);  
+        let s = Math.floor((diff % 60000) / 1000);  
+        timerBox.innerText = m + ":" + ("0" + s).slice(-2);  
+    }, 1000);  
+}  
+
+function showQuestion() {  
+    const q = questions[current];  
+    qBox.innerHTML = `<span class="qIndex">${current + 1}.</span> <span class="qText">${q.q}</span>`;  
+    optBox.innerHTML = "";  
+
+    q.options.forEach(op => {  
+        let div = document.createElement("div");  
+        div.className = "option";  
+        div.innerText = op;  
+
+        div.onclick = () => {  
+            if (answers[current]) return;  
+            answers[current] = op;  
+            document.querySelectorAll(".option").forEach(x => x.classList.remove("active"));  
+            div.classList.add("active");  
+            div.innerHTML = op + ' <span class="tick">✓</span>';  
+        };  
+
+        optBox.appendChild(div);  
+    });  
+
+    progressBox.innerText = "प्रश्न " + (current + 1) + "/" + questions.length;  
+}  
+
+document.getElementById("nextBtn").onclick = () => {  
+    if (!answers[current]) {  
+        qBox.classList.add("shake");  
+        optBox.classList.add("shake");  
+        setTimeout(() => {  
+            qBox.classList.remove("shake");  
+            optBox.classList.remove("shake");  
+        }, 400);  
+        return;  
+    }  
+
+    if (current === questions.length - 1) {  
+        finishExam();  
+        return;  
+    }  
+
+    current++;  
+    showQuestion();  
+};  
+
+document.getElementById("prevBtn").onclick = () => {  
+    if (current > 0) {  
+        current--;  
+        showQuestion();  
+    }  
+};  
+
+async function finishExam() {  
+    clearInterval(timerInterval);  
+    examArea.style.display = "none";  
+
+    let score = 0;  
+    questions.forEach((q, i) => {  
+        if (answers[i] === q.answer) score++;  
+    });  
+
+    let timeTaken = Math.floor((Date.now() - examStartTime) / 1000);  
+
+    showLoading("रिजल्ट सेव हो रहा है...");  
+    await set(ref(db, "results/" + data.testId + "/" + userId), {  
+        score: score,  
+        time: timeTaken,  
+        total: questions.length  
+    });  
+    hideLoading();  
+
+    const userSnap = await get(ref(db, "users/" + userId));  
+    const user = userSnap.val();  
+
+    popupHead.innerHTML = `  
+        <div class="result-badge">✅ टेस्ट पूरा हुआ</div>  
+        <div class="result-title">${data.title}</div>  
+        <div class="result-score">  
+            <div class="score-number">${score}/${questions.length}</div>  
+            <div class="score-label">सही उत्तर</div>  
+        </div>  
+    `;  
+
+    popupUser.innerHTML = `  
+        <div class="result-user">  
+            <img src="${user.photo}" alt="${user.username}">  
+            <div class="user-info">  
+                <div class="user-name">${user.username}</div>  
+                <div class="user-time">⏱️ समय: ${formatTime(timeTaken)}</div>  
+            </div>  
+        </div>  
+    `;  
+
+    resultPopup.style.display = "flex";  
+
+    let countdown = 5;  
+    popupTimer.textContent = countdown;  
+
+    const countdownInterval = setInterval(() => {  
+        countdown--;  
+        popupTimer.textContent = countdown;  
+
+        if (countdown <= 0) {  
+            clearInterval(countdownInterval);  
+            resultPopup.style.display = "none";  
+            showLoading("लीडरबोर्ड लोड हो रहा है...");  
+            showLeaderboard(data.testId);  
+        }  
+    }, 1000);  
+}  
+
+function showLeaderboard(testId) {  
+    const resultRef = ref(db, "results/" + testId);  
+    const userRef = ref(db, "users");  
+
+    onValue(resultRef, async (resSnap) => {  
+        const userSnap = await get(userRef);  
+        hideLoading();  
+
+        let arr = [];  
+        Object.entries(resSnap.val()).forEach(([uid, d]) => {  
+            arr.push({  
+                uid: uid,  
+                score: Number(d.score) || 0,  
+                time: parseInt(d.time) || 0,  
+                total: Number(d.total) || 0  
+            });  
+        });  
+
+        arr.sort((a, b) => b.score - a.score || a.time - b.time);  
+
+        boardArea.innerHTML = `  
+            <div class="box" style="background: linear-gradient(135deg,#1e40af,#3b82f6); color:white; text-align:center; padding:16px;">  
+                🏆 लीव लीडरबोर्ड  
+            </div>  
+        `;  
+
+        arr.forEach((item, i) => {  
+            const user = userSnap.val()[item.uid];  
+            let crown = i === 0 ? "👑 " : "";  
+            let rankClass = i === 0 ? "gold" : i === 1 ? "silver" : i === 2 ? "bronze" : "";  
+
+            boardArea.innerHTML += `  
+                <div class="card ${rankClass}" style="animation-delay: ${i * 0.1}s">  
+                    <div class="left">  
+                        <div class="rank">${crown}#${i + 1}</div>  
+                        <img src="${user.photo}" alt="${user.username}">  
+                        <div>  
+                            <div style="font-weight:600;">${user.username}</div>  
+                            <div style="color:#64748b;">${item.score}/${item.total}</div>  
+                        </div>  
+                    </div>  
+                    <div class="time">${formatTime(item.time)}</div>  
+                </div>  
+            `;  
+        });  
+    });  
+}  
+</script>  
+</body>  
+</html>

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🏆 Live Leaderboard</title>
+
+<style>
+/* ===== MODERN RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    color: #1a1a1a;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header span {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-right: 8px;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+    padding-bottom: 30px;
+}
+
+/* ===== TEST INFO CARD ===== */
+#status {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+#status::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #fbbf24);
+}
+
+.test-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.test-id-badge {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.test-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+    flex: 1;
+}
+
+.test-meta {
+    display: flex;
+    gap: 20px;
+    color: #64748b;
+    font-size: 14px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px dashed #e2e8f0;
+}
+
+.test-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ===== LEADERBOARD CARD ===== */
+.leaderboard-card {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.5s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.leaderboard-card:hover {
+    transform: translateX(5px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: #667eea;
+}
+
+/* Rank Medal */
+.rank-medal {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.rank-1 {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #78350f;
+    border: 3px solid #fbbf24;
+}
+
+.rank-2 {
+    background: linear-gradient(135deg, #e5e7eb, #9ca3af);
+    color: #1f2937;
+    border: 3px solid #9ca3af;
+}
+
+.rank-3 {
+    background: linear-gradient(135deg, #f59e0b, #b45309);
+    color: #7b341e;
+    border: 3px solid #b45309;
+}
+
+.rank-normal {
+    background: #f1f5f9;
+    color: #475569;
+    border: 3px solid #e2e8f0;
+}
+
+/* User Image */
+.user-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #667eea;
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.leaderboard-card:hover .user-image {
+    transform: scale(1.1);
+}
+
+/* User Info */
+.user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-name {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 18px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.crown {
+    font-size: 20px;
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+}
+
+.user-score {
+    display: flex;
+    gap: 12px;
+    color: #64748b;
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.score-badge {
+    background: #e0e7ff;
+    color: #4f46e5;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* Time */
+.time-badge {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    color: #dc2626;
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 28px;
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+.empty-state i {
+    font-size: 60px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* Loading Spinner */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.loading-content {
+    background: white;
+    padding: 30px;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.loading-content p {
+    color: #64748b;
+    margin-top: 10px;
+}
+
+/* ===== PULSE ANIMATION FOR TOP RANK ===== */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.rank-1 {
+    animation: pulse 2s infinite;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .test-title {
+        font-size: 18px;
+    }
+    
+    .test-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .leaderboard-card {
+        padding: 15px;
+        gap: 12px;
+    }
+    
+    .rank-medal {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    .user-image {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .user-name {
+        font-size: 16px;
+    }
+    
+    .time-badge {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+}
+
+/* ===== STATS CARD ===== */
+.stats-card {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 13px;
+    opacity: 0.9;
+    margin-top: 5px;
+}
+
+/* ===== FILTER BUTTONS ===== */
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: white;
+    padding: 6px;
+    border-radius: 50px;
+}
+
+.filter-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    background: transparent;
+    color: #64748b;
+    transition: all 0.3s ease;
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* ===== TOOLTIP ===== */
+[data-tooltip] {
+    position: relative;
+    cursor: help;
+}
+
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+[data-tooltip]:hover:before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <span>🏆</span> LIVE LEADERBOARD
+</div>
+
+<div class="container">
+    <div id="status" class="box">
+        <div class="spinner"></div>
+    </div>
+    
+    <!-- Stats Card (Dynamic) -->
+    <div id="statsCard" class="stats-card" style="display: none;">
+        <div class="stat-item">
+            <div class="stat-value" id="totalParticipants">0</div>
+            <div class="stat-label">Participants</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="avgScore">0</div>
+            <div class="stat-label">Avg Score</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="topScore">0</div>
+            <div class="stat-label">Top Score</div>
+        </div>
+    </div>
+    
+    <!-- Filter Bar -->
+    <div class="filter-bar" id="filterBar" style="display: none;">
+        <button class="filter-btn active" onclick="filterLeaderboard('all')">All</button>
+        <button class="filter-btn" onclick="filterLeaderboard('top3')">Top 3</button>
+        <button class="filter-btn" onclick="filterLeaderboard('rest')">Others</button>
+    </div>
+    
+    <div id="boardArea"></div>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-content">
+        <div class="spinner"></div>
+        <p>Loading Leaderboard...</p>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const app = initializeApp({
+    apiKey: "AIzaSyCy1r8BXbe-W9UBsCrFDFgkHy-j7lYFwYg",
+    databaseURL: "https://mmpublicschoolmundeshwar-233a4-default-rtdb.firebaseio.com"
+});
+
+const db = getDatabase(app);
+
+const statusBox = document.getElementById("status");
+const boardArea = document.getElementById("boardArea");
+const statsCard = document.getElementById("statsCard");
+const filterBar = document.getElementById("filterBar");
+const loadingOverlay = document.getElementById("loadingOverlay");
+
+let allParticipants = [];
+let currentFilter = 'all';
+
+// Format time function
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+}
+
+// Show/Hide Loading
+function showLoading() {
+    loadingOverlay.style.display = 'flex';
+}
+
+function hideLoading() {
+    loadingOverlay.style.display = 'none';
+}
+
+// Load Current Test
+showLoading();
+const testSnap = await get(ref(db, "onlineTest/current"));
+hideLoading();
+
+if (!testSnap.exists()) {
+    statusBox.innerHTML = `
+        <div class="empty-state">
+            <i>📭</i>
+            No Test Available
+            <p style="font-size: 14px; margin-top: 10px;">Please wait for admin to upload a test</p>
+        </div>
+    `;
+    throw new Error("No test");
+}
+
+const testData = testSnap.val();
+const startTime = new Date(testData.startTime).toLocaleString();
+const endTime = new Date(testData.endTime).toLocaleString();
+
+statusBox.innerHTML = `
+    <div class="test-info">
+        <span class="test-id-badge">${testData.testId}</span>
+        <div class="test-title">${testData.title}</div>
+    </div>
+    <div class="test-meta">
+        <span>📅 ${startTime}</span>
+        <span>⏰ ${endTime}</span>
+        <span>📊 ${testData.questions?.length || 0} Questions</span>
+    </div>
+`;
+
+const resultRef = ref(db, "results/" + testData.testId);
+const userRef = ref(db, "users");
+
+// Live Leaderboard
+onValue(resultRef, async (resSnap) => {
+    showLoading();
+    const userSnap = await get(userRef);
+    
+    if (!resSnap.exists()) {
+        boardArea.innerHTML = `
+            <div class="empty-state">
+                <i>📊</i>
+                No Results Yet
+                <p style="font-size: 14px; margin-top: 10px;">Be the first to complete the test!</p>
+            </div>
+        `;
+        statsCard.style.display = 'none';
+        filterBar.style.display = 'none';
+        hideLoading();
+        return;
+    }
+    
+    let arr = [];
+    let totalScore = 0;
+    let maxScore = 0;
+    
+    Object.entries(resSnap.val()).forEach(([uid, d]) => {
+        const score = Number(d.score) || 0;
+        const time = parseInt(d.time) || 0;
+        const total = Number(d.total) || 0;
+        
+        arr.push({
+            uid: uid,
+            score: score,
+            time: time,
+            total: total,
+            percentage: total > 0 ? Math.round((score / total) * 100) : 0
+        });
+        
+        totalScore += score;
+        if (score > maxScore) maxScore = score;
+    });
+    
+    // Sort: Higher score first, then faster time
+    arr.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.time - b.time;
+    });
+    
+    allParticipants = arr;
+    
+    // Update Stats
+    document.getElementById('totalParticipants').textContent = arr.length;
+    document.getElementById('avgScore').textContent = arr.length > 0 ? Math.round(totalScore / arr.length) : 0;
+    document.getElementById('topScore').textContent = maxScore;
+    
+    statsCard.style.display = 'flex';
+    filterBar.style.display = 'flex';
+    
+    renderLeaderboard(currentFilter);
+    hideLoading();
+});
+
+// Render Leaderboard
+function renderLeaderboard(filter) {
+    boardArea.innerHTML = "";
+    
+    let participantsToShow = allParticipants;
+    
+    if (filter === 'top3') {
+        participantsToShow = allParticipants.slice(0, 3);
+    } else if (filter === 'rest') {
+        participantsToShow = allParticipants.slice(3);
+    }
+    
+    if (participantsToShow.length === 0) {
+        boardArea.innerHTML = `
+            <div class="empty-state">
+                <i>🔍</i>
+                No participants in this category
+            </div>
+        `;
+        return;
+    }
+    
+    participantsToShow.forEach((item, index) => {
+        const originalIndex = allParticipants.findIndex(p => p.uid === item.uid);
+        const rank = originalIndex + 1;
+        
+        const user = userSnap.val()[item.uid];
+        if (!user) return;
+        
+        let medalClass = 'rank-normal';
+        let crown = '';
+        
+        if (rank === 1) {
+            medalClass = 'rank-1';
+            crown = '👑';
+        } else if (rank === 2) {
+            medalClass = 'rank-2';
+        } else if (rank === 3) {
+            medalClass = 'rank-3';
+        }
+        
+        const card = document.createElement('div');
+        card.className = 'leaderboard-card';
+        card.style.animationDelay = `${index * 0.1}s`;
+        
+        card.innerHTML = `
+            <div class="rank-medal ${medalClass}">#${rank}</div>
+            <img src="${user.photo}" class="user-image" alt="${user.username}">
+            <div class="user-info">
+                <div class="user-name">
+                    ${crown ? `<span class="crown">${crown}</span>` : ''}
+                    ${user.username}
+                </div>
+                <div class="user-score">
+                    <span class="score-badge" data-tooltip="Score">📊 ${item.score}/${item.total}</span>
+                    <span class="score-badge" data-tooltip="Accuracy">🎯 ${item.percentage}%</span>
+                </div>
+            </div>
+            <div class="time-badge" data-tooltip="Completion Time">
+                ⏱️ ${formatTime(item.time)}
+            </div>
+        `;
+        
+        boardArea.appendChild(card);
+    });
+}
+
+// Filter function (make it global)
+window.filterLeaderboard = (filter) => {
+    currentFilter = filter;
+    
+    // Update active button
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(filter)) {
+            btn.classList.add('active');
+        }
+    });
+    
+    renderLeaderboard(filter);
+};
+
+// Store userSnap globally for rendering
+let userSnap = await get(userRef);
+</script>
+
+</body>
+</html>

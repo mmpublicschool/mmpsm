@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.C.C.M Dashboard</title>
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background: #f0f5fb;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ===== PROFESSIONAL DIALOG SYSTEM ===== */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 20, 40, 0.7);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.dialog-overlay.active {
+  display: flex;
+}
+
+.dialog-box {
+  background: white;
+  width: 90%;
+  max-width: 380px;
+  padding: 35px 30px;
+  border-radius: 30px;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.dialog-icon {
+  font-size: 50px;
+  margin-bottom: 15px;
+  color: #2563eb;
+}
+
+.dialog-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.dialog-message {
+  color: #475569;
+  font-size: 16px;
+  margin: 15px 0 25px;
+  line-height: 1.6;
+}
+
+.dialog-btn {
+  background: #2563eb;
+  border: none;
+  color: white;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.dialog-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(37,99,235,0.3);
+}
+
+/* ===== CUSTOM NAME INPUT DIALOG ===== */
+.name-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 20, 40, 0.8);
+  backdrop-filter: blur(10px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.name-dialog-overlay.active {
+  display: flex;
+}
+
+.name-dialog-box {
+  background: white;
+  width: 90%;
+  max-width: 400px;
+  padding: 40px 35px;
+  border-radius: 40px;
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.name-dialog-box h3 {
+  font-size: 28px;
+  color: #1e293b;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.name-dialog-box p {
+  color: #64748b;
+  margin-bottom: 25px;
+  font-size: 16px;
+}
+
+.name-input {
+  width: 100%;
+  padding: 18px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 30px;
+  font-size: 16px;
+  margin-bottom: 25px;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.name-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+}
+
+.name-dialog-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.name-dialog-actions button {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37,99,235,0.3);
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+/* Loading Dots Animation */
+.loading-dots:after {
+  content: '';
+  animation: dots 1.2s steps(4, end) infinite;
+  display: inline-block;
+  width: 24px;
+  text-align: left;
+}
+
+@keyframes dots {
+  0%, 20% { content: ''; }
+  40% { content: '.'; }
+  60% { content: '..'; }
+  80%, 100% { content: '...'; }
+}
+
+/* ===== HEADER ===== */
+.header {
+  height: 65px;
+  background: #1e3a8a;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+#menuBtn {
+  font-size: 24px;
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  transition: 0.2s;
+}
+
+#menuBtn:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ===== SIDE MENU ===== */
+.sideMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100%;
+  background: white;
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+  z-index: 1000;
+  padding: 30px 20px;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.sideMenu.active {
+  transform: translateX(0);
+}
+
+.profile {
+  text-align: center;
+  padding: 15px 0 25px;
+  border-bottom: 2px solid #eef2f6;
+  margin-bottom: 20px;
+}
+
+.profile img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #2563eb;
+  box-shadow: 0 8px 20px rgba(37,99,235,0.3);
+  background: #f8fafc;
+}
+
+.profile h3 {
+  margin-top: 15px;
+  font-size: 1.4rem;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.menuItem {
+  padding: 14px 18px;
+  margin: 8px 0;
+  border-radius: 14px;
+  background: #f8fafc;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menuItem i {
+  width: 24px;
+  color: #2563eb;
+  font-size: 1.1rem;
+}
+
+.menuItem:hover {
+  background: #e6f0ff;
+  border-color: #2563eb;
+  transform: translateX(5px);
+  color: #1e293b;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 15px 30px rgba(30,58,138,0.3);
+}
+
+.hero img {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  border: 3px solid white;
+  object-fit: cover;
+  background: white;
+}
+
+.hero b {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.hero div div {
+  opacity: 0.9;
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+/* ===== MAIN CARDS ===== */
+.main {
+  padding: 10px 20px 90px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.card {
+  background: white;
+  padding: 22px 12px;
+  border-radius: 22px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1e293b;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transition: all 0.25s;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.card i {
+  font-size: 2rem;
+  color: #2563eb;
+  margin-bottom: 5px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 30px -8px rgba(37,99,235,0.3);
+  border-color: #2563eb;
+  background: #fafcff;
+}
+
+/* ===== BOTTOM NAVIGATION ===== */
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  z-index: 90;
+}
+
+.navBtn {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #64748b;
+  cursor: pointer;
+  padding: 8px 15px;
+  border-radius: 40px;
+  transition: 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.navBtn i {
+  font-size: 1.5rem;
+  color: #64748b;
+}
+
+.navBtn.active {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.navBtn.active i {
+  color: #2563eb;
+}
+
+/* ===== PROFILE POPUP ===== */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popupBox {
+  background: white;
+  padding: 35px 25px;
+  border-radius: 35px;
+  width: 90%;
+  max-width: 340px;
+  text-align: center;
+  box-shadow: 0 40px 70px rgba(0,0,0,0.4);
+  animation: popIn 0.3s;
+}
+
+.popupBox img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid #2563eb;
+  margin-bottom: 15px;
+  object-fit: cover;
+}
+
+.popupBox b {
+  font-size: 1.5rem;
+  color: #1e293b;
+  display: block;
+  margin-bottom: 25px;
+}
+
+.popupBox button {
+  margin: 8px 0;
+  padding: 14px;
+  border: none;
+  background: #f1f5f9;
+  color: #1e293b;
+  border-radius: 50px;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.popupBox button i {
+  color: #2563eb;
+}
+
+.popupBox button:hover {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.popupBox button:hover i {
+  color: white;
+}
+
+.close-btn {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+  border-color: #fecaca !important;
+}
+
+.close-btn:hover {
+  background: #dc2626 !important;
+  color: white !important;
+}
+</style>
+</head>
+<body>
+
+<!-- SIDE MENU -->
+<div class="sideMenu" id="menu">
+  <div class="profile">
+    <img id="userPhoto" src="#" alt="Profile">
+    <h3 id="userName">Loading...</h3>
+  </div>
+
+  <div class="menuItem"><i class="fas fa-home"></i> Dashboard</div>
+  <div class="menuItem" onclick="goTest()"><i class="fas fa-pencil-alt"></i> Online Test</div>
+  <div class="menuItem" onclick="goBoard()"><i class="fas fa-trophy"></i> Leaderboard</div>
+  <div class="menuItem" onclick="goAdmin()"><i class="fas fa-cog"></i> Admin Panel</div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div><i class="fas fa-school" style="margin-right: 10px;"></i>S.C.C.M</div>
+  <div id="menuBtn"><i class="fas fa-bars"></i></div>
+</div>
+
+<!-- HERO SECTION -->
+<div class="hero">
+  <img id="heroImg" src="#" alt="Profile">
+  <div>
+    <b>Welcome, <span id="heroName"></span></b>
+    <div><i class="fas fa-laptop"></i> Online Test Dashboard</div>
+  </div>
+</div>
+
+<!-- MAIN CARDS -->
+<div class="main">
+  <div class="card" onclick="goTest()"><i class="fas fa-pencil-alt"></i> Online Test</div>
+  <div class="card" onclick="goBoard()"><i class="fas fa-trophy"></i> Leaderboard</div>
+  <div class="card" onclick="goAdmin()"><i class="fas fa-cog"></i> Admin</div>
+  <div class="card"><i class="fas fa-chart-bar"></i> Results</div>
+  <div class="card"><i class="fas fa-bullhorn"></i> Updates</div>
+  <div class="card"><i class="fas fa-ellipsis-h"></i> More</div>
+</div>
+
+<!-- BOTTOM NAVIGATION -->
+<div class="bottomNav">
+  <div class="navBtn active"><i class="fas fa-home"></i> Home</div>
+  <div class="navBtn" onclick="goTest()"><i class="fas fa-pencil-alt"></i> Test</div>
+  <div class="navBtn" onclick="openProfile()"><i class="fas fa-user-circle"></i> Profile</div>
+</div>
+
+<!-- PROFILE POPUP -->
+<div class="popup" id="profilePopup">
+  <div class="popupBox">
+    <img id="popupImg" src="#">
+    <b id="popupName"></b>
+    <button onclick="showNameDialog()"><i class="fas fa-edit"></i> Change Name</button>
+    <button onclick="changePhoto()"><i class="fas fa-camera"></i> Change Photo</button>
+    <button class="close-btn" onclick="closeProfile()"><i class="fas fa-times"></i> Close</button>
+  </div>
+</div>
+
+<!-- CUSTOM NAME INPUT DIALOG (PROFESSIONAL - NO PROMPT) -->
+<div class="name-dialog-overlay" id="nameDialogOverlay">
+  <div class="name-dialog-box">
+    <i class="fas fa-user-edit" style="font-size: 50px; color: #2563eb; margin-bottom: 15px;"></i>
+    <h3>Change Name</h3>
+    <p>Enter your new full name below</p>
+    <input type="text" class="name-input" id="newNameInput" placeholder="e.g., Rajesh Kumar" autocomplete="off">
+    <div class="name-dialog-actions">
+      <button class="btn-secondary" onclick="closeNameDialog()"><i class="fas fa-times"></i> Cancel</button>
+      <button class="btn-primary" onclick="updateName()"><i class="fas fa-check"></i> Update</button>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM DIALOG (LOADING + ALERTS) -->
+<div class="dialog-overlay" id="dialogOverlay">
+  <div class="dialog-box">
+    <div class="dialog-icon" id="dialogIcon"><i class="fas fa-circle-notch"></i></div>
+    <div class="dialog-title" id="dialogTitle">Loading</div>
+    <div class="dialog-message" id="dialogMessage">Please wait<span class="loading-dots"></span></div>
+    <button class="dialog-btn" id="dialogBtn">OK</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCy1r8BXbe-W9UBsCrFDFgkHy-j7lYFwYg",
+  authDomain: "mmpublicschoolmundeshwar-233a4.firebaseapp.com",
+  databaseURL: "https://mmpublicschoolmundeshwar-233a4-default-rtdb.firebaseio.com",
+  projectId: "mmpublicschoolmundeshwar-233a4",
+  storageBucket: "mmpublicschoolmundeshwar-233a4.firebasestorage.app",
+  messagingSenderId: "34014305665",
+  appId: "1:34014305665:web:543d0aed6c75d6d8549c80"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ===== DIALOG SYSTEM =====
+const dialogOverlay = document.getElementById('dialogOverlay');
+const dialogIcon = document.getElementById('dialogIcon');
+const dialogTitle = document.getElementById('dialogTitle');
+const dialogMessage = document.getElementById('dialogMessage');
+const dialogBtn = document.getElementById('dialogBtn');
+
+// Name Dialog Elements
+const nameDialogOverlay = document.getElementById('nameDialogOverlay');
+const newNameInput = document.getElementById('newNameInput');
+
+function showLoading(message = 'Loading') {
+  dialogIcon.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>';
+  dialogTitle.textContent = 'Please Wait';
+  dialogMessage.innerHTML = message + '<span class="loading-dots"></span>';
+  dialogOverlay.classList.add('active');
+  
+  dialogBtn.style.opacity = '0.6';
+  dialogBtn.style.cursor = 'not-allowed';
+  dialogBtn.disabled = true;
+}
+
+function showAlert(icon, title, message, callback = null) {
+  dialogIcon.innerHTML = icon;
+  dialogTitle.textContent = title;
+  dialogMessage.textContent = message;
+  dialogOverlay.classList.add('active');
+  
+  dialogBtn.style.opacity = '1';
+  dialogBtn.style.cursor = 'pointer';
+  dialogBtn.disabled = false;
+  
+  const closeHandler = () => {
+    dialogOverlay.classList.remove('active');
+    dialogBtn.removeEventListener('click', closeHandler);
+    if (callback) callback();
+  };
+  
+  dialogBtn.addEventListener('click', closeHandler, { once: true });
+}
+
+function hideDialog() {
+  dialogOverlay.classList.remove('active');
+}
+
+// Name Dialog Functions
+window.showNameDialog = () => {
+  closeProfile(); // Close profile popup
+  newNameInput.value = ''; // Clear previous input
+  nameDialogOverlay.classList.add('active');
+  setTimeout(() => newNameInput.focus(), 100);
+};
+
+window.closeNameDialog = () => {
+  nameDialogOverlay.classList.remove('active');
+};
+
+// ===== CHECK USER & LOAD DATA =====
+const userId = localStorage.getItem("userId");
+
+if (!userId) {
+  showAlert('<i class="fas fa-exclamation-triangle"></i>', 'Not Logged In', 'Please login first', () => {
+    location.href = "index.html";
+  });
+} else {
+  showLoading('Fetching profile');
+  
+  get(ref(db, "users/" + userId))
+    .then((snap) => {
+      if (snap.exists()) {
+        const userData = snap.val();
+        
+        // Update all UI elements
+        document.getElementById("userName").innerText = userData.username;
+        document.getElementById("heroName").innerText = userData.username;
+        document.getElementById("popupName").innerText = userData.username;
+        
+        document.getElementById("userPhoto").src = userData.photo;
+        document.getElementById("heroImg").src = userData.photo;
+        document.getElementById("popupImg").src = userData.photo;
+        
+        hideDialog();
+      } else {
+        showAlert('<i class="fas fa-exclamation-circle"></i>', 'Error', 'User data not found', () => {
+          localStorage.clear();
+          location.href = "index.html";
+        });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      showAlert('<i class="fas fa-wifi-slash"></i>', 'Network Error', 'Check internet connection');
+    });
+}
+
+// ===== MENU LOGIC =====
+const menu = document.getElementById("menu");
+const menuBtn = document.getElementById("menuBtn");
+
+menuBtn.onclick = (e) => {
+  e.stopPropagation();
+  menu.classList.toggle("active");
+};
+
+document.body.onclick = (e) => {
+  if (!menu.contains(e.target) && e.target.id !== "menuBtn") {
+    menu.classList.remove("active");
+  }
+};
+
+// ===== NAVIGATION =====
+window.goTest = () => {
+  showLoading('Loading Test');
+  setTimeout(() => location.href = "online-test.html", 300);
+};
+
+window.goBoard = () => {
+  showLoading('Loading Leaderboard');
+  setTimeout(() => location.href = "sccm-leaderboard.html", 300);
+};
+
+window.goAdmin = () => {
+  showLoading('Loading Admin');
+  setTimeout(() => location.href = "admin.html", 300);
+};
+
+// ===== PROFILE POPUP =====
+const popup = document.getElementById("profilePopup");
+
+window.openProfile = () => {
+  popup.style.display = "flex";
+};
+
+window.closeProfile = () => {
+  popup.style.display = "none";
+};
+
+// ===== UPDATE NAME (NO PROMPT, NO LOCALHOST) =====
+window.updateName = async () => {
+  const newName = newNameInput.value.trim();
+  
+  if (!newName) {
+    showAlert('<i class="fas fa-info-circle"></i>', 'Empty Name', 'Please enter a valid name');
+    return;
+  }
+  
+  if (newName.length < 3) {
+    showAlert('<i class="fas fa-info-circle"></i>', 'Too Short', 'Name must be at least 3 characters');
+    return;
+  }
+  
+  closeNameDialog();
+  showLoading('Updating your name');
+  
+  try {
+    await update(ref(db, "users/" + userId), { username: newName });
+    hideDialog();
+    showAlert('<i class="fas fa-check-circle"></i>', 'Success!', 'Name updated successfully', () => {
+      location.reload(); // Refresh to show updated name
+    });
+  } catch (error) {
+    console.error(error);
+    hideDialog();
+    showAlert('<i class="fas fa-exclamation-circle"></i>', 'Error', 'Failed to update name. Please try again.');
+  }
+};
+
+// ===== CHANGE PHOTO =====
+window.changePhoto = () => {
+  closeProfile();
+  showAlert('<i class="fas fa-camera"></i>', 'Photo Update', 'Please use the signup page to change your photo', () => {
+    // Just info - no redirect to localhost
+  });
+};
+</script>
+</body>
+</html>

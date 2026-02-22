@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Admin PRO MAX</title>
+
+<style>
+/* ===== MODERN RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+/* ===== STICKY HEADER WITH TABS ===== */
+.header {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ===== TAB NAVIGATION - NOW SCROLLS WITH PAGE ===== */
+.tab-container {
+    display: flex;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 40px;
+    max-width: 400px;
+    margin: 10px auto 0;
+    position: sticky;
+    top: 60px;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    background: transparent;
+    color: #64748b;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background: white;
+    color: #667eea;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 16px;
+    padding-bottom: 30px;
+}
+
+/* ===== CARD DESIGN ===== */
+.box {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 24px;
+    margin-top: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.box h3 {
+    color: #1e293b;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.box h3::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+/* ===== FORM ELEMENTS ===== */
+label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    color: #475569;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+textarea {
+    min-height: 100px;
+    font-size: 13px;
+}
+
+/* ===== BUTTONS ===== */
+button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px;
+    border: none;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.rowBtn {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.rowBtn button {
+    margin-top: 0;
+    flex: 1;
+    padding: 12px;
+}
+
+.deleteBtn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.editBtn {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.viewBtn {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+/* ===== HISTORY ITEM WITH COMPACT THREE DOTS ===== */
+.history-item {
+    background: #f8fafc;
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 2px solid #e2e8f0;
+    transition: all 0.2s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.history-item:hover {
+    border-color: #667eea;
+    background: white;
+}
+
+/* Left side - Icon */
+.history-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+/* Middle - Content */
+.history-content {
+    flex: 1;
+    min-width: 0; /* For text truncation */
+}
+
+.history-id {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 13px;
+    background: #e0e7ff;
+    padding: 2px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 4px;
+}
+
+.history-title {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 16px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.history-meta {
+    display: flex;
+    gap: 12px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.history-meta span {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+/* Right side - Three Dots (Compact) */
+.three-dots {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    position: relative;
+    z-index: 10;
+}
+
+.three-dots:hover {
+    background: #667eea;
+    border-color: #667eea;
+    color: white;
+    transform: scale(1.05);
+}
+
+.three-dots span {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* ===== DROPDOWN MENU - FIXED POSITIONING ===== */
+.dropdown-menu {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    z-index: 9999;
+    min-width: 150px;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-item {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #1e293b;
+    font-weight: 500;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item.view:hover {
+    background: #e0e7ff;
+    color: #2563eb;
+}
+
+.dropdown-item.edit:hover {
+    background: #d1fae5;
+    color: #059669;
+}
+
+.dropdown-item.delete:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* ===== MODAL/POPUP STYLES ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+    padding: 16px;
+}
+
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 28px;
+    padding: 24px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.4s ease;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-content.large {
+    max-width: 700px;
+}
+
+.modal-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 30px;
+}
+
+.modal-icon.success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.modal-icon.error {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+.modal-icon.warning {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+}
+
+.modal-icon.info {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+}
+
+.modal-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.modal-message {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0;
+}
+
+.modal-btn.primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.modal-btn.secondary {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.modal-btn.danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+/* ===== VIEW DETAILS STYLES ===== */
+.detail-grid {
+    display: grid;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.detail-row {
+    display: flex;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 14px;
+    font-size: 14px;
+}
+
+.detail-label {
+    width: 90px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.detail-value {
+    flex: 1;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.question-preview {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 12px;
+    max-height: 250px;
+    overflow-y: auto;
+    font-size: 13px;
+}
+
+.question-item {
+    padding: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.question-item:last-child {
+    border-bottom: none;
+}
+
+/* ===== CURRENT TEST CARD ===== */
+.current-test-card {
+    background: linear-gradient(135deg, #f8fafc, #eef2ff);
+    border-radius: 20px;
+    padding: 16px;
+    border-left: 4px solid #667eea;
+}
+
+.test-id-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.test-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.test-meta {
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+/* ===== SPINNER ===== */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e2e8f0;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 15px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== TABS CONTENT ===== */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+/* ===== SCROLL BEHAVIOR ===== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+    .container {
+        padding: 0 12px;
+    }
+    
+    .tab-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    
+    .history-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    .history-title {
+        font-size: 15px;
+    }
+    
+    .history-meta {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .dropdown-menu {
+        min-width: 130px;
+    }
+    
+    .dropdown-item {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-top">
+        <div class="logo">⚡ ADMIN PRO MAX</div>
+        <div style="color: #64748b; font-size: 13px;">v3.0</div>
+    </div>
+</div>
+
+<!-- TABS - STICKY BUT SCROLLS WITH PAGE -->
+<div class="tab-container">
+    <button class="tab-btn active" onclick="switchTab('upload')">📤 Upload</button>
+    <button class="tab-btn" onclick="switchTab('history')">📋 History</button>
+</div>
+
+<div class="container">
+    <!-- UPLOAD TAB -->
+    <div id="uploadTab" class="tab-content active">
+        <div class="box">
+            <h3>📝 Upload / Edit Test</h3>
+            
+            <label>Test ID</label>
+            <input id="testId" placeholder="e.g., TEST_001">
+            
+            <label>Test Title</label>
+            <input id="title" placeholder="e.g., Mathematics Final Exam">
+            
+            <label>Start Time</label>
+            <input id="startTime" type="datetime-local">
+            
+            <label>End Time</label>
+            <input id="endTime" type="datetime-local">
+            
+            <label>Questions (JSON)</label>
+            <textarea id="questions" rows="5" placeholder='[{"q":"2+2?","options":["3","4"],"answer":"4"}]'></textarea>
+            
+            <button onclick="uploadTest()">💾 Save Test</button>
+        </div>
+
+        <div class="box">
+            <h3>📌 Current Active Test</h3>
+            <div id="currentTest">
+                <div class="empty-state">
+                    <div class="spinner"></div>
+                    Loading...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div id="historyTab" class="tab-content">
+        <div class="box">
+            <h3>📚 Test History</h3>
+            <div id="history"></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal-overlay">
+    <div class="modal-content" id="modalContent">
+        <div id="modalIcon" class="modal-icon success">✓</div>
+        <div id="modalTitle" class="modal-title">Success</div>
+        <div id="modalMessage" class="modal-message"></div>
+        <div id="modalBody" style="display: none;"></div>
+        <div class="modal-buttons">
+            <button id="modalConfirmBtn" class="modal-btn primary">OK</button>
+            <button id="modalCancelBtn" class="modal-btn secondary" style="display: none;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, set, get, remove, push } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const app = initializeApp({
+    apiKey: "AIzaSyCy1r8BXbe-W9UBsCrFDFgkHy-j7lYFwYg",
+    databaseURL: "https://mmpublicschoolmundeshwar-233a4-default-rtdb.firebaseio.com"
+});
+
+const db = getDatabase(app);
+
+// UI Elements
+const currentDiv = document.getElementById("currentTest");
+const historyDiv = document.getElementById("history");
+const modal = document.getElementById("modal");
+const modalContent = document.getElementById("modalContent");
+const modalIcon = document.getElementById("modalIcon");
+const modalTitle = document.getElementById("modalTitle");
+const modalMessage = document.getElementById("modalMessage");
+const modalBody = document.getElementById("modalBody");
+const modalConfirmBtn = document.getElementById("modalConfirmBtn");
+const modalCancelBtn = document.getElementById("modalCancelBtn");
+
+let activeDropdown = null;
+
+// Tab switching
+window.switchTab = (tab) => {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    if (tab === 'upload') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('uploadTab').classList.add('active');
+    } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('historyTab').classList.add('active');
+        loadHistory();
+    }
+};
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    if (activeDropdown && !e.target.closest('.three-dots') && !e.target.closest('.dropdown-menu')) {
+        activeDropdown.remove();
+        activeDropdown = null;
+    }
+});
+
+// Show modal
+function showModal(type, title, message, showCancel = false, customContent = null) {
+    return new Promise((resolve) => {
+        modalIcon.className = 'modal-icon ' + type;
+        modalIcon.innerHTML = type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'ℹ';
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        
+        if (customContent) {
+            modalBody.style.display = 'block';
+            modalBody.innerHTML = customContent;
+            modalContent.classList.add('large');
+        } else {
+            modalBody.style.display = 'none';
+            modalContent.classList.remove('large');
+        }
+        
+        modalConfirmBtn.style.display = 'block';
+        modalCancelBtn.style.display = showCancel ? 'block' : 'none';
+        
+        modal.style.display = 'flex';
+        
+        modalConfirmBtn.onclick = () => {
+            modal.style.display = 'none';
+            resolve(true);
+        };
+        
+        modalCancelBtn.onclick = () => {
+            modal.style.display = 'none';
+            resolve(false);
+        };
+    });
+}
+
+// Load Current Test
+async function loadCurrent() {
+    try {
+        const snap = await get(ref(db, "onlineTest/current"));
+        
+        if (!snap.exists()) {
+            currentDiv.innerHTML = `
+                <div class="empty-state">
+                    <div style="font-size: 40px; margin-bottom: 10px;">📭</div>
+                    No Test Uploaded
+                </div>
+            `;
+            return;
+        }
+        
+        const d = snap.val();
+        const startTime = new Date(d.startTime).toLocaleString();
+        const endTime = new Date(d.endTime).toLocaleString();
+        
+        currentDiv.innerHTML = `
+            <div class="current-test-card">
+                <span class="test-id-badge">${d.testId}</span>
+                <div class="test-title">${d.title}</div>
+                <div class="test-meta">
+                    <div>📅 ${startTime}</div>
+                    <div>⏰ ${endTime}</div>
+                    <div>📊 ${d.questions?.length || 0} questions</div>
+                </div>
+                <div class="rowBtn">
+                    <button class="editBtn" onclick='editTest(${JSON.stringify(d).replace(/'/g, "&apos;")})'>✏️ Edit</button>
+                    <button class="deleteBtn" onclick="deleteTest()">🗑️ Delete</button>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        currentDiv.innerHTML = `<div class="empty-state">Error loading test</div>`;
+    }
+}
+
+// Load History with Compact Three Dots
+async function loadHistory() {
+    try {
+        const snap = await get(ref(db, "onlineTest/history"));
+        
+        if (!snap.exists()) {
+            historyDiv.innerHTML = `
+                <div class="empty-state">
+                    <div style="font-size: 40px; margin-bottom: 10px;">📜</div>
+                    No History Available
+                </div>
+            `;
+            return;
+        }
+        
+        historyDiv.innerHTML = "";
+        const historyArray = Object.entries(snap.val()).reverse();
+        
+        historyArray.forEach(([key, d]) => {
+            const date = new Date(d.startTime).toLocaleDateString();
+            const time = new Date(d.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const questionsCount = d.questions?.length || 0;
+            
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'history-item';
+            itemDiv.id = `history-${key}`;
+            
+            itemDiv.innerHTML = `
+                <div class="history-icon">📝</div>
+                <div class="history-content">
+                    <span class="history-id">${d.testId}</span>
+                    <div class="history-title">${d.title}</div>
+                    <div class="history-meta">
+                        <span>📅 ${date}</span>
+                        <span>⏰ ${time}</span>
+                        <span>📊 ${questionsCount}</span>
+                    </div>
+                </div>
+                <div class="three-dots" onclick="event.stopPropagation(); toggleDropdown('${key}', event)">
+                    <span>⋮</span>
+                </div>
+            `;
+            
+            historyDiv.appendChild(itemDiv);
+        });
+    } catch (error) {
+        historyDiv.innerHTML = `<div class="empty-state">Error loading history</div>`;
+    }
+}
+
+// Toggle Dropdown
+window.toggleDropdown = (key, event) => {
+    event.stopPropagation();
+    
+    if (activeDropdown) {
+        activeDropdown.remove();
+    }
+    
+    const item = document.getElementById(`history-${key}`);
+    if (!item) return;
+    
+    const rect = item.querySelector('.three-dots').getBoundingClientRect();
+    
+    const dropdown = document.createElement('div');
+    dropdown.className = 'dropdown-menu';
+    dropdown.style.position = 'fixed';
+    dropdown.style.top = (rect.bottom + 5) + 'px';
+    dropdown.style.right = (window.innerWidth - rect.right) + 'px';
+    dropdown.style.zIndex = '10001';
+    
+    dropdown.innerHTML = `
+        <div class="dropdown-item view" onclick="viewTest('${key}')">
+            <span>👁️</span> View
+        </div>
+        <div class="dropdown-item edit" onclick="editHistoryTest('${key}')">
+            <span>✏️</span> Edit
+        </div>
+        <div class="dropdown-item delete" onclick="deleteHistoryTest('${key}')">
+            <span>🗑️</span> Delete
+        </div>
+    `;
+    
+    document.body.appendChild(dropdown);
+    activeDropdown = dropdown;
+};
+
+// View Test Details
+window.viewTest = async (key) => {
+    if (activeDropdown) {
+        activeDropdown.remove();
+        activeDropdown = null;
+    }
+    
+    const snap = await get(ref(db, `onlineTest/history/${key}`));
+    if (!snap.exists()) return;
+    
+    const d = snap.val();
+    const startTime = new Date(d.startTime).toLocaleString();
+    const endTime = new Date(d.endTime).toLocaleString();
+    
+    const questionsHtml = d.questions.map((q, i) => `
+        <div class="question-item">
+            <div style="font-weight:600;">Q${i+1}: ${q.q}</div>
+            <div style="color:#64748b;">Options: ${q.options.join(', ')}</div>
+            <div style="color:#10b981;">✓ Answer: ${q.answer}</div>
+        </div>
+    `).join('');
+    
+    const customContent = `
+        <div class="detail-grid">
+            <div class="detail-row"><span class="detail-label">Test ID:</span><span class="detail-value">${d.testId}</span></div>
+            <div class="detail-row"><span class="detail-label">Title:</span><span class="detail-value">${d.title}</span></div>
+            <div class="detail-row"><span class="detail-label">Start:</span><span class="detail-value">${startTime}</span></div>
+            <div class="detail-row"><span class="detail-label">End:</span><span class="detail-value">${endTime}</span></div>
+            <div class="detail-row"><span class="detail-label">Questions:</span><span class="detail-value">${d.questions.length}</span></div>
+        </div>
+        <div class="question-preview">${questionsHtml}</div>
+    `;
+    
+    await showModal('info', 'Test Details', '', false, customContent);
+};
+
+// Edit History Test
+window.editHistoryTest = async (key) => {
+    if (activeDropdown) {
+        activeDropdown.remove();
+        activeDropdown = null;
+    }
+    
+    const snap = await get(ref(db, `onlineTest/history/${key}`));
+    if (!snap.exists()) return;
+    
+    const d = snap.val();
+    
+    document.getElementById("testId").value = d.testId;
+    document.getElementById("title").value = d.title;
+    document.getElementById("startTime").value = new Date(d.startTime).toISOString().slice(0, 16);
+    document.getElementById("endTime").value = new Date(d.endTime).toISOString().slice(0, 16);
+    document.getElementById("questions").value = JSON.stringify(d.questions, null, 2);
+    
+    switchTab('upload');
+    await showModal('success', 'Ready to Edit', 'Test data loaded. Make your changes and click Save.');
+};
+
+// Delete History Test
+window.deleteHistoryTest = async (key) => {
+    if (activeDropdown) {
+        activeDropdown.remove();
+        activeDropdown = null;
+    }
+    
+    const confirmed = await showModal('warning', 'Delete Test', 'Are you sure you want to delete this test from history?', true);
+    
+    if (!confirmed) return;
+    
+    try {
+        await remove(ref(db, `onlineTest/history/${key}`));
+        await showModal('success', 'Deleted', 'Test removed from history');
+        loadHistory();
+    } catch (error) {
+        showModal('error', 'Error', 'Failed to delete test');
+    }
+};
+
+// Edit Current Test
+window.editTest = (d) => {
+    document.getElementById("testId").value = d.testId;
+    document.getElementById("title").value = d.title;
+    document.getElementById("startTime").value = new Date(d.startTime).toISOString().slice(0, 16);
+    document.getElementById("endTime").value = new Date(d.endTime).toISOString().slice(0, 16);
+    document.getElementById("questions").value = JSON.stringify(d.questions, null, 2);
+    
+    switchTab('upload');
+    showModal('info', 'Edit Mode', 'Test data loaded for editing.');
+};
+
+// Upload/Save Test
+window.uploadTest = async () => {
+    const testId = document.getElementById("testId").value;
+    const title = document.getElementById("title").value;
+    const startTime = new Date(document.getElementById("startTime").value).getTime();
+    const endTime = new Date(document.getElementById("endTime").value).getTime();
+    
+    if (!testId || !title || !startTime || !endTime) {
+        showModal('warning', 'Missing Fields', 'Please fill in all fields');
+        return;
+    }
+    
+    let questions;
+    try {
+        questions = JSON.parse(document.getElementById("questions").value);
+        if (!Array.isArray(questions)) throw new Error("Not an array");
+    } catch (e) {
+        showModal('error', 'Invalid JSON', 'Please check your JSON format');
+        return;
+    }
+    
+    const confirmed = await showModal('warning', 'Confirm Save', 'Save this test?', true);
+    
+    if (!confirmed) return;
+    
+    try {
+        await set(ref(db, "onlineTest/current"), {
+            testId, title, startTime, endTime, questions
+        });
+        
+        await push(ref(db, "onlineTest/history"), {
+            testId, title, startTime, endTime, questions,
+            timestamp: Date.now()
+        });
+        
+        showModal('success', 'Success!', 'Test saved successfully');
+        
+        document.getElementById("testId").value = "";
+        document.getElementById("title").value = "";
+        document.getElementById("startTime").value = "";
+        document.getElementById("endTime").value = "";
+        document.getElementById("questions").value = "";
+        
+        loadCurrent();
+        loadHistory();
+    } catch (error) {
+        showModal('error', 'Error', 'Failed to save test');
+    }
+};
+
+// Delete Current Test
+window.deleteTest = async () => {
+    const confirmed = await showModal('warning', 'Delete Test', 'Delete current test?', true);
+    
+    if (!confirmed) return;
+    
+    try {
+        await remove(ref(db, "onlineTest/current"));
+        showModal('success', 'Deleted', 'Test removed');
+        loadCurrent();
+    } catch (error) {
+        showModal('error', 'Error', 'Failed to delete test');
+    }
+};
+
+// Initial load
+loadCurrent();
+loadHistory();
+
+// Modal cancel handler
+modalCancelBtn.onclick = () => {
+    modal.style.display = 'none';
+};
+</script>
+
+</body>
+</html>
