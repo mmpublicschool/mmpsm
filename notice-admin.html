@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MM Public School - Notice Admin Panel</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+    padding-bottom: 20px;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: #fff;
+    padding: 18px 20px;
+    font-weight: 800;
+    font-size: 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    letter-spacing: 0.5px;
+}
+
+.header i {
+    font-size: 24px;
+    color: #ffd700;
+}
+
+/* ===== ADMIN BADGE ===== */
+.admin-badge {
+    background: white;
+    border-radius: 50px;
+    padding: 12px 20px;
+    margin: 16px 16px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.1);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.admin-badge i {
+    font-size: 24px;
+    color: #0a2a66;
+    background: #e6ecff;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.admin-badge span {
+    font-weight: 700;
+    color: #0a2a66;
+    font-size: 14px;
+}
+
+.admin-badge small {
+    color: #666;
+    font-size: 12px;
+    display: block;
+    margin-top: 4px;
+}
+
+/* ===== CARD ===== */
+.card {
+    background: #fff;
+    margin: 16px;
+    padding: 22px;
+    border-radius: 28px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    border: 1px solid rgba(10,42,102,0.1);
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e6ecff;
+}
+
+.card-title i {
+    color: #ff9800;
+    font-size: 20px;
+}
+
+/* ===== FORM ===== */
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    font-weight: 700;
+    font-size: 14px;
+    color: #444;
+    display: block;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+label i {
+    color: #0a2a66;
+    width: 18px;
+}
+
+input, select, textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 2px solid #e0e7ff;
+    font-size: 14px;
+    background: #f8fafd;
+    outline: none;
+    transition: 0.2s;
+    font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #0a2a66;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(10,42,102,0.1);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ===== UPLOAD BUTTON ===== */
+.ok-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 8px 25px rgba(10,42,102,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.ok-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(10,42,102,0.4);
+}
+
+.ok-btn i {
+    font-size: 18px;
+}
+
+/* ===== STATS CARD ===== */
+.stats-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin: 16px;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0a2a66;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* ===== HISTORY CARD ===== */
+.history-card {
+    background: #f8fafd;
+    padding: 18px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border: 1px solid #e0e7ff;
+    position: relative;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.history-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.history-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e6ecff, #d6e0ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #0a2a66;
+}
+
+.history-type {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 30px;
+    display: inline-block;
+}
+
+.type-new {
+    background: #0a2a66;
+    color: white;
+}
+
+.type-old {
+    background: #ff9800;
+    color: white;
+}
+
+.h-title {
+    font-weight: 800;
+    color: #0a2a66;
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.h-desc {
+    font-size: 14px;
+    color: #444;
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.h-link {
+    background: #f0f4fa;
+    padding: 10px 12px;
+    border-radius: 12px;
+    margin: 10px 0;
+    font-size: 13px;
+    color: #0a2a66;
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.h-link i {
+    color: #0a2a66;
+}
+
+.h-time {
+    font-size: 12px;
+    color: #ff9800;
+    font-weight: 600;
+    margin: 12px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.h-time i {
+    color: #ff9800;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.edit-btn, .delete-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, #ffd700, #ffb300);
+    color: #0a2a66;
+    box-shadow: 0 4px 15px rgba(255,193,7,0.3);
+}
+
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,193,7,0.4);
+}
+
+.delete-btn {
+    background: #dc2626;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(220,38,38,0.3);
+}
+
+.delete-btn:hover {
+    transform: translateY(-2px);
+    background: #b91c1c;
+    box-shadow: 0 8px 25px rgba(220,38,38,0.4);
+}
+
+/* ===== POPUP ===== */
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 16px;
+}
+
+.popup-box {
+    background: #fff;
+    width: 90%;
+    max-width: 340px;
+    padding: 28px;
+    border-radius: 32px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.popup-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.popup-title {
+    font-weight: 800;
+    font-size: 22px;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+.popup-text {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.popup-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.cancel, .ok {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.cancel {
+    background: #f0f0f0;
+    color: #495057;
+}
+
+.cancel:hover {
+    background: #e0e0e0;
+}
+
+.ok {
+    background: #0a2a66;
+    color: #fff;
+}
+
+.ok:hover {
+    background: #1e4b8f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8fafd;
+    border-radius: 20px;
+    color: #666;
+}
+
+.empty-state i {
+    font-size: 50px;
+    color: #0a2a66;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 14px;
+}
+
+/* ===== BOTTOM SPACE ===== */
+.bottom-space {
+    height: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <i class="fa-regular fa-bell"></i>
+    NOTICE ADMIN PANEL
+    <i class="fa-regular fa-bell"></i>
+</div>
+
+<!-- Admin Badge -->
+<div class="admin-badge">
+    <i class="fa-solid fa-user-shield"></i>
+    <div>
+        <span>Administrator Access</span>
+        <small>Manage school notices and updates</small>
+    </div>
+</div>
+
+<!-- Stats Card -->
+<div class="stats-card" id="statsCard">
+    <div class="stat-item">
+        <div class="stat-value" id="totalNotices">0</div>
+        <div class="stat-label">Total Notices</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="newNotices">0</div>
+        <div class="stat-label">New</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="oldNotices">0</div>
+        <div class="stat-label">Old</div>
+    </div>
+</div>
+
+<!-- Upload Card -->
+<div class="card">
+    <div class="card-title">
+        <i class="fa-regular fa-pen-to-square"></i>
+        Upload New Notice
+    </div>
+
+    <div class="form-group">
+        <label><i class="fa-regular fa-tag"></i> Notice Category</label>
+        <select id="type">
+            <option value="new">📢 New Notice</option>
+            <option value="old">📁 Old Notice</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label><i class="fa-regular fa-heading"></i> Title</label>
+        <input id="title" placeholder="Enter notice title" maxlength="100">
+    </div>
+
+    <div class="form-group">
+        <label><i class="fa-regular fa-file-lines"></i> Description</label>
+        <textarea id="desc" placeholder="Enter detailed description"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label><i class="fa-regular fa-link"></i> Link</label>
+        <input id="link" placeholder="https://example.com" type="url">
+    </div>
+
+    <button id="uploadBtn" class="ok-btn">
+        <i class="fa-regular fa-cloud-arrow-up"></i>
+        Upload Notice
+    </button>
+</div>
+
+<!-- History Card -->
+<div class="card">
+    <div class="card-title">
+        <i class="fa-regular fa-clock-rotate-left"></i>
+        Upload History
+    </div>
+    <div id="historyList"></div>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+    <div class="popup-box">
+        <div class="popup-icon" id="popupIcon">🔔</div>
+        <div id="popupTitle" class="popup-title"></div>
+        <div id="popupText" class="popup-text"></div>
+        <div class="popup-actions">
+            <button class="cancel" id="cancelBtn">Cancel</button>
+            <button class="ok" id="okBtn">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE CONFIRM POPUP -->
+<div id="deletePopup" class="popup" style="display:none;">
+    <div class="popup-box">
+        <div class="popup-icon">⚠️</div>
+        <div class="popup-title">Delete Notice?</div>
+        <div class="popup-text">This notice will be permanently removed.</div>
+        <div class="popup-actions">
+            <button class="cancel" id="cancelDelete">Cancel</button>
+            <button class="ok" id="confirmDelete">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove, update, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+    apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    authDomain:"apni-duniya-b53d7.firebaseapp.com",
+    databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+// DOM Elements
+const popup = document.getElementById("popup");
+const popupIcon = document.getElementById("popupIcon");
+const popupTitle = document.getElementById("popupTitle");
+const popupText = document.getElementById("popupText");
+const okBtn = document.getElementById("okBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+
+const deletePopup = document.getElementById("deletePopup");
+const cancelDelete = document.getElementById("cancelDelete");
+const confirmDelete = document.getElementById("confirmDelete");
+
+const type = document.getElementById("type");
+const title = document.getElementById("title");
+const desc = document.getElementById("desc");
+const link = document.getElementById("link");
+const uploadBtn = document.getElementById("uploadBtn");
+const historyList = document.getElementById("historyList");
+
+const totalNotices = document.getElementById("totalNotices");
+const newNotices = document.getElementById("newNotices");
+const oldNotices = document.getElementById("oldNotices");
+
+let action = null;
+let deleteInfo = { type: null, key: null };
+
+// Show dialog
+function showDialog(icon, title, text, cb = null) {
+    popupIcon.innerText = icon;
+    popupTitle.innerText = title;
+    popupText.innerText = text;
+    popup.style.display = "flex";
+    action = cb;
+}
+
+okBtn.onclick = () => {
+    popup.style.display = "none";
+    if (action) action();
+};
+
+cancelBtn.onclick = () => {
+    popup.style.display = "none";
+};
+
+// Format time
+function formatTime(ts) {
+    if (!ts) return "N/A";
+    const date = new Date(ts);
+    const now = new Date();
+    const diff = Math.floor((now - date) / (1000 * 60));
+    
+    if (diff < 1) return "Just now";
+    if (diff < 60) return diff + " min ago";
+    if (diff < 120) return "1 hour ago";
+    if (diff < 1440) return Math.floor(diff / 60) + " hours ago";
+    
+    const days = Math.floor(diff / 1440);
+    if (days === 1) return "Yesterday";
+    if (days < 7) return days + " days ago";
+    
+    return date.toLocaleString('en-IN', { 
+        day: 'numeric', 
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+// Update stats
+async function updateStats() {
+    const snap = await get(ref(db, "mmpsm_notice_panel"));
+    let newCount = 0;
+    let oldCount = 0;
+    
+    if (snap.exists()) {
+        snap.forEach(group => {
+            if (group.key === "new") {
+                group.forEach(() => newCount++);
+            } else if (group.key === "old") {
+                group.forEach(() => oldCount++);
+            }
+        });
+    }
+    
+    totalNotices.innerText = newCount + oldCount;
+    newNotices.innerText = newCount;
+    oldNotices.innerText = oldCount;
+}
+
+// ===== UPLOAD =====
+uploadBtn.onclick = async () => {
+    if (!title.value.trim() || !desc.value.trim() || !link.value.trim()) {
+        showDialog(
+            "❌",
+            "Incomplete Form",
+            "Please fill Title, Description and Link before uploading."
+        );
+        return;
+    }
+
+    const typeVal = type.value;
+    const time = Date.now();
+
+    // Upload to notice panel
+    await push(ref(db, "mmpsm_notice_panel/" + typeVal), {
+        title: title.value.trim(),
+        desc: desc.value.trim(),
+        link: link.value.trim(),
+        time: time
+    });
+
+    // Upload to notifications
+    await push(ref(db, "mmpsm_notice_notifications"), {
+        title: title.value.trim(),
+        desc: desc.value.trim(),
+        noticeType: typeVal,
+        time: time,
+        read: false
+    });
+
+    // Clear form
+    title.value = "";
+    desc.value = "";
+    link.value = "";
+
+    showDialog("✅", "Success", "Notice uploaded successfully.");
+    await updateStats();
+};
+
+// ===== LOAD HISTORY =====
+onValue(ref(db, "mmpsm_notice_panel"), async (snap) => {
+    historyList.innerHTML = "";
+    let hasItems = false;
+
+    if (!snap.exists()) {
+        historyList.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-regular fa-folder-open"></i>
+                <p>No notices uploaded yet</p>
+            </div>
+        `;
+        return;
+    }
+
+    snap.forEach(group => {
+        const typeName = group.key;
+        
+        group.forEach(c => {
+            hasItems = true;
+            const d = c.val();
+            const timeStr = formatTime(d.time);
+            
+            historyList.innerHTML += `
+                <div class="history-card">
+                    <div class="history-header">
+                        <div class="history-icon">
+                            <i class="fa-regular ${typeName === 'new' ? 'fa-star' : 'fa-clock'}"></i>
+                        </div>
+                        <span class="history-type ${typeName === 'new' ? 'type-new' : 'type-old'}">
+                            ${typeName.toUpperCase()}
+                        </span>
+                    </div>
+                    
+                    <div class="h-title">${d.title || "Untitled"}</div>
+                    
+                    <div class="h-desc">${d.desc || ""}</div>
+                    
+                    <div class="h-link">
+                        <i class="fa-regular fa-link"></i>
+                        ${d.link || "No link provided"}
+                    </div>
+                    
+                    <div class="h-time">
+                        <i class="fa-regular fa-clock"></i> ${timeStr}
+                    </div>
+                    
+                    <div class="actions">
+                        <button class="edit-btn" onclick="editNotice('${typeName}','${c.key}','${d.title.replace(/'/g, "\\'")}','${d.desc.replace(/'/g, "\\'")}','${d.link.replace(/'/g, "\\'")}')">
+                            <i class="fa-regular fa-pen-to-square"></i> Edit
+                        </button>
+                        <button class="delete-btn" onclick="deleteNotice('${typeName}','${c.key}')">
+                            <i class="fa-regular fa-trash-can"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+    });
+
+    if (!hasItems) {
+        historyList.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-regular fa-folder-open"></i>
+                <p>No notices uploaded yet</p>
+            </div>
+        `;
+    }
+
+    await updateStats();
+});
+
+// ===== DELETE =====
+window.deleteNotice = (type, key) => {
+    deleteInfo = { type, key };
+    deletePopup.style.display = "flex";
+};
+
+cancelDelete.onclick = () => {
+    deletePopup.style.display = "none";
+};
+
+confirmDelete.onclick = async () => {
+    if (deleteInfo.type && deleteInfo.key) {
+        await remove(ref(db, "mmpsm_notice_panel/" + deleteInfo.type + "/" + deleteInfo.key));
+        deletePopup.style.display = "none";
+        showDialog("✅", "Deleted", "Notice removed successfully.");
+        await updateStats();
+    }
+};
+
+// ===== EDIT =====
+window.editNotice = (type, key, t, d, l) => {
+    title.value = t;
+    desc.value = d;
+    link.value = l;
+    thisType.value = type;
+    
+    showDialog(
+        "✏️",
+        "Edit Mode",
+        "Make your changes and click Upload to update.",
+        async () => {
+            if (title.value.trim() && desc.value.trim() && link.value.trim()) {
+                await update(ref(db, "mmpsm_notice_panel/" + type + "/" + key), {
+                    title: title.value.trim(),
+                    desc: desc.value.trim(),
+                    link: link.value.trim(),
+                    time: Date.now(),
+                    edited: true
+                });
+                showDialog("✅", "Success", "Notice updated successfully.");
+            }
+        }
+    );
+};
+
+// Close popups on outside click
+popup.addEventListener('click', (e) => {
+    if (e.target === popup) popup.style.display = "none";
+});
+
+deletePopup.addEventListener('click', (e) => {
+    if (e.target === deletePopup) deletePopup.style.display = "none";
+});
+
+// Initial stats update
+updateStats();
+</script>
+
+</body>
+</html>

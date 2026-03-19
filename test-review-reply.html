@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>student panel · refined prompt</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: #f2f6fc;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: #0a2a5e;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.3rem;
+      letter-spacing: 0.2px;
+      box-shadow: 0 6px 14px rgba(0,20,50,0.08);
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 1.2rem 1rem 2.5rem;
+      width: 100%;
+    }
+
+    /* loading */
+    .loading-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 40px;
+      padding: 3rem 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 10px 25px -8px rgba(0,0,0,0.05);
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid #e8f0fe;
+      border-top: 3px solid #2563eb;
+      border-radius: 50%;
+      animation: spin 0.9s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+      margin-bottom: 1.2rem;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .loading-text {
+      color: #334e77;
+      font-weight: 500;
+      font-size: 1rem;
+      background: #ecf3fd;
+      padding: 0.5rem 1.4rem;
+      border-radius: 60px;
+    }
+
+    /* test cards */
+    .test-card {
+      background: white;
+      border-radius: 26px;
+      padding: 1.1rem 1.5rem;
+      margin: 0.9rem 0;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0,20,40,0.03);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border: 1px solid #eef4fa;
+      transition: all 0.15s ease;
+    }
+    .test-card:hover { background: #f9fcff; border-color: #b8d1f0; transform: scale(1.01); }
+    .test-card:active { transform: scale(0.97); background: #eaf3ff; }
+
+    .test-card b { color: #0a2a5e; font-size: 1.1rem; font-weight: 650; }
+    .test-card span { color: #2e405b; font-weight: 450; }
+
+    /* student bar (category buttons) */
+    .studentBar {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 0.75rem 0.25rem 0.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: #99b9dc #deeaf6;
+    }
+    .studentBar::-webkit-scrollbar { height: 5px; }
+    .studentBar::-webkit-scrollbar-track { background: #deeaf6; border-radius: 12px; }
+    .studentBar::-webkit-scrollbar-thumb { background: #99b9dc; border-radius: 12px; }
+
+    .student {
+      min-width: 74px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.12s;
+      padding: 5px 2px;
+      border-radius: 40px;
+    }
+    .student:active { transform: scale(0.92); background: #e2edff; }
+    .student img {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #2d68c4;
+      background: white;
+      box-shadow: 0 6px 12px rgba(25,60,130,0.12);
+    }
+    .student span {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #11356b;
+      margin-top: 5px;
+      line-height: 1.2;
+    }
+
+    /* DIVIDER LINE below category buttons */
+    .category-divider {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #acc6e8, #5a8ad4, #acc6e8, transparent);
+      margin: 0.2rem 0 1rem 0;
+      border-radius: 4px;
+    }
+
+    /* professional prompt — no emoji, clean call to action */
+    .view-prompt {
+      background: #f0f7ff;
+      border-radius: 50px;
+      padding: 0.9rem 1.8rem;
+      margin: 0.5rem 0 1.5rem 0;
+      text-align: center;
+      color: #0e3d7c;
+      font-weight: 550;
+      font-size: 1.02rem;
+      border: 1px solid #bfd9fc;
+      box-shadow: 0 4px 12px rgba(23,55,120,0.05);
+      letter-spacing: -0.1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .view-prompt .icon {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+    .view-prompt .highlight {
+      background: #2d63b0;
+      color: white;
+      padding: 0.2rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      margin-left: 6px;
+      box-shadow: 0 3px 8px rgba(0,60,140,0.2);
+    }
+
+    /* question card */
+    .review-card {
+      background: white;
+      border-radius: 30px;
+      padding: 1.3rem 1.2rem 1.2rem;
+      margin: 1.2rem 0;
+      box-shadow: 0 14px 28px -10px rgba(10,40,70,0.1);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .q {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+      color: #0e2d57;
+    }
+
+    .opt {
+      border: 1.5px solid #e1ebf7;
+      padding: 0.7rem 1rem;
+      margin: 0.6rem 0;
+      border-radius: 24px;
+      background: #ffffff;
+      font-weight: 450;
+      transition: 0.1s;
+    }
+    .your {
+      background: #fff7dd;
+      border-color: #f0b849;
+      font-weight: 500;
+    }
+    .correct {
+      background: #dcfce7;
+      border-color: #34b56f;
+      font-weight: 500;
+    }
+
+    /* ===== ACTION ROW — exactly 4 buttons in one line ===== */
+    .action-row {
+      display: flex;
+      flex-wrap: nowrap;        /* force single line */
+      gap: 6px;
+      margin: 1.2rem 0 0.8rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .action-btn {
+      background: transparent;
+      border: none;
+      padding: 0.5rem 0.3rem;
+      border-radius: 40px;
+      font-size: 0.88rem;
+      font-weight: 580;
+      color: #1f3f70;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      border: 1px solid transparent;
+      line-height: 1;
+      flex: 0 1 auto;           /* allow shrink, but no wrap */
+      white-space: nowrap;
+    }
+    .action-btn:hover {
+      background: #ecf3fd;
+      border-color: #bacff0;
+    }
+    .action-btn:active {
+      transform: scale(0.92);
+      background: #d6e5ff;
+    }
+
+    /* heart only */
+    .heart {
+      color: #c42e2e;
+      font-size: 1rem;
+      transition: 0.1s;
+      display: inline-block;
+    }
+    .heart.active { color: #e03131; text-shadow: 0 0 5px #ffb8b8; }
+
+    /* icon size */
+    .btn-icon {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      display: inline-block;
+    }
+
+    /* reply input */
+    .comment-input-area {
+      margin: 1rem 0 0.8rem;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .comment-input-area input {
+      flex: 1;
+      padding: 0.7rem 1.2rem;
+      border: 1.5px solid #dae6f8;
+      border-radius: 60px;
+      font-size: 0.9rem;
+    }
+    .comment-input-area input:focus {
+      border-color: #3f7cff;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(57,110,240,0.12);
+    }
+    .comment-input-area button {
+      background: #1d4ed8;
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.7rem 1.4rem;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.1s;
+      box-shadow: 0 4px 10px rgba(30,80,200,0.2);
+    }
+    .comment-input-area button:active { transform: scale(0.92); background: #0e3aa3; }
+
+    /* ===== REPLY THREAD — nested, connected look ===== */
+    .thread-item {
+      margin: 0.6rem 0 0.6rem 1.6rem;   /* indentation to show reply */
+      padding-left: 0.5rem;
+      border-left: 3px solid #a2bde0;
+      position: relative;
+    }
+    /* subtle connecting line to previous reply */
+    .thread-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: -1px;
+      width: 2px;
+      height: 16px;
+      background: #d1e0f5;
+      border-radius: 2px;
+    }
+
+    .reply-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 0.65rem 1rem 0.65rem 0.8rem;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid #e2eefa;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.02);
+    }
+    .reply-card img {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #c9defa;
+    }
+    .reply-content {
+      flex: 1;
+    }
+    .reply-name {
+      font-weight: 700;
+      color: #15387a;            /* name colour */
+      font-size: 0.8rem;
+      margin-bottom: 3px;
+    }
+    .reply-text {
+      background: #f1f8ff;
+      color: #1d314f;             /* message colour */
+      font-weight: 450;
+      font-size: 0.82rem;
+      padding: 0.4rem 1rem;
+      border-radius: 28px;
+      display: inline-block;
+      max-width: 100%;
+      word-break: break-word;
+      border: 1px solid #d9e9fd;
+      line-height: 1.3;
+    }
+    .reply-time {
+      color: #6d819b;             /* time colour */
+      font-size: 0.62rem;
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    /* toast */
+    .dialog {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.15);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      backdrop-filter: blur(2px);
+    }
+    .dialogBox {
+      background: white;
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      color: #0b2b5c;
+      box-shadow: 0 24px 38px -12px #0a2a66;
+      animation: pop 0.2s ease;
+    }
+    @keyframes pop { 0% { transform: scale(0.7); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  </style>
+</head>
+<body>
+<div class="header">📘 test review · reply view</div>
+<div class="container" id="container">
+  <div id="testList" class="test-list"></div>
+  <div id="panel"></div>
+</div>
+
+<!-- toast -->
+<div class="dialog" id="dialog"><div class="dialogBox" id="dialogText">Done</div></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getDatabase, ref, get, set, push, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+  const config = {
+    apiKey: "AIzaSyCy1r8BXbe-W9UBsCrFDFgkHy-j7lYFwYg",
+    databaseURL: "https://mmpublicschoolmundeshwar-233a4-default-rtdb.firebaseio.com"
+  };
+  const app = initializeApp(config);
+  const db = getDatabase(app);
+  let currentTestKey = "";
+let currentStudent = "";
+
+  const userId = localStorage.getItem("userId") || "user_" + Math.random().toString(36).substring(2,12);
+  if (!localStorage.getItem("userId")) localStorage.setItem("userId", userId);
+
+  const testListDiv = document.getElementById("testList");
+  const panel = document.getElementById("panel");
+  const dialogEl = document.getElementById("dialog");
+  const dialogText = document.getElementById("dialogText");
+  const showDialog = (msg) => { dialogText.innerText = msg; dialogEl.style.display = "flex"; setTimeout(() => dialogEl.style.display = "none", 1300); };
+
+  // ----- LOAD tests with loading -----
+  testListDiv.innerHTML = `<div class="loading-block"><div class="spinner"></div><div class="loading-text">loading tests ...</div></div>`;
+
+  let historySnap;
+  try {
+    historySnap = await get(ref(db, "onlineTest/history"));
+  } catch (e) { testListDiv.innerHTML = '<div class="test-card">⚠️ error loading</div>'; }
+
+  if (historySnap && historySnap.exists()) {
+    testListDiv.innerHTML = '';
+    Object.entries(historySnap.val()).reverse().forEach(([key, d]) => {
+      testListDiv.innerHTML += `
+        <div class="test-card" onclick="openTest('${key}')">
+          <b>📋 ${d.testId || 'Test'}</b>
+          <span>${d.title || ''}</span>
+        </div>`;
+    });
+  } else {
+    testListDiv.innerHTML = '<div class="test-card">📭 no tests</div>';
+  }
+
+  // ----- open test: student bar, divider, then professional prompt -----
+  window.openTest = async (testKey) => {
+    currentTestKey = testKey;
+    testListDiv.style.display = "none";
+    panel.innerHTML = `<div class="loading-block"><div class="spinner"></div><div class="loading-text">loading students ...</div></div>`;
+
+    const testSnap = await get(ref(db, "onlineTest/history/" + testKey));
+    const test = testSnap.val();
+    const resultSnap = await get(ref(db, "results/" + test.testId));
+    const usersSnap = await get(ref(db, "users"));
+
+    if (!resultSnap.exists()) { panel.innerHTML = '<div class="test-card">no responses</div>'; return; }
+
+    // student bar (category buttons)
+    let studentBarHtml = '<div class="studentBar" id="studentBar">';
+    Object.entries(resultSnap.val()).forEach(([uid]) => {
+      const u = usersSnap.val()?.[uid] || { username: "student", photo: "https://via.placeholder.com/60" };
+      studentBarHtml += `
+        <div class="student" onclick="showStudent('${uid}','${testKey}')">
+          <img src="${u.photo}" crossorigin="anonymous" loading="lazy">
+          <span>${u.username}</span>
+        </div>`;
+    });
+    studentBarHtml += '</div>';
+
+    // DIVIDER line below category buttons
+    const divider = '<div class="category-divider"></div>';
+
+    // professional prompt (no emoji, clean) — placed after divider
+    const promptHtml = `
+      <div class="view-prompt">
+        <span class="icon">👆</span>  select a profile to view answers
+        <span class="highlight">tap here</span>
+      </div>
+    `;
+
+    // then review area
+    panel.innerHTML = studentBarHtml + divider + promptHtml + '<div id="reviewArea"></div>';
+  };
+
+  // ----- show student answers with action row (reply) -----
+  window.showStudent = async (uid, testKey) => {
+    currentStudent = uid;
+    const reviewArea = document.getElementById("reviewArea");
+    if (!reviewArea) return;
+    reviewArea.innerHTML = `<div class="loading-block" style="padding:1.5rem"><div class="spinner"></div><div class="loading-text">loading answers ...</div></div>`;
+
+    const testSnap = await get(ref(db, "onlineTest/history/" + testKey));
+    const test = testSnap.val();
+    const resSnap = await get(ref(db, "results/" + test.testId + "/" + uid));
+    const result = resSnap.val() || { answers: [] };
+    const answers = result.answers || [];
+
+    reviewArea.innerHTML = "";
+
+    test.questions.forEach((q, idx) => {
+      const qIndex = idx;
+      const card = document.createElement("div");
+      card.className = "review-card";
+
+      let optionsHtml = '';
+      q.options.forEach(op => {
+        let cls = "opt";
+        if (answers[qIndex] === op) cls += " your";
+        if (q.answer === op) cls += " correct";
+        optionsHtml += `<div class="${cls}">${op}</div>`;
+      });
+
+      // icons (svg)
+      const likeIcon = `<span class="heart" id="heart_${qIndex}">❤</span>`;
+      const replyIcon = `<svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+      const shareIcon = `<svg class="btn-icon" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>`;
+      const saveIcon = `<svg class="btn-icon" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+
+      card.innerHTML = `
+        <div class="q">${qIndex+1}. ${q.q}</div>
+        ${optionsHtml}
+        <div class="action-row">
+          <button class="action-btn" id="likeBtn_${qIndex}">${likeIcon} <span id="likeCount_${qIndex}">0</span></button>
+          <button class="action-btn" id="replyBtn_${qIndex}">${replyIcon} reply</button>
+          <button class="action-btn" id="shareBtn_${qIndex}">${shareIcon} share</button>
+          <button class="action-btn" id="saveBtn_${qIndex}">${saveIcon} save</button>
+        </div>
+        <div id="commentInput_${qIndex}" class="comment-input-area" style="display: none;"></div>
+        <div id="comments_${qIndex}" class="threads-container"></div>
+      `;
+
+      reviewArea.appendChild(card);
+
+      document.getElementById(`likeBtn_${qIndex}`).addEventListener('click', (e) => { e.stopPropagation(); likeQ(test.testId, qIndex); });
+      document.getElementById(`replyBtn_${qIndex}`).addEventListener('click', (e) => { e.stopPropagation(); toggleReply(qIndex); });
+      document.getElementById(`shareBtn_${qIndex}`).addEventListener('click', (e) => { e.stopPropagation(); shareQ(q.q, answers[qIndex] || '—', q.answer); });
+      document.getElementById(`saveBtn_${qIndex}`).addEventListener('click', (e) => { e.stopPropagation(); saveQ(qIndex); });
+
+      loadLikes(test.testId, qIndex);
+      loadReplies(qIndex);
+    });
+  };
+
+  // like
+  window.likeQ = async (testId, qIndex) => {
+    await set(ref(db, `likes/${testId}/${qIndex}/${userId}`), true);
+    document.getElementById(`heart_${qIndex}`)?.classList.add('active');
+    showDialog('❤️ liked');
+  };
+
+  function loadLikes(testId, qIndex) {
+    onValue(ref(db, `likes/${testId}/${qIndex}`), (snap) => {
+      const count = snap.exists() ? Object.keys(snap.val()).length : 0;
+      const span = document.getElementById(`likeCount_${qIndex}`);
+      if (span) span.innerText = count;
+      if (snap.exists() && snap.val()[userId]) {
+        document.getElementById(`heart_${qIndex}`)?.classList.add('active');
+      }
+    });
+  }
+
+  // toggleReply
+  window.toggleReply = (qIndex) => {
+    const div = document.getElementById(`commentInput_${qIndex}`);
+    if (!div) return;
+    if (div.style.display === 'none' || !div.style.display) {
+      div.style.display = 'flex';
+      div.innerHTML = `<input type="text" id="cInput_${qIndex}" placeholder="write a reply..." autocomplete="off"><button id="cSend_${qIndex}">post</button>`;
+      document.getElementById(`cSend_${qIndex}`).addEventListener('click', () => sendReply(qIndex));
+    } else { div.style.display = 'none'; }
+  };
+
+  window.sendReply = async (qIndex) => {
+    const input = document.getElementById(`cInput_${qIndex}`);
+    if (!input || !input.value.trim()) return;
+    const text = input.value.trim();
+    const userSnap = await get(ref(db, "users/" + userId));
+    const user = userSnap.val() || { username: "Guest", photo: "https://via.placeholder.com/40" };
+    await push(ref(db, "comments/" + qIndex), {
+      uid: userId,
+      name: user.username || "student",
+      photo: user.photo || "https://via.placeholder.com/40",
+      text,
+      time: new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' })
+    });
+    document.getElementById(`commentInput_${qIndex}`).style.display = 'none';
+    showDialog('💬 reply posted');
+  };
+
+  // load replies (threaded)
+  function loadReplies(qIndex) {
+    onValue(ref(db, "comments/" + qIndex), (snap) => {
+      const container = document.getElementById(`comments_${qIndex}`);
+      if (!container) return;
+      container.innerHTML = "";
+      if (!snap.exists()) return;
+      const replies = Object.values(snap.val()).reverse();
+      replies.forEach(c => {
+        const threadDiv = document.createElement("div");
+        threadDiv.className = "thread-item";
+        threadDiv.innerHTML = `
+          <div class="reply-card">
+            <img src="${c.photo}" crossorigin="anonymous">
+            <div class="reply-content">
+              <div class="reply-name">${c.name}</div>
+              <div class="reply-text">${c.text}</div>
+              <div class="reply-time">🕒 ${c.time || 'just now'}</div>
+            </div>
+          </div>
+        `;
+        container.appendChild(threadDiv);
+      });
+    });
+  }
+
+  // share
+  window.shareQ = (q, your, correct) => {
+    const txt = `❓ ${q}\n✏️ your: ${your}\n✅ correct: ${correct}`;
+    if (navigator.share) navigator.share({ text: txt }).catch(() => showDialog('share cancelled'));
+    else { navigator.clipboard?.writeText(txt).then(() => showDialog('📋 copied')); }
+  };
+
+  // save
+/* 🔥 SAVE CARD REAL SYSTEM */
+/* 🔥 SAVE CARD FINAL FIXED */
+window.saveQ = async (qIndex) => {
+  
+  const btn = document.getElementById(`saveBtn_${qIndex}`);
+  btn.style.transform = 'scale(0.88)';
+  setTimeout(() => btn.style.transform = 'scale(1)', 120);
+  
+  try {
+    
+    // 🔥 test data
+    const testSnap = await get(ref(db, "onlineTest/history/" + currentTestKey));
+    const test = testSnap.val();
+    
+    // 🔥 जिस student का answer देख रहे हो
+    const ownerSnap = await get(ref(db, "users/" + currentStudent));
+    const owner = ownerSnap.val() || {};
+    
+    // 🔥 answer data
+    const resSnap = await get(ref(db, "results/" + test.testId + "/" + currentStudent));
+    const result = resSnap.val() || {};
+    const yourAns = result.answers?.[qIndex] || "";
+    
+    const qData = test.questions[qIndex];
+    
+    // 🔥 SAVE
+    await push(ref(db, "savedCards/" + userId), {
+      
+      ownerUid: currentStudent,
+      ownerName: owner.username || "student",
+      ownerPhoto: owner.photo || "",
+      
+      testId: test.testId,
+      title: test.title,
+      qIndex: qIndex,
+      question: qData.q,
+      options: qData.options,
+      your: yourAns,
+      correct: qData.answer,
+      time: new Date().toLocaleString()
+    });
+    
+    showDialog('⭐ saved');
+    
+  } catch (e) {
+    console.log(e);
+    showDialog('error saving');
+  }
+};
+
+  window.showStudent = showStudent;
+  window.openTest = openTest;
+</script>
+</body>
+</html>

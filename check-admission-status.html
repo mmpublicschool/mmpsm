@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMPSM School - Check Admission Status</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Main Container */
+        .status-container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header .school-name {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 40px 30px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-box label {
+            display: block;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            min-width: 250px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        .input-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .search-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37,99,235,0.3);
+        }
+
+        .search-btn i {
+            font-size: 1.1rem;
+        }
+
+        .example-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .example-text span {
+            color: #2563eb;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Status Result */
+        .status-result {
+            padding: 30px;
+            display: none;
+        }
+
+        .status-result.active {
+            display: block;
+        }
+
+        /* Success Message - Only shown when FULLY APPROVED by admin */
+        .success-message {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .success-message h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .success-message p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .class-box {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        /* Pending Message */
+        .pending-message {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .rejected-message {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* Application Header */
+        .app-header {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .app-id-badge {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .student-name-large {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 15px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .status-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .status-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .badge-pending { background: #fef9c3; color: #854d0e; }
+        .badge-approved { background: #dcfce7; color: #166534; }
+        .badge-rejected { background: #fee2e2; color: #991b1b; }
+        .badge-partial { background: #dbeafe; color: #1e40af; }
+
+        /* Field Status Badges - NEW */
+        .field-status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .field-status-pending {
+            background: #fef9c3;
+            color: #854d0e;
+            border: 1px solid #eab308;
+        }
+
+        .field-status-approved {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #22c55e;
+        }
+
+        .field-status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        /* Section Cards */
+        .section-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-header i {
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-header h3 {
+            font-size: 1rem;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .section-content {
+            padding: 20px;
+            background: white;
+        }
+
+        /* Fields Grid */
+        .fields-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .field-item {
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .field-item:hover {
+            border-color: #2563eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .field-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 5px;
+            text-transform: capitalize;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .field-value {
+            font-weight: 500;
+            color: #0f172a;
+            margin-bottom: 10px;
+            word-break: break-word;
+            font-size: 0.95rem;
+        }
+
+        .field-value.empty {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .field-verification {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #e2e8f0;
+        }
+
+        /* Document Links */
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .document-item:hover {
+            border-color: #2563eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .document-icon {
+            width: 45px;
+            height: 45px;
+            background: #dbeafe;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            font-size: 1.3rem;
+        }
+
+        .document-info {
+            flex: 1;
+        }
+
+        .document-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 5px;
+            text-transform: capitalize;
+        }
+
+        .document-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            background: #eef2ff;
+            border-radius: 6px;
+            margin-top: 5px;
+        }
+
+        .document-link:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .document-link i {
+            font-size: 0.8rem;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .summary-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* Not Found */
+        .not-found {
+            text-align: center;
+            padding: 60px 30px;
+        }
+
+        .not-found i {
+            font-size: 5rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+
+        .not-found h3 {
+            font-size: 1.5rem;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .not-found p {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .try-again-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.9rem;
+            background: #f8fafc;
+        }
+
+        .footer a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .search-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .student-name-large {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="status-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Check Admission Status</h1>
+            <p class="school-name">MMPSM School</p>
+            <p>Enter your Registration ID to view detailed status</p>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-box">
+                <label><i class="fas fa-id-card" style="color: #2563eb;"></i> Registration ID</label>
+                <div class="input-group">
+                    <input type="text" id="appIdInput" placeholder="e.g. REG-2026-0001" value="">
+                    <button class="search-btn" onclick="searchApplication()">
+                        <i class="fas fa-search"></i> Check Status
+                    </button>
+                </div>
+                <div class="example-text">
+                    Example: <span onclick="setExampleId('REG-2026-0001')">REG-2026-0001 (Approved)</span> | 
+                    <span onclick="setExampleId('REG-2026-0002')">REG-2026-0002 (Pending)</span> |
+                    <span onclick="setExampleId('REG-2026-0003')">REG-2026-0003 (Rejected)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="color: #64748b;">Fetching your application details...</p>
+        </div>
+
+        <!-- Status Result -->
+        <div class="status-result" id="statusResult">
+            <!-- Content will be populated dynamically -->
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2026 MMPSM School. All rights reserved. | <a href="#" onclick="showHelp()">Need Help?</a> | <a href="#" onclick="goToHome()">Back to Home</a></p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+            authDomain: "apni-duniya-b53d7.firebaseapp.com",
+            databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+            projectId: "apni-duniya-b53d7",
+            storageBucket: "apni-duniya-b53d7.firebasestorage.app",
+            messagingSenderId: "178853058918",
+            appId: "1:178853058918:web:91dfaa5c5e41446da290a7",
+            measurementId: "G-SW5SH1V2BB"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+
+        window.firebaseDatabase = database;
+        window.firebaseRef = ref;
+        window.firebaseGet = get;
+        window.firebaseChild = child;
+    </script>
+
+    <script>
+        let applications = [];
+        let fieldVerification = {};
+
+        // Load data from Firebase
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFromFirebase();
+        });
+
+        async function loadFromFirebase() {
+            try {
+                // Load applications
+                const appsRef = window.firebaseRef(window.firebaseDatabase, 'applications');
+                const appsSnapshot = await window.firebaseGet(appsRef);
+                
+                if (appsSnapshot.exists()) {
+                    const data = appsSnapshot.val();
+                    applications = [];
+                    Object.keys(data).forEach(key => {
+                        applications.push({
+                            firebaseKey: key,
+                            ...data[key]
+                        });
+                    });
+                    console.log('Loaded applications:', applications);
+                } else {
+                    console.log('No data in Firebase, loading sample data');
+                    loadSampleData();
+                }
+
+                // Load field verification
+                const verifyRef = window.firebaseRef(window.firebaseDatabase, 'fieldVerification');
+                const verifySnapshot = await window.firebaseGet(verifyRef);
+                
+                if (verifySnapshot.exists()) {
+                    fieldVerification = verifySnapshot.val();
+                } else {
+                    loadSampleVerification();
+                }
+            } catch (error) {
+                console.error('Error loading from Firebase:', error);
+                loadSampleData();
+                loadSampleVerification();
+            }
+        }
+
+        function loadSampleData() {
+            applications = [
+                {
+                    firebaseKey: 'demo1',
+                    registrationId: 'REG-2026-0001',
+                    studentName: 'Rahul Sharma',
+                    fatherName: 'Rajesh Sharma',
+                    motherName: 'Sunita Sharma',
+                    dob: '2015-05-15',
+                    mobile: '9876543210',
+                    status: 'approved',
+                    paymentStatus: 'completed',
+                    submittedDate: '2026-02-15T10:30:00Z',
+                    studentDetails: {
+                        name: 'Rahul Sharma',
+                        gender: 'male',
+                        dob: '2015-05-15',
+                        age: '10 years',
+                        bloodGroup: 'B+',
+                        category: 'general',
+                        religion: 'Hindu',
+                        nationality: 'Indian',
+                        aadhaar: '123456789012',
+                        prevSchool: 'Kendriya Vidyalaya',
+                        prevClass: '4',
+                        tcNumber: 'TC2025001'
+                    },
+                    parentDetails: {
+                        fatherName: 'Rajesh Sharma',
+                        fatherOcc: 'Engineer',
+                        fatherMobile: '9876543210',
+                        fatherEmail: 'rajesh@gmail.com',
+                        motherName: 'Sunita Sharma',
+                        motherOcc: 'Teacher',
+                        motherMobile: '9876543211',
+                        income: '5to10'
+                    },
+                    addressDetails: {
+                        houseNo: '123',
+                        street: 'MG Road',
+                        city: 'Delhi',
+                        state: 'Delhi',
+                        district: 'New Delhi',
+                        pincode: '110001',
+                        permanentHouse: '123',
+                        permanentStreet: 'MG Road',
+                        permanentCity: 'Delhi',
+                        permanentState: 'Delhi',
+                        permanentPincode: '110001'
+                    },
+                    academicHealth: {
+                        lastMarks: '85',
+                        percentage: '85',
+                        medium: 'english',
+                        board: 'CBSE',
+                        achievement: 'First in Science',
+                        medical: 'None',
+                        disability: 'no',
+                        allergy: 'None',
+                        emergencyName: 'Rajesh Sharma',
+                        emergencyContact: '9876543210'
+                    },
+                    transportDetails: {
+                        busRequired: 'yes',
+                        pickupLocation: 'MG Road Metro Station',
+                        distance: '2.5'
+                    },
+                    documentLinks: {
+                        birthCert: 'https://drive.google.com/file/d/1/view',
+                        aadhaar: 'https://drive.google.com/file/d/2/view',
+                        marksheet: 'https://drive.google.com/file/d/3/view',
+                        tc: 'https://drive.google.com/file/d/4/view',
+                        studentPhoto: 'https://drive.google.com/file/d/5/view',
+                        parentPhoto: 'https://drive.google.com/file/d/6/view',
+                        incomeCert: 'https://drive.google.com/file/d/7/view'
+                    },
+                    adminOnly: {
+                        studentUniqueId: 'MMPSM-2026-0001',
+                        rollNumber: '1-A-01',
+                        timestamp: '2026-02-15T10:30:00Z',
+                        allocatedClass: '1',
+                        section: 'A',
+                        fullyVerified: true,
+                        approvedBy: 'Admin',
+                        approvalDate: '2026-02-20T14:30:00Z'
+                    }
+                },
+                {
+                    firebaseKey: 'demo2',
+                    registrationId: 'REG-2026-0002',
+                    studentName: 'Priya Singh',
+                    fatherName: 'Amit Singh',
+                    motherName: 'Neha Singh',
+                    dob: '2015-08-20',
+                    mobile: '9876543222',
+                    status: 'pending',
+                    paymentStatus: 'pending',
+                    submittedDate: '2026-02-10T09:15:00Z',
+                    studentDetails: {
+                        name: 'Priya Singh',
+                        gender: 'female',
+                        dob: '2015-08-20',
+                        age: '10 years',
+                        bloodGroup: 'O+',
+                        category: 'general',
+                        religion: 'Hindu',
+                        nationality: 'Indian',
+                        aadhaar: '987654321098',
+                        prevSchool: 'DPS School',
+                        prevClass: '4',
+                        tcNumber: 'TC2025002'
+                    },
+                    parentDetails: {
+                        fatherName: 'Amit Singh',
+                        fatherOcc: 'Doctor',
+                        fatherMobile: '9876543222',
+                        fatherEmail: 'amit@gmail.com',
+                        motherName: 'Neha Singh',
+                        motherOcc: 'Lawyer',
+                        motherMobile: '9876543223',
+                        income: 'above10'
+                    },
+                    addressDetails: {
+                        houseNo: '456',
+                        street: 'Park Street',
+                        city: 'Mumbai',
+                        state: 'Maharashtra',
+                        district: 'Mumbai',
+                        pincode: '400001',
+                        permanentHouse: '456',
+                        permanentStreet: 'Park Street',
+                        permanentCity: 'Mumbai',
+                        permanentState: 'Maharashtra',
+                        permanentPincode: '400001'
+                    },
+                    academicHealth: {
+                        lastMarks: '92',
+                        percentage: '92',
+                        medium: 'english',
+                        board: 'ICSE',
+                        achievement: 'Sports Captain',
+                        medical: 'None',
+                        disability: 'no',
+                        allergy: 'Dust',
+                        emergencyName: 'Amit Singh',
+                        emergencyContact: '9876543222'
+                    },
+                    transportDetails: {
+                        busRequired: 'no',
+                        distance: '1.0'
+                    },
+                    documentLinks: {
+                        birthCert: 'https://drive.google.com/file/d/8/view',
+                        aadhaar: 'https://drive.google.com/file/d/9/view',
+                        marksheet: 'https://drive.google.com/file/d/10/view',
+                        tc: 'https://drive.google.com/file/d/11/view',
+                        studentPhoto: 'https://drive.google.com/file/d/12/view',
+                        parentPhoto: 'https://drive.google.com/file/d/13/view'
+                    },
+                    adminOnly: {
+                        studentUniqueId: null,
+                        rollNumber: null,
+                        timestamp: '2026-02-10T09:15:00Z',
+                        fullyVerified: false
+                    }
+                },
+                {
+                    firebaseKey: 'demo3',
+                    registrationId: 'REG-2026-0003',
+                    studentName: 'Amit Kumar',
+                    fatherName: 'Suresh Kumar',
+                    motherName: 'Geeta Devi',
+                    dob: '2015-11-10',
+                    mobile: '9876543333',
+                    status: 'rejected',
+                    paymentStatus: 'pending',
+                    submittedDate: '2026-02-05T11:20:00Z',
+                    studentDetails: {
+                        name: 'Amit Kumar',
+                        gender: 'male',
+                        dob: '2015-11-10',
+                        age: '10 years',
+                        bloodGroup: 'A+',
+                        category: 'obc',
+                        religion: 'Hindu',
+                        nationality: 'Indian',
+                        aadhaar: '555555555555',
+                        prevSchool: 'Sarvodaya Vidyalaya',
+                        prevClass: '4',
+                        tcNumber: 'TC2025003'
+                    },
+                    parentDetails: {
+                        fatherName: 'Suresh Kumar',
+                        fatherOcc: 'Business',
+                        fatherMobile: '9876543333',
+                        fatherEmail: 'suresh@gmail.com',
+                        motherName: 'Geeta Devi',
+                        motherOcc: 'Housewife',
+                        motherMobile: '9876543334',
+                        income: '3to5'
+                    },
+                    addressDetails: {
+                        houseNo: '789',
+                        street: 'GT Road',
+                        city: 'Lucknow',
+                        state: 'Uttar Pradesh',
+                        district: 'Lucknow',
+                        pincode: '226001',
+                        permanentHouse: '789',
+                        permanentStreet: 'GT Road',
+                        permanentCity: 'Lucknow',
+                        permanentState: 'Uttar Pradesh',
+                        permanentPincode: '226001'
+                    },
+                    academicHealth: {
+                        lastMarks: '78',
+                        percentage: '78',
+                        medium: 'hindi',
+                        board: 'UP Board',
+                        achievement: '',
+                        medical: 'Asthma',
+                        disability: 'no',
+                        allergy: 'Pollen',
+                        emergencyName: 'Suresh Kumar',
+                        emergencyContact: '9876543333'
+                    },
+                    transportDetails: {
+                        busRequired: 'yes',
+                        pickupLocation: 'Charbagh',
+                        distance: '3.5'
+                    },
+                    documentLinks: {
+                        birthCert: 'https://drive.google.com/file/d/14/view',
+                        aadhaar: 'https://drive.google.com/file/d/15/view',
+                        marksheet: 'https://drive.google.com/file/d/16/view',
+                        tc: 'https://drive.google.com/file/d/17/view',
+                        studentPhoto: 'https://drive.google.com/file/d/18/view',
+                        parentPhoto: 'https://drive.google.com/file/d/19/view'
+                    },
+                    adminOnly: {
+                        studentUniqueId: null,
+                        rollNumber: null,
+                        timestamp: '2026-02-05T11:20:00Z',
+                        fullyVerified: true,
+                        rejectedReason: 'Incomplete documents and wrong information',
+                        rejectedBy: 'Admin',
+                        rejectionDate: '2026-02-18T10:15:00Z'
+                    }
+                }
+            ];
+        }
+
+        function loadSampleVerification() {
+            fieldVerification = {
+                'demo1': {
+                    'studentName': 'approved',
+                    'gender': 'approved',
+                    'dob': 'approved',
+                    'age': 'approved',
+                    'bloodGroup': 'approved',
+                    'category': 'approved',
+                    'religion': 'approved',
+                    'nationality': 'approved',
+                    'aadhaar': 'approved',
+                    'prevSchool': 'approved',
+                    'prevClass': 'approved',
+                    'tcNumber': 'approved',
+                    'fatherName': 'approved',
+                    'fatherOcc': 'approved',
+                    'fatherMobile': 'approved',
+                    'fatherEmail': 'approved',
+                    'motherName': 'approved',
+                    'motherOcc': 'approved',
+                    'motherMobile': 'approved',
+                    'income': 'approved',
+                    'houseNo': 'approved',
+                    'street': 'approved',
+                    'city': 'approved',
+                    'state': 'approved',
+                    'district': 'approved',
+                    'pincode': 'approved',
+                    'permanentHouse': 'approved',
+                    'permanentStreet': 'approved',
+                    'permanentCity': 'approved',
+                    'permanentState': 'approved',
+                    'permanentPincode': 'approved',
+                    'lastMarks': 'approved',
+                    'percentage': 'approved',
+                    'medium': 'approved',
+                    'board': 'approved',
+                    'achievement': 'approved',
+                    'medical': 'approved',
+                    'disability': 'approved',
+                    'allergy': 'approved',
+                    'emergencyName': 'approved',
+                    'emergencyContact': 'approved',
+                    'busRequired': 'approved',
+                    'pickupLocation': 'approved',
+                    'distance': 'approved',
+                    'doc_birthCert': 'approved',
+                    'doc_aadhaar': 'approved',
+                    'doc_marksheet': 'approved',
+                    'doc_tc': 'approved',
+                    'doc_studentPhoto': 'approved',
+                    'doc_parentPhoto': 'approved',
+                    'doc_incomeCert': 'approved',
+                    'overall': 'approved'
+                },
+                'demo2': {
+                    'studentName': 'approved',
+                    'gender': 'approved',
+                    'dob': 'pending',
+                    'age': 'approved',
+                    'bloodGroup': 'pending',
+                    'category': 'approved',
+                    'religion': 'pending',
+                    'nationality': 'approved',
+                    'aadhaar': 'pending',
+                    'prevSchool': 'approved',
+                    'prevClass': 'approved',
+                    'tcNumber': 'pending',
+                    'fatherName': 'approved',
+                    'fatherOcc': 'approved',
+                    'fatherMobile': 'approved',
+                    'fatherEmail': 'pending',
+                    'motherName': 'pending',
+                    'motherOcc': 'approved',
+                    'motherMobile': 'approved',
+                    'income': 'pending',
+                    'houseNo': 'approved',
+                    'street': 'approved',
+                    'city': 'approved',
+                    'state': 'approved',
+                    'district': 'pending',
+                    'pincode': 'approved',
+                    'permanentHouse': 'approved',
+                    'permanentStreet': 'approved',
+                    'permanentCity': 'pending',
+                    'permanentState': 'approved',
+                    'permanentPincode': 'approved',
+                    'lastMarks': 'approved',
+                    'percentage': 'approved',
+                    'medium': 'pending',
+                    'board': 'approved',
+                    'achievement': 'approved',
+                    'medical': 'pending',
+                    'disability': 'approved',
+                    'allergy': 'pending',
+                    'emergencyName': 'approved',
+                    'emergencyContact': 'approved',
+                    'busRequired': 'approved',
+                    'distance': 'approved',
+                    'doc_birthCert': 'approved',
+                    'doc_aadhaar': 'pending',
+                    'doc_marksheet': 'pending',
+                    'doc_tc': 'approved',
+                    'doc_studentPhoto': 'pending',
+                    'doc_parentPhoto': 'approved',
+                    'doc_incomeCert': 'pending',
+                    'overall': 'partial'
+                },
+                'demo3': {
+                    'studentName': 'rejected',
+                    'gender': 'rejected',
+                    'dob': 'rejected',
+                    'age': 'rejected',
+                    'bloodGroup': 'rejected',
+                    'category': 'rejected',
+                    'religion': 'rejected',
+                    'nationality': 'rejected',
+                    'aadhaar': 'rejected',
+                    'prevSchool': 'rejected',
+                    'prevClass': 'rejected',
+                    'tcNumber': 'rejected',
+                    'fatherName': 'rejected',
+                    'fatherOcc': 'rejected',
+                    'fatherMobile': 'rejected',
+                    'fatherEmail': 'rejected',
+                    'motherName': 'rejected',
+                    'motherOcc': 'rejected',
+                    'motherMobile': 'rejected',
+                    'income': 'rejected',
+                    'houseNo': 'rejected',
+                    'street': 'rejected',
+                    'city': 'rejected',
+                    'state': 'rejected',
+                    'district': 'rejected',
+                    'pincode': 'rejected',
+                    'permanentHouse': 'rejected',
+                    'permanentStreet': 'rejected',
+                    'permanentCity': 'rejected',
+                    'permanentState': 'rejected',
+                    'permanentPincode': 'rejected',
+                    'lastMarks': 'rejected',
+                    'percentage': 'rejected',
+                    'medium': 'rejected',
+                    'board': 'rejected',
+                    'achievement': 'rejected',
+                    'medical': 'rejected',
+                    'disability': 'rejected',
+                    'allergy': 'rejected',
+                    'emergencyName': 'rejected',
+                    'emergencyContact': 'rejected',
+                    'busRequired': 'rejected',
+                    'pickupLocation': 'rejected',
+                    'distance': 'rejected',
+                    'doc_birthCert': 'rejected',
+                    'doc_aadhaar': 'rejected',
+                    'doc_marksheet': 'rejected',
+                    'doc_tc': 'rejected',
+                    'doc_studentPhoto': 'rejected',
+                    'doc_parentPhoto': 'rejected',
+                    'doc_incomeCert': 'rejected',
+                    'overall': 'rejected'
+                }
+            };
+        }
+
+        // Search Application
+        async function searchApplication() {
+            const appId = document.getElementById('appIdInput').value.trim();
+            
+            if (!appId) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Please enter a Registration ID',
+                    icon: 'error',
+                    confirmButtonColor: '#2563eb'
+                });
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('statusResult').classList.remove('active');
+
+            // Try to load from Firebase first
+            await loadFromFirebase();
+
+            // Find application by registrationId (new) or applicationId (old for compatibility)
+            const app = applications.find(a => a.registrationId === appId || a.applicationId === appId);
+            
+            // Hide loading
+            document.getElementById('loading').classList.remove('active');
+            
+            if (app) {
+                displayApplicationStatus(app);
+            } else {
+                showNotFound();
+            }
+        }
+
+        // Display Application Status - UPDATED with proper field status colors
+        function displayApplicationStatus(app) {
+            const resultDiv = document.getElementById('statusResult');
+            resultDiv.classList.add('active');
+
+            const verification = fieldVerification[app.firebaseKey] || {};
+            
+            // Function to get field status badge with proper color
+            function getFieldStatusBadge(fieldName) {
+                const status = verification[fieldName] || 'pending';
+                let badgeClass = '';
+                let statusText = '';
+                
+                switch(status) {
+                    case 'approved':
+                        badgeClass = 'field-status-approved';
+                        statusText = '✓ Approved';
+                        break;
+                    case 'rejected':
+                        badgeClass = 'field-status-rejected';
+                        statusText = '✗ Rejected';
+                        break;
+                    default:
+                        badgeClass = 'field-status-pending';
+                        statusText = '⏳ Pending';
+                }
+                
+                return `<span class="field-status-badge ${badgeClass}">${statusText}</span>`;
+            }
+
+            function getStatusBadge(status) {
+                const badges = {
+                    'pending': 'badge-pending',
+                    'approved': 'badge-approved',
+                    'rejected': 'badge-rejected',
+                    'completed': 'badge-approved',
+                    'partial': 'badge-partial'
+                };
+                return `<span class="badge ${badges[status] || 'badge-pending'}">${status}</span>`;
+            }
+
+            function getValue(value) {
+                return value && value.toString().trim() !== '' ? value : '<span class="field-value empty">Not Provided</span>';
+            }
+
+            // Calculate verification summary
+            const verificationValues = Object.values(verification).filter(v => v !== 'overall');
+            const approvedCount = verificationValues.filter(v => v === 'approved').length;
+            const pendingCount = verificationValues.filter(v => v === 'pending').length;
+            const rejectedCount = verificationValues.filter(v => v === 'rejected').length;
+            const totalFields = verificationValues.length;
+
+            // Check if admission is FULLY COMPLETED by admin
+            const isFullyCompleted = app.status === 'approved' && 
+                                     app.paymentStatus === 'completed' && 
+                                     app.adminOnly?.fullyVerified === true;
+
+            const allocatedClass = app.adminOnly?.allocatedClass || '1';
+            const section = app.adminOnly?.section || 'A';
+
+            let html = '';
+
+            // Show appropriate message based on status
+            if (isFullyCompleted) {
+                // SUCCESS MESSAGE
+                html += `
+                    <div class="success-message">
+                        <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 15px;"></i>
+                        <h2>🎉 Admission Successful! 🎉</h2>
+                        <p>Congratulations! Your admission has been confirmed by the school.</p>
+                        <div class="class-box">
+                            <i class="fas fa-school"></i> Class ${allocatedClass}-${section}
+                        </div>
+                        <p style="margin-top: 15px; font-size: 1rem;">
+                            <strong>Student Unique ID:</strong> ${app.adminOnly?.studentUniqueId || 'Not Assigned'}<br>
+                            <strong>Roll Number:</strong> ${app.adminOnly?.rollNumber || 'Not Assigned'}
+                        </p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">
+                            Approved on: ${app.adminOnly?.approvalDate ? new Date(app.adminOnly.approvalDate).toLocaleDateString() : 'N/A'}
+                        </p>
+                    </div>
+                `;
+            } else if (app.status === 'rejected') {
+                // REJECTED MESSAGE
+                html += `
+                    <div class="rejected-message">
+                        <i class="fas fa-times-circle" style="font-size: 4rem; margin-bottom: 15px;"></i>
+                        <h2>Application Rejected</h2>
+                        <p>We regret to inform you that your application has been rejected.</p>
+                        <p style="margin-top: 15px; font-size: 1rem;">
+                            Reason: ${app.adminOnly?.rejectedReason || 'Incomplete or incorrect information'}
+                        </p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">
+                            Please contact the school administration for more details.
+                        </p>
+                    </div>
+                `;
+            } else if (app.status === 'pending' || app.paymentStatus !== 'completed') {
+                // PENDING MESSAGE
+                html += `
+                    <div class="pending-message">
+                        <i class="fas fa-clock" style="font-size: 4rem; margin-bottom: 15px;"></i>
+                        <h2>Application Under Review</h2>
+                        <p>Your application is currently being processed by the school administration.</p>
+                        <p style="margin-top: 15px; font-size: 1rem;">
+                            ${pendingCount > 0 ? `${pendingCount} fields pending verification` : 'Waiting for admin approval'}
+                        </p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">
+                            Please check back later for updates.
+                        </p>
+                    </div>
+                `;
+            }
+
+            // Display ID based on what's available
+            const displayId = app.registrationId || app.applicationId || 'N/A';
+
+            html += `
+                <!-- Application Header -->
+                <div class="app-header">
+                    <div class="app-id-badge">
+                        <i class="fas fa-id-card"></i> ${displayId}
+                    </div>
+                    <div class="student-name-large">
+                        ${app.studentName}
+                    </div>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <div class="status-label"><i class="fas fa-check-circle"></i> Application Status</div>
+                            <div class="status-value">${getStatusBadge(app.status)}</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label"><i class="fas fa-credit-card"></i> Payment Status</div>
+                            <div class="status-value">${getStatusBadge(app.paymentStatus)}</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label"><i class="fas fa-check-double"></i> Verification Status</div>
+                            <div class="status-value">${getStatusBadge(verification.overall || 'pending')}</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label"><i class="fas fa-calendar"></i> Submitted On</div>
+                            <div class="status-value">${new Date(app.submittedDate).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Details -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-user-graduate"></i>
+                        <h3>Student Details</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="fields-grid">
+                            ${Object.entries(app.studentDetails || {}).map(([key, value]) => `
+                                <div class="field-item">
+                                    <div class="field-label">
+                                        ${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                    </div>
+                                    <div class="field-value">${getValue(value)}</div>
+                                    <div class="field-verification">
+                                        ${getFieldStatusBadge(key)}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parent Details -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-users"></i>
+                        <h3>Parent Details</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="fields-grid">
+                            ${Object.entries(app.parentDetails || {}).map(([key, value]) => `
+                                <div class="field-item">
+                                    <div class="field-label">
+                                        ${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                    </div>
+                                    <div class="field-value">${getValue(value)}</div>
+                                    <div class="field-verification">
+                                        ${getFieldStatusBadge(key)}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address Details -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Address Details</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="fields-grid">
+                            ${Object.entries(app.addressDetails || {}).map(([key, value]) => `
+                                <div class="field-item">
+                                    <div class="field-label">
+                                        ${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                    </div>
+                                    <div class="field-value">${getValue(value)}</div>
+                                    <div class="field-verification">
+                                        ${getFieldStatusBadge(key)}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic & Health -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-book"></i>
+                        <h3>Academic & Health</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="fields-grid">
+                            ${Object.entries(app.academicHealth || {}).map(([key, value]) => `
+                                <div class="field-item">
+                                    <div class="field-label">
+                                        ${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                    </div>
+                                    <div class="field-value">${getValue(value)}</div>
+                                    <div class="field-verification">
+                                        ${getFieldStatusBadge(key)}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transport -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-bus"></i>
+                        <h3>Transport</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="fields-grid">
+                            ${Object.entries(app.transportDetails || {}).map(([key, value]) => `
+                                <div class="field-item">
+                                    <div class="field-label">
+                                        ${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                    </div>
+                                    <div class="field-value">${getValue(value)}</div>
+                                    <div class="field-verification">
+                                        ${getFieldStatusBadge(key)}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documents -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-link"></i>
+                        <h3>Uploaded Documents</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="documents-grid">
+                            ${Object.entries(app.documentLinks || {}).map(([key, value]) => {
+                                if (!value) return '';
+                                const fileExtension = value.split('.').pop()?.toUpperCase() || 'PDF';
+                                return `
+                                    <div class="document-item">
+                                        <div class="document-icon">
+                                            <i class="fas fa-file-${fileExtension === 'PDF' ? 'pdf' : 'image'}"></i>
+                                        </div>
+                                        <div class="document-info">
+                                            <div class="document-name">${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</div>
+                                            <a href="${value}" target="_blank" class="document-link">
+                                                <i class="fas fa-eye"></i> View Document
+                                            </a>
+                                        </div>
+                                        <div class="field-verification">
+                                            ${getFieldStatusBadge('doc_' + key)}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                            ${!app.documentLinks || Object.values(app.documentLinks).every(v => !v) ? 
+                                '<p style="text-align: center; color: #64748b; padding: 20px;">No documents uploaded</p>' : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Section -->
+                <div class="summary-section">
+                    <div class="summary-title">
+                        <i class="fas fa-chart-pie"></i> Verification Summary
+                    </div>
+                    <div class="summary-grid">
+                        <div class="summary-box">
+                            <div class="summary-number">${totalFields}</div>
+                            <div class="summary-label">Total Fields</div>
+                        </div>
+                        <div class="summary-box" style="border-color: #16a34a;">
+                            <div class="summary-number" style="color: #16a34a;">${approvedCount}</div>
+                            <div class="summary-label">Approved</div>
+                        </div>
+                        <div class="summary-box" style="border-color: #ca8a04;">
+                            <div class="summary-number" style="color: #ca8a04;">${pendingCount}</div>
+                            <div class="summary-label">Pending</div>
+                        </div>
+                        <div class="summary-box" style="border-color: #dc2626;">
+                            <div class="summary-number" style="color: #dc2626;">${rejectedCount}</div>
+                            <div class="summary-label">Rejected</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background: #f1f5f9; border-radius: 8px;">
+                        <p style="margin-bottom: 10px;"><i class="fas fa-info-circle" style="color: #2563eb;"></i> <strong>Status Guide:</strong></p>
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.9rem;">
+                            <span><span class="field-status-badge field-status-approved">✓ Approved</span> - Field is correct</span>
+                            <span><span class="field-status-badge field-status-pending">⏳ Pending</span> - Under review</span>
+                            <span><span class="field-status-badge field-status-rejected">✗ Rejected</span> - Needs correction</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            resultDiv.innerHTML = html;
+        }
+
+        // Show Not Found
+        function showNotFound() {
+            const resultDiv = document.getElementById('statusResult');
+            resultDiv.classList.add('active');
+            
+            resultDiv.innerHTML = `
+                <div class="not-found">
+                    <i class="fas fa-search"></i>
+                    <h3>Application Not Found</h3>
+                    <p>We couldn't find any application with the ID you entered.</p>
+                    <p style="color: #94a3b8;">Please check the Registration ID and try again.</p>
+                    <button class="try-again-btn" onclick="tryAgain()">
+                        <i class="fas fa-redo"></i> Try Again
+                    </button>
+                </div>
+            `;
+        }
+
+        // Try Again
+        function tryAgain() {
+            document.getElementById('statusResult').classList.remove('active');
+            document.getElementById('appIdInput').value = '';
+            document.getElementById('appIdInput').focus();
+        }
+
+        // Set Example IDs
+        function setExampleId(id) {
+            document.getElementById('appIdInput').value = id;
+        }
+
+        // Show Help
+        function showHelp() {
+            Swal.fire({
+                title: 'Need Help?',
+                html: `
+                    <div style="text-align: left;">
+                        <p><i class="fas fa-id-card" style="color: #2563eb;"></i> <strong>Registration ID:</strong> Sent to your email and phone after application</p>
+                        <p><i class="fas fa-envelope" style="color: #2563eb;"></i> <strong>Email:</strong> mmpsm.support@gmail.com</p>
+                        <p><i class="fas fa-phone" style="color: #2563eb;"></i> <strong>Phone:</strong> +91 8084873902</p>
+                        <p><i class="fas fa-clock" style="color: #2563eb;"></i> <strong>Office Hours:</strong> Mon-Fri, 9AM-5PM</p>
+                    </div>
+                `,
+                icon: 'info',
+                confirmButtonColor: '#2563eb'
+            });
+        }
+
+        // Go to Home
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>M.M Public School | Result List</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+    padding-bottom: 20px;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 18px 20px;
+    font-size: 20px;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    letter-spacing: 0.5px;
+}
+
+.header i {
+    font-size: 24px;
+    color: #ffd700;
+}
+
+/* ===== CATEGORY BAR ===== */
+.cat {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 8px;
+}
+
+.cat button {
+    flex: 1;
+    padding: 14px 12px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    background: #f0f4fa;
+    color: #0a2a66;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.cat button i {
+    font-size: 16px;
+}
+
+.cat button.active {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+/* ===== RESULT AREA ===== */
+#resultArea {
+    padding: 16px;
+}
+
+/* ===== STATS CARD ===== */
+.stats-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0a2a66;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* ===== SEARCH BAR ===== */
+.search-bar {
+    background: white;
+    border-radius: 50px;
+    padding: 10px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.search-bar i {
+    color: #0a2a66;
+    font-size: 16px;
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+.search-bar input::placeholder {
+    color: #999;
+}
+
+/* ===== CARD ===== */
+.card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    animation: fadeUp 0.4s ease;
+    border: 1px solid rgba(10,42,102,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.student-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e6ecff, #d6e0ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #0a2a66;
+    border: 3px solid #0a2a66;
+}
+
+.student-info {
+    flex: 1;
+}
+
+.name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.school-id {
+    font-size: 13px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.school-id i {
+    color: #0a2a66;
+    width: 16px;
+}
+
+.class-badge {
+    background: #e6ecff;
+    color: #0a2a66;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 30px;
+    display: inline-block;
+}
+
+.time-badge {
+    font-size: 11px;
+    color: #ff9800;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+}
+
+.time-badge i {
+    color: #ff9800;
+}
+
+/* ===== MARKS GRID ===== */
+.marks-grid {
+    background: #f8fafd;
+    border-radius: 18px;
+    padding: 16px;
+    margin: 16px 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.marks-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.marks-subject {
+    font-weight: 600;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.marks-subject i {
+    color: #0a2a66;
+    width: 18px;
+}
+
+.marks-value {
+    font-weight: 800;
+    color: #0a2a66;
+}
+
+.marks-percent {
+    font-size: 11px;
+    color: #10b981;
+    margin-left: 4px;
+}
+
+/* ===== TOTAL SECTION ===== */
+.total-section {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    border-radius: 18px;
+    padding: 16px;
+    margin: 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.total-label {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.total-label i {
+    color: #ffd700;
+}
+
+.total-value {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.total-percent {
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 14px;
+}
+
+/* ===== GRADE BADGE ===== */
+.grade-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 800;
+    margin-top: 8px;
+}
+
+.grade-A { background: #10b981; color: white; }
+.grade-B { background: #3b82f6; color: white; }
+.grade-C { background: #f59e0b; color: white; }
+.grade-D { background: #ef4444; color: white; }
+
+/* ===== ACTION BUTTONS ===== */
+.action {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.action button {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.edit {
+    background: linear-gradient(135deg, #2563eb, #1e4b8f);
+    color: white;
+    box-shadow: 0 4px 15px rgba(37,99,235,0.3);
+}
+
+.edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37,99,235,0.4);
+}
+
+.del {
+    background: #fee8e8;
+    color: #dc2626;
+    border: 2px solid #dc2626;
+}
+
+.del:hover {
+    background: #dc2626;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220,38,38,0.3);
+}
+
+/* ===== LOADING ===== */
+.loading {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 28px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.loading i {
+    font-size: 40px;
+    color: #0a2a66;
+    margin-bottom: 16px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.loading p {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0a2a66;
+    margin-bottom: 16px;
+}
+
+.bar {
+    width: 200px;
+    height: 6px;
+    background: #e0e7ff;
+    margin: 10px auto;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.bar span {
+    display: block;
+    height: 100%;
+    width: 40%;
+    background: linear-gradient(90deg, #0a2a66, #1e4b8f);
+    animation: slide 1s linear infinite;
+}
+
+@keyframes slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(300%); }
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 28px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.empty-state i {
+    font-size: 60px;
+    color: #0a2a66;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ===== DELETE DIALOG ===== */
+.dialog {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 16px;
+}
+
+.dialogBox {
+    background: white;
+    padding: 28px;
+    border-radius: 32px;
+    width: 90%;
+    max-width: 300px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.dialogIcon {
+    font-size: 48px;
+    color: #dc2626;
+    margin-bottom: 16px;
+}
+
+.dialogTitle {
+    font-weight: 800;
+    font-size: 20px;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+.dialogText {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.dialogBtns {
+    display: flex;
+    gap: 12px;
+}
+
+.dialogBtns button {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.cancel {
+    background: #f0f0f0;
+    color: #495057;
+}
+
+.cancel:hover {
+    background: #e0e0e0;
+}
+
+.ok {
+    background: #dc2626;
+    color: white;
+}
+
+.ok:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(220,38,38,0.3);
+}
+
+/* ===== TOAST ===== */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a1a;
+    color: white;
+    padding: 14px 28px;
+    border-radius: 60px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    animation: toastIn 0.3s ease;
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.toast i {
+    color: #10b981;
+    font-size: 18px;
+}
+
+/* ===== NO RESULTS MESSAGE ===== */
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 24px;
+    margin: 20px 0;
+}
+
+.no-results i {
+    font-size: 50px;
+    color: #0a2a66;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.no-results h4 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 4px;
+}
+
+.no-results p {
+    font-size: 14px;
+    color: #666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <i class="fa-solid fa-list"></i>
+    Result List
+    <i class="fa-solid fa-list"></i>
+</div>
+
+<div class="cat">
+    <button id="signupBtn" class="active">
+        <i class="fa-solid fa-user-plus"></i> Signup Students
+    </button>
+    <button id="manualBtn">
+        <i class="fa-solid fa-pen"></i> Manual Entry
+    </button>
+</div>
+
+<div id="resultArea"></div>
+
+<!-- DELETE DIALOG -->
+<div id="deleteDialog" class="dialog">
+    <div class="dialogBox">
+        <div class="dialogIcon">
+            <i class="fa-regular fa-trash-can"></i>
+        </div>
+        <div class="dialogTitle">Delete Result?</div>
+        <div class="dialogText">
+            This result will be permanently removed from the database.<br>
+            This action cannot be undone.
+        </div>
+        <div class="dialogBtns">
+            <button class="cancel" id="cancelDel">
+                <i class="fa-regular fa-xmark"></i> Cancel
+            </button>
+            <button class="ok" id="confirmDel">
+                <i class="fa-regular fa-trash-can"></i> Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast">
+    <i class="fa-regular fa-circle-check"></i>
+    <span>Result deleted successfully</span>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+    apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    authDomain:"apni-duniya-b53d7.firebaseapp.com",
+    databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const area = document.getElementById("resultArea");
+const deleteDialog = document.getElementById("deleteDialog");
+const cancelDel = document.getElementById("cancelDel");
+const confirmDel = document.getElementById("confirmDel");
+const toast = document.getElementById("toast");
+
+let delPath = "";
+let currentType = "signup";
+
+function showToast(msg, icon = '✅') {
+    toast.innerHTML = `<i class="fa-regular fa-circle-check"></i><span>${msg}</span>`;
+    toast.style.display = "flex";
+    setTimeout(() => toast.style.display = "none", 2500);
+}
+
+function formatTime(ts) {
+    if (!ts) return "";
+    const date = new Date(ts);
+    const now = new Date();
+    const diff = Math.floor((now - date) / (1000 * 60));
+    
+    if (diff < 1) return "Just now";
+    if (diff < 60) return diff + " min ago";
+    if (diff < 120) return "1 hour ago";
+    if (diff < 1440) return Math.floor(diff / 60) + " hours ago";
+    
+    return date.toLocaleDateString('en-IN', { 
+        day: 'numeric', 
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function calculatePercentage(obtained, total) {
+    return ((obtained / total) * 100).toFixed(1);
+}
+
+function getGradeFromPercentage(percent) {
+    if (percent >= 90) return { grade: 'A+', class: 'grade-A' };
+    if (percent >= 75) return { grade: 'A', class: 'grade-A' };
+    if (percent >= 60) return { grade: 'B', class: 'grade-B' };
+    if (percent >= 45) return { grade: 'C', class: 'grade-C' };
+    return { grade: 'D', class: 'grade-D' };
+}
+
+function getMarksValue(d, subject) {
+    const possibleKeys = [
+        subject,
+        subject + "Marks",
+        subject + "Score",
+        subject.toLowerCase(),
+        subject + "Marks"
+    ];
+    
+    for (let key of possibleKeys) {
+        if (d[key] !== undefined) return parseInt(d[key]) || 0;
+    }
+    return 0;
+}
+
+function load(type) {
+    currentType = type;
+    
+    area.innerHTML = `
+        <div class="loading">
+            <i class="fa-solid fa-spinner"></i>
+            <p>Loading Results...</p>
+            <div class="bar"><span></span></div>
+        </div>
+    `;
+
+    onValue(ref(db, "resultsUploadPanel/" + type), snap => {
+        area.innerHTML = "";
+
+        if (!snap.exists()) {
+            area.innerHTML = `
+                <div class="empty-state">
+                    <i class="fa-regular fa-folder-open"></i>
+                    <h3>No Results Found</h3>
+                    <p>No results have been uploaded for ${type} students yet</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Stats calculation
+        let totalResults = 0;
+        let totalMarksSum = 0;
+        let totalObtainedSum = 0;
+
+        // Add search bar
+        area.innerHTML = `
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Search by name or school ID..." onkeyup="window.filterResults()">
+            </div>
+            <div id="resultsContainer"></div>
+        `;
+
+        const container = document.getElementById('resultsContainer');
+        let results = [];
+
+        snap.forEach(c => {
+            const d = c.val();
+            const key = c.key;
+            
+            // Calculate marks
+            const hindi = getMarksValue(d, 'hindi');
+            const english = getMarksValue(d, 'english');
+            const maths = getMarksValue(d, 'math') || getMarksValue(d, 'maths') || getMarksValue(d, 'mathematics');
+            const science = getMarksValue(d, 'science');
+            const social = getMarksValue(d, 'social');
+            const sanskrit = getMarksValue(d, 'sanskrit');
+            
+            const totalMarks = 600;
+            const obtained = hindi + english + maths + science + social + sanskrit;
+            const percentage = calculatePercentage(obtained, totalMarks);
+            const gradeInfo = getGradeFromPercentage(percentage);
+            
+            totalResults++;
+            totalMarksSum += totalMarks;
+            totalObtainedSum += obtained;
+            
+            results.push({
+                id: key,
+                data: d,
+                hindi, english, maths, science, social, sanskrit,
+                obtained, percentage, gradeInfo,
+                searchText: (d.name + ' ' + (d.schoolId || '')).toLowerCase()
+            });
+        });
+
+        // Sort by time (newest first)
+        results.sort((a, b) => (b.data.time || 0) - (a.data.time || 0));
+
+        // Add stats card
+        const avgPercentage = ((totalObtainedSum / totalMarksSum) * 100).toFixed(1);
+        
+        const statsHTML = `
+            <div class="stats-card">
+                <div class="stat-item">
+                    <div class="stat-value">${totalResults}</div>
+                    <div class="stat-label">Total Results</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${avgPercentage}%</div>
+                    <div class="stat-label">Avg. Score</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${Math.round(totalObtainedSum/totalResults)}</div>
+                    <div class="stat-label">Avg. Marks</div>
+                </div>
+            </div>
+        `;
+        
+        container.innerHTML = statsHTML;
+
+        results.forEach(r => {
+            const d = r.data;
+            const key = r.id;
+            const timeStr = formatTime(d.time);
+            
+            const gradeClass = r.gradeInfo.class;
+            const gradeText = r.gradeInfo.grade;
+
+            const cardHTML = `
+                <div class="card result-card" data-search="${r.searchText}">
+                    <div class="card-header">
+                        <div class="student-avatar">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                        <div class="student-info">
+                            <div class="name">
+                                ${d.name || 'Unknown Student'}
+                                <span class="class-badge">Class ${d.class || 'N/A'}</span>
+                            </div>
+                            <div class="school-id">
+                                <i class="fa-regular fa-id-card"></i> ${d.schoolId || 'No ID'}
+                            </div>
+                            <div class="time-badge">
+                                <i class="fa-regular fa-clock"></i> ${timeStr}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="marks-grid">
+                        <div class="marks-item">
+                            <span class="marks-subject"><i class="fa-solid fa-language"></i> Hindi</span>
+                            <span class="marks-value">${r.hindi}/100 <span class="marks-percent">(${calculatePercentage(r.hindi, 100)}%)</span></span>
+                        </div>
+                        <div class="marks-item">
+                            <span class="marks-subject"><i class="fa-solid fa-book"></i> English</span>
+                            <span class="marks-value">${r.english}/100 <span class="marks-percent">(${calculatePercentage(r.english, 100)}%)</span></span>
+                        </div>
+                        <div class="marks-item">
+                            <span class="marks-subject"><i class="fa-solid fa-calculator"></i> Maths</span>
+                            <span class="marks-value">${r.maths}/100 <span class="marks-percent">(${calculatePercentage(r.maths, 100)}%)</span></span>
+                        </div>
+                        <div class="marks-item">
+                            <span class="marks-subject"><i class="fa-solid fa-flask"></i> Science</span>
+                            <span class="marks-value">${r.science}/100 <span class="marks-percent">(${calculatePercentage(r.science, 100)}%)</span></span>
+                        </div>
+                        <div class="marks-item">
+                            <span class="marks-subject"><i class="fa-solid fa-globe"></i> Social</span>
+                            <span class="marks-value">${r.social}/100 <span class="marks-percent">(${calculatePercentage(r.social, 100)}%)</span></span>
+                        </div>
+                        <div class="marks-item">
+                            <span class="marks-subject"><i class="fa-solid fa-om"></i> Sanskrit</span>
+                            <span class="marks-value">${r.sanskrit}/100 <span class="marks-percent">(${calculatePercentage(r.sanskrit, 100)}%)</span></span>
+                        </div>
+                    </div>
+
+                    <div class="total-section">
+                        <span class="total-label">
+                            <i class="fa-solid fa-star"></i> Total Marks
+                        </span>
+                        <span>
+                            <span class="total-value">${r.obtained}/600</span>
+                            <span class="total-percent">${r.percentage}%</span>
+                        </span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="grade-badge ${gradeClass}">Grade ${gradeText}</span>
+                        
+                        <div class="action">
+                            <button class="edit" onclick="editResult('${type}','${key}')">
+                                <i class="fa-regular fa-pen-to-square"></i> Edit
+                            </button>
+                            <button class="del" onclick="deleteResult('${type}','${key}')">
+                                <i class="fa-regular fa-trash-can"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML += cardHTML;
+        });
+
+        // Add filter function
+        window.filterResults = function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.result-card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const searchText = card.dataset.search || '';
+                if (searchText.includes(searchTerm) || searchTerm === '') {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Show no results message
+            const existingMsg = document.getElementById('noResultsMsg');
+            if (existingMsg) existingMsg.remove();
+            
+            if (visibleCount === 0 && searchTerm !== '') {
+                const msgDiv = document.createElement('div');
+                msgDiv.id = 'noResultsMsg';
+                msgDiv.className = 'no-results';
+                msgDiv.innerHTML = `
+                    <i class="fa-solid fa-search"></i>
+                    <h4>No Results Found</h4>
+                    <p>No results match "${searchTerm}"</p>
+                `;
+                container.appendChild(msgDiv);
+            }
+        };
+
+    }, { onlyOnce: true });
+}
+
+// Global functions
+window.editResult = (type, id) => {
+    window.location.href = "edit-result.html?type=" + type + "&id=" + id;
+};
+
+window.deleteResult = (type, id) => {
+    delPath = "resultsUploadPanel/" + type + "/" + id;
+    deleteDialog.style.display = "flex";
+};
+
+// Category buttons
+const signupBtn = document.getElementById("signupBtn");
+const manualBtn = document.getElementById("manualBtn");
+
+signupBtn.onclick = () => {
+    signupBtn.classList.add("active");
+    manualBtn.classList.remove("active");
+    load("signup");
+};
+
+manualBtn.onclick = () => {
+    manualBtn.classList.add("active");
+    signupBtn.classList.remove("active");
+    load("manual");
+};
+
+// Delete dialog
+cancelDel.onclick = () => {
+    deleteDialog.style.display = "none";
+};
+
+confirmDel.onclick = async () => {
+    if (delPath) {
+        await remove(ref(db, delPath));
+        deleteDialog.style.display = "none";
+        showToast("Result deleted successfully");
+        load(currentType);
+    }
+};
+
+// Close dialog on outside click
+deleteDialog.addEventListener('click', (e) => {
+    if (e.target === deleteDialog) {
+        deleteDialog.style.display = "none";
+    }
+});
+
+// Initial load
+load("signup");
+</script>
+
+</body>
+</html>

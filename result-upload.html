@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>M.M Public School | Admin Result Upload</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+    padding-bottom: 20px;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 18px 20px;
+    font-size: 20px;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    letter-spacing: 0.5px;
+}
+
+.header i {
+    font-size: 24px;
+    color: #ffd700;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+/* ===== ADMIN BADGE ===== */
+.admin-badge {
+    background: white;
+    border-radius: 50px;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.1);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.admin-badge i {
+    font-size: 24px;
+    color: #0a2a66;
+    background: #e6ecff;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.admin-badge span {
+    font-weight: 700;
+    color: #0a2a66;
+    font-size: 14px;
+}
+
+.admin-badge small {
+    color: #666;
+    font-size: 12px;
+    display: block;
+    margin-top: 4px;
+}
+
+/* ===== CATEGORY BAR ===== */
+.cat-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: white;
+    padding: 16px;
+    border-radius: 40px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.cat {
+    flex: 1;
+    padding: 14px 8px;
+    border: none;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 13px;
+    background: #f0f4fa;
+    color: #0a2a66;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.cat i {
+    font-size: 16px;
+}
+
+.cat.active {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+/* ===== CARD ===== */
+.card {
+    background: white;
+    border-radius: 28px;
+    padding: 22px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    border: 1px solid rgba(10,42,102,0.1);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e6ecff;
+}
+
+.card-title i {
+    color: #ff9800;
+}
+
+/* ===== FORM ELEMENTS ===== */
+.form-group {
+    margin-bottom: 16px;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #444;
+    display: block;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+label i {
+    color: #0a2a66;
+    width: 18px;
+}
+
+input, select {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 2px solid #e0e7ff;
+    font-weight: 500;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+    background: #f8fafd;
+}
+
+input:focus, select:focus {
+    border-color: #0a2a66;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(10,42,102,0.1);
+}
+
+input[readonly] {
+    background: #f0f4fa;
+    border-color: #d0d9ff;
+    color: #0a2a66;
+    font-weight: 600;
+}
+
+/* ===== MARKS GRID ===== */
+.marks-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.marks-item {
+    background: #f8fafd;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid #e0e7ff;
+}
+
+.marks-item label {
+    margin-bottom: 4px;
+    font-size: 12px;
+}
+
+.marks-item input {
+    padding: 12px;
+    border-radius: 12px;
+}
+
+/* ===== UPLOAD BUTTON ===== */
+.upload-btn {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 8px 25px rgba(10,42,102,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.upload-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(10,42,102,0.4);
+}
+
+.upload-btn i {
+    font-size: 18px;
+}
+
+/* ===== NOTIFICATION ===== */
+.notify {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 16px 30px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 15px;
+    display: none;
+    box-shadow: 0 15px 40px rgba(10,42,102,0.4);
+    z-index: 9999;
+    align-items: center;
+    gap: 12px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translate(-50%, -20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.notify i {
+    font-size: 20px;
+    color: #ffd700;
+}
+
+/* ===== INFO TEXT ===== */
+.info-text {
+    font-size: 12px;
+    color: #666;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.info-text i {
+    color: #0a2a66;
+}
+
+/* ===== LOADING STATE ===== */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #0a2a66;
+}
+
+.loading i {
+    font-size: 30px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ===== PREVIEW CARD ===== */
+.preview-card {
+    background: #f8fafd;
+    border-radius: 18px;
+    padding: 16px;
+    margin-top: 16px;
+    border: 2px dashed #0a2a66;
+}
+
+.preview-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0a2a66;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.preview-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e7ff;
+    font-size: 13px;
+}
+
+.preview-item:last-child {
+    border-bottom: none;
+}
+
+.preview-label {
+    color: #666;
+    font-weight: 500;
+}
+
+.preview-value {
+    color: #0a2a66;
+    font-weight: 700;
+}
+
+/* ===== TOTAL MARKS ===== */
+.total-marks {
+    background: #e6ecff;
+    border-radius: 16px;
+    padding: 16px;
+    margin: 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-marks span {
+    font-weight: 700;
+    color: #0a2a66;
+}
+
+.total-marks .total-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0a2a66;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <i class="fa-solid fa-shield-halved"></i>
+    Admin Result Upload
+    <i class="fa-solid fa-shield-halved"></i>
+</div>
+
+<div class="container">
+
+    <!-- Admin Badge -->
+    <div class="admin-badge">
+        <i class="fa-solid fa-user-tie"></i>
+        <div>
+            <span>Administrator Panel</span>
+            <small>Upload student results securely</small>
+        </div>
+    </div>
+
+    <!-- Category Bar -->
+    <div class="cat-bar">
+        <button id="signupBtn" class="cat active">
+            <i class="fa-solid fa-user-plus"></i> Signup Student
+        </button>
+        <button id="manualBtn" class="cat">
+            <i class="fa-solid fa-pen"></i> Without Signup
+        </button>
+        <button id="resultListBtn" class="cat">
+            <i class="fa-solid fa-list"></i> Result List
+        </button>
+    </div>
+
+    <!-- Signup Box -->
+    <div id="signupBox" class="card">
+        <div class="card-title">
+            <i class="fa-solid fa-graduation-cap"></i>
+            Select Registered Student
+        </div>
+        
+        <div class="form-group">
+            <label><i class="fa-regular fa-id-card"></i> School ID</label>
+            <select id="schoolSelect">
+                <option value="">-- Select School ID --</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label><i class="fa-regular fa-user"></i> Student Name</label>
+            <input id="studentNameAuto" placeholder="Auto-fills automatically" readonly>
+        </div>
+        
+        <div class="info-text">
+            <i class="fa-solid fa-circle-info"></i>
+            Select a student from the registered list
+        </div>
+    </div>
+
+    <!-- Manual Box -->
+    <div id="manualBox" class="card" style="display:none;">
+        <div class="card-title">
+            <i class="fa-solid fa-pencil"></i>
+            Manual Entry
+        </div>
+        
+        <div class="form-group">
+            <label><i class="fa-regular fa-id-card"></i> School ID</label>
+            <input id="manualId" placeholder="Enter School ID (e.g., MMPSM-2026-001)">
+        </div>
+        
+        <div class="form-group">
+            <label><i class="fa-regular fa-user"></i> Student Name</label>
+            <input id="manualName" placeholder="Enter student full name">
+        </div>
+        
+        <div class="info-text">
+            <i class="fa-solid fa-circle-info"></i>
+            For students not in the signup list
+        </div>
+    </div>
+
+    <!-- Common Result Form -->
+    <div class="card">
+        <div class="card-title">
+            <i class="fa-solid fa-chart-simple"></i>
+            Enter Result Details
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-graduation-cap"></i> Class</label>
+            <select id="studentClass">
+                <option value="">-- Select Class --</option>
+                <option>Nursery</option>
+                <option>LKG</option>
+                <option>UKG</option>
+                <option>1</option><option>2</option><option>3</option>
+                <option>4</option><option>5</option><option>6</option>
+                <option>7</option><option>8</option><option>9</option>
+                <option>10</option><option>11</option><option>12</option>
+            </select>
+        </div>
+
+        <div class="marks-grid">
+            <div class="marks-item">
+                <label><i class="fa-solid fa-language"></i> Hindi</label>
+                <input id="hindi" type="number" min="0" max="100" placeholder="0-100">
+            </div>
+            <div class="marks-item">
+                <label><i class="fa-solid fa-book"></i> English</label>
+                <input id="english" type="number" min="0" max="100" placeholder="0-100">
+            </div>
+            <div class="marks-item">
+                <label><i class="fa-solid fa-globe"></i> Social</label>
+                <input id="social" type="number" min="0" max="100" placeholder="0-100">
+            </div>
+            <div class="marks-item">
+                <label><i class="fa-solid fa-flask"></i> Science</label>
+                <input id="science" type="number" min="0" max="100" placeholder="0-100">
+            </div>
+            <div class="marks-item">
+                <label><i class="fa-solid fa-calculator"></i> Maths</label>
+                <input id="math" type="number" min="0" max="100" placeholder="0-100">
+            </div>
+            <div class="marks-item">
+                <label><i class="fa-solid fa-om"></i> Sanskrit</label>
+                <input id="sanskrit" type="number" min="0" max="100" placeholder="0-100">
+            </div>
+        </div>
+
+        <!-- Total Marks Preview -->
+        <div class="total-marks" id="totalPreview">
+            <span><i class="fa-solid fa-calculator"></i> Total Marks</span>
+            <span class="total-value" id="totalValue">0/600</span>
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-medal"></i> Grade</label>
+            <select id="grade">
+                <option value="">-- Select Grade --</option>
+                <option>A+ (90-100%)</option>
+                <option>A (75-89%)</option>
+                <option>B (60-74%)</option>
+                <option>C (45-59%)</option>
+                <option>D (33-44%)</option>
+                <option>F (Below 33%)</option>
+            </select>
+        </div>
+
+        <button id="uploadBtn" class="upload-btn">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            Upload Result
+        </button>
+
+        <!-- Preview Section -->
+        <div class="preview-card" id="previewCard" style="display:none;">
+            <div class="preview-title">
+                <i class="fa-regular fa-eye"></i> Result Preview
+            </div>
+            <div id="previewContent"></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Success Notification -->
+<div id="notify" class="notify">
+    <i class="fa-regular fa-circle-check"></i>
+    Result Successfully Uploaded
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+    apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    authDomain:"apni-duniya-b53d7.firebaseapp.com",
+    databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+// DOM Elements
+const schoolSelect = document.getElementById('schoolSelect');
+const studentNameAuto = document.getElementById('studentNameAuto');
+const manualId = document.getElementById('manualId');
+const manualName = document.getElementById('manualName');
+const signupBox = document.getElementById('signupBox');
+const manualBox = document.getElementById('manualBox');
+const signupBtn = document.getElementById('signupBtn');
+const manualBtn = document.getElementById('manualBtn');
+const resultListBtn = document.getElementById('resultListBtn');
+const uploadBtn = document.getElementById('uploadBtn');
+const notify = document.getElementById('notify');
+
+// Marks inputs
+const hindi = document.getElementById('hindi');
+const english = document.getElementById('english');
+const social = document.getElementById('social');
+const science = document.getElementById('science');
+const math = document.getElementById('math');
+const sanskrit = document.getElementById('sanskrit');
+const studentClass = document.getElementById('studentClass');
+const grade = document.getElementById('grade');
+const totalValue = document.getElementById('totalValue');
+const previewCard = document.getElementById('previewCard');
+const previewContent = document.getElementById('previewContent');
+
+// Calculate total marks on input
+function calculateTotal() {
+    const marks = [
+        parseInt(hindi.value) || 0,
+        parseInt(english.value) || 0,
+        parseInt(social.value) || 0,
+        parseInt(science.value) || 0,
+        parseInt(math.value) || 0,
+        parseInt(sanskrit.value) || 0
+    ];
+    
+    const total = marks.reduce((a, b) => a + b, 0);
+    totalValue.innerText = total + '/600';
+    
+    // Show preview if any marks entered
+    if (total > 0) {
+        previewCard.style.display = 'block';
+        updatePreview();
+    } else {
+        previewCard.style.display = 'none';
+    }
+}
+
+// Update preview
+function updatePreview() {
+    const type = signupBox.style.display !== 'none' ? 'signup' : 'manual';
+    const studentId = type === 'signup' ? schoolSelect.value : manualId.value;
+    const studentName = type === 'signup' ? studentNameAuto.value : manualName.value;
+    
+    if (studentId && studentName) {
+        previewContent.innerHTML = `
+            <div class="preview-item">
+                <span class="preview-label">School ID:</span>
+                <span class="preview-value">${studentId}</span>
+            </div>
+            <div class="preview-item">
+                <span class="preview-label">Name:</span>
+                <span class="preview-value">${studentName}</span>
+            </div>
+            <div class="preview-item">
+                <span class="preview-label">Class:</span>
+                <span class="preview-value">${studentClass.value || 'Not selected'}</span>
+            </div>
+        `;
+    }
+}
+
+// Add event listeners for total calculation
+[hindi, english, social, science, math, sanskrit].forEach(input => {
+    input.addEventListener('input', calculateTotal);
+});
+
+// Load signup students
+onValue(ref(db, "students"), snap => {
+    schoolSelect.innerHTML = '<option value="">-- Select School ID --</option>';
+    
+    snap.forEach(c => {
+        const d = c.val();
+        schoolSelect.innerHTML += `
+            <option value="${c.key}" data-name="${d.name || ''}">
+                ${c.key} - ${d.name || 'Unknown'}
+            </option>
+        `;
+    });
+});
+
+// Auto fill name on select
+schoolSelect.onchange = () => {
+    const opt = schoolSelect.options[schoolSelect.selectedIndex];
+    studentNameAuto.value = opt.dataset.name || '';
+    updatePreview();
+};
+
+// Manual inputs update preview
+manualId.oninput = updatePreview;
+manualName.oninput = updatePreview;
+studentClass.onchange = updatePreview;
+
+// Category switch
+signupBtn.onclick = () => {
+    signupBox.style.display = "block";
+    manualBox.style.display = "none";
+    signupBtn.classList.add("active");
+    manualBtn.classList.remove("active");
+    updatePreview();
+};
+
+manualBtn.onclick = () => {
+    signupBox.style.display = "none";
+    manualBox.style.display = "block";
+    manualBtn.classList.add("active");
+    signupBtn.classList.remove("active");
+    updatePreview();
+};
+
+// Result list page
+resultListBtn.onclick = () => {
+    window.location.href = "result-list.html";
+};
+
+// Upload result
+uploadBtn.onclick = async () => {
+    let sid = "";
+    let name = "";
+    let type = "signup";
+
+    if (signupBox.style.display !== "none") {
+        sid = schoolSelect.value;
+        name = studentNameAuto.value;
+        type = "signup";
+    } else {
+        sid = manualId.value.toUpperCase().trim();
+        name = manualName.value.trim();
+        type = "manual";
+    }
+
+    // Validation
+    if (!sid || !name) {
+        alert("❌ Please fill student details properly");
+        return;
+    }
+
+    if (!studentClass.value) {
+        alert("❌ Please select class");
+        return;
+    }
+
+    // Validate marks
+    const marks = {
+        hindi: parseInt(hindi.value) || 0,
+        english: parseInt(english.value) || 0,
+        social: parseInt(social.value) || 0,
+        science: parseInt(science.value) || 0,
+        math: parseInt(math.value) || 0,
+        sanskrit: parseInt(sanskrit.value) || 0
+    };
+
+    for (let [subject, mark] of Object.entries(marks)) {
+        if (mark < 0 || mark > 100) {
+            alert(`❌ ${subject} marks must be between 0 and 100`);
+            return;
+        }
+    }
+
+    try {
+        // Upload to Firebase
+        await push(ref(db, "resultsUploadPanel/" + type), {
+            schoolId: sid,
+            name: name,
+            class: studentClass.value,
+            subjects: marks,
+            grade: grade.value || "Not Specified",
+            totalMarks: Object.values(marks).reduce((a, b) => a + b, 0),
+            maxMarks: 600,
+            percentage: ((Object.values(marks).reduce((a, b) => a + b, 0) / 600) * 100).toFixed(2),
+            time: Date.now(),
+            uploadedBy: "Admin"
+        });
+
+        // Show notification
+        notify.style.display = "flex";
+        setTimeout(() => notify.style.display = "none", 3000);
+
+        // Reset form
+        if (type === "signup") {
+            schoolSelect.value = "";
+            studentNameAuto.value = "";
+        } else {
+            manualId.value = "";
+            manualName.value = "";
+        }
+        
+        // Clear marks
+        [hindi, english, social, science, math, sanskrit].forEach(input => input.value = "");
+        studentClass.value = "";
+        grade.value = "";
+        calculateTotal();
+
+    } catch (error) {
+        alert("❌ Error uploading result. Please try again.");
+        console.error(error);
+    }
+};
+
+// Initial total calculation
+calculateTotal();
+</script>
+
+</body>
+</html>

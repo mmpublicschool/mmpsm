@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Attendance ERP</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#e9f0f8,#d9e4f5);
+overflow-x:hidden;
+}
+
+/* HEADER */
+.header{
+background:linear-gradient(135deg,#0b3b5c,#0d4a73);
+color:white;
+padding:22px;
+text-align:center;
+font-weight:700;
+font-size:18px;
+box-shadow:0 8px 25px rgba(0,0,0,0.2);
+}
+.header span{
+font-size:14px;
+opacity:0.9;
+margin-left:10px;
+}
+
+/* TOGGLE */
+.toggle{
+display:flex;
+max-width:520px;
+margin:18px auto;
+background:white;
+border-radius:50px;
+overflow:hidden;
+box-shadow:0 5px 20px rgba(0,0,0,0.05);
+}
+.toggle button{
+flex:1;
+padding:14px;
+border:none;
+background:white;
+font-weight:700;
+cursor:pointer;
+transition:0.2s;
+}
+.toggle button.active{
+background:#0b3b5c;
+color:white;
+}
+
+/* CONTAINER */
+.container{
+max-width:520px;
+margin:auto;
+padding:0 15px 120px;
+}
+
+/* LOADING SCREEN */
+.loading-screen{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(255,255,255,0.9);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:1000;
+}
+.loading-screen.active{
+display:flex;
+}
+.loading-box{
+background:white;
+padding:25px;
+border-radius:25px;
+text-align:center;
+width:85%;
+max-width:300px;
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+.loading-box i{
+font-size:40px;
+color:#0b3b5c;
+margin-bottom:15px;
+}
+.loading-box p{
+color:#0b3b5c;
+font-weight:600;
+font-size:16px;
+margin-bottom:5px;
+}
+.loading-box .small{
+color:#5f7d9c;
+font-size:13px;
+}
+
+/* DATE */
+.date-box{
+background:white;
+padding:18px;
+border-radius:24px;
+margin-bottom:18px;
+box-shadow:0 6px 20px rgba(0,0,0,0.05);
+}
+.date-label{
+display:flex;
+align-items:center;
+gap:8px;
+margin-bottom:12px;
+color:#0b3b5c;
+font-weight:600;
+font-size:14px;
+}
+.date-label i{
+color:#0b3b5c;
+font-size:16px;
+}
+.date-input-wrapper{
+position:relative;
+width:100%;
+}
+.date-input-wrapper i{
+position:absolute;
+left:15px;
+top:50%;
+transform:translateY(-50%);
+color:#0b3b5c;
+font-size:16px;
+opacity:0.7;
+}
+.date-box input{
+width:100%;
+padding:14px 14px 14px 45px;
+border-radius:50px;
+border:2px solid #e0e7f0;
+font-size:15px;
+font-weight:500;
+color:#1e2f4a;
+background:#f8fafd;
+outline:none;
+transition:0.2s;
+cursor:pointer;
+}
+.date-box input:focus{
+border-color:#0b3b5c;
+background:white;
+box-shadow:0 0 0 4px rgba(11,59,92,0.1);
+}
+
+/* TEACHER CARD */
+.teacher-card{
+background:white;
+border-radius:22px;
+padding:18px;
+margin-bottom:16px;
+box-shadow:0 8px 25px rgba(0,0,0,0.06);
+border:1px solid #eef3f9;
+transition:all 0.3s ease;
+}
+.teacher-card.saved{
+border:2px solid #28a745;
+background:#f0fff4;
+}
+.teacher-top{
+display:flex;
+align-items:center;
+gap:14px;
+margin-bottom:12px;
+}
+.teacher-photo{
+width:60px;
+height:60px;
+border-radius:50%;
+overflow:hidden;
+background:#eee;
+border:3px solid #0b3b5c;
+position:relative;
+}
+.teacher-photo img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+.teacher-photo.loading{
+position:relative;
+}
+.teacher-photo.loading::before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
+background-size:200% 100%;
+animation:loadingShimmer 1.5s infinite;
+border-radius:50%;
+}
+.teacher-photo.loading::after{
+content:'';
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:30px;
+height:30px;
+border:3px solid rgba(11,59,92,0.2);
+border-top-color:#0b3b5c;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+@keyframes loadingShimmer{
+0%{background-position:200% 0;}
+100%{background-position:-200% 0;}
+}
+@keyframes spin{
+0%{transform:translate(-50%,-50%) rotate(0deg);}
+100%{transform:translate(-50%,-50%) rotate(360deg);}
+}
+.teacher-info{flex:1;}
+.teacher-name{
+font-weight:700;
+color:#0b3b5c;
+margin-bottom:2px;
+}
+.teacher-name span{
+color:#5f7d9c;
+font-size:13px;
+font-weight:400;
+margin-left:5px;
+}
+.teacher-sub{
+font-size:12px;
+color:#666;
+}
+.teacher-sub i{
+color:#0b3b5c;
+margin-right:4px;
+}
+
+.status-row{display:flex;gap:8px;}
+.status-btn{
+flex:1;
+padding:10px;
+border-radius:25px;
+border:1.5px solid #ccc;
+background:#f4f6fb;
+font-weight:600;
+cursor:pointer;
+font-size:12px;
+}
+.status-btn.active.present{background:#d4f4dd;border-color:#1e7e34;color:#1e7e34;}
+.status-btn.active.absent{background:#ffe0e0;border-color:#c82333;color:#c82333;}
+.status-btn.active.leave{background:#fff4d4;border-color:#e0a800;color:#e0a800;}
+
+/* SAVE BUTTON */
+.save-btn{
+position:fixed;
+bottom:18px;
+left:50%;
+transform:translateX(-50%);
+width:90%;
+max-width:520px;
+background:#0b3b5c;
+color:white;
+padding:16px;
+border:none;
+border-radius:40px;
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+.save-btn i{
+margin-right:8px;
+}
+
+/* HISTORY */
+.history-card{
+background:white;
+border-radius:20px;
+padding:18px;
+margin-bottom:15px;
+box-shadow:0 6px 20px rgba(0,0,0,0.05);
+border:1px solid #eef3f9;
+}
+.history-header{
+display:flex;
+align-items:center;
+gap:12px;
+margin-bottom:15px;
+padding-bottom:10px;
+border-bottom:2px dashed #e0eaf2;
+}
+.history-date-icon{
+width:40px;
+height:40px;
+background:#e1ecfe;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#0b3b5c;
+}
+.history-date-info{
+flex:1;
+}
+.history-date{
+font-weight:700;
+color:#0b3b5c;
+font-size:16px;
+margin-bottom:2px;
+}
+.history-day{
+font-size:12px;
+color:#5f7d9c;
+}
+.history-list{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+.history-teacher{
+display:flex;
+align-items:center;
+gap:10px;
+padding:6px 0;
+border-bottom:1px solid #f0f4fa;
+}
+.history-teacher:last-child{
+border-bottom:none;
+}
+.history-teacher img{
+width:40px;
+height:40px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid white;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+.history-teacher-info{
+flex:1;
+}
+.history-teacher-name{
+font-weight:600;
+color:#1e2f4a;
+font-size:14px;
+margin-bottom:2px;
+}
+.history-teacher-detail{
+font-size:11px;
+color:#5f7d9c;
+}
+.badge{
+padding:4px 12px;
+border-radius:20px;
+font-size:11px;
+font-weight:600;
+min-width:70px;
+text-align:center;
+}
+.badge.present{background:#d4f4dd;color:#1e7e34;}
+.badge.absent{background:#ffe0e0;color:#c82333;}
+.badge.leave{background:#fff4d4;color:#e0a800;}
+.badge.not-marked{background:#e9ecf1;color:#5f7d9c;}
+
+/* MONTH FILTER */
+.month-filter{
+background:white;
+border-radius:24px;
+padding:15px;
+margin-bottom:18px;
+box-shadow:0 6px 20px rgba(0,0,0,0.05);
+display:flex;
+gap:10px;
+align-items:center;
+}
+.month-filter select{
+flex:1;
+padding:12px;
+border-radius:50px;
+border:2px solid #e0e7f0;
+background:#f8fafd;
+font-size:14px;
+font-weight:500;
+color:#1e2f4a;
+outline:none;
+cursor:pointer;
+}
+.month-filter select:focus{
+border-color:#0b3b5c;
+}
+.month-filter button{
+padding:12px 20px;
+border-radius:50px;
+border:none;
+background:#0b3b5c;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+/* STATS CARD */
+.stats-card{
+background:linear-gradient(135deg,#0b3b5c,#0d4a73);
+border-radius:24px;
+padding:18px;
+margin-bottom:18px;
+color:white;
+display:flex;
+justify-content:space-around;
+}
+.stat-item{
+text-align:center;
+}
+.stat-value{
+font-size:22px;
+font-weight:700;
+margin-bottom:4px;
+}
+.stat-label{
+font-size:11px;
+opacity:0.8;
+}
+
+/* POPUP */
+.popup-overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.4);
+backdrop-filter:blur(5px);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+}
+.popup{
+background:white;
+padding:25px;
+border-radius:25px;
+text-align:center;
+width:85%;
+max-width:340px;
+animation:fadeIn 0.3s ease;
+}
+.popup i{
+font-size:55px;
+margin-bottom:12px;
+}
+.popup.success i{color:#28a745;}
+.popup.error i{color:#dc3545;}
+.popup button{
+margin-top:15px;
+padding:10px 25px;
+border:none;
+border-radius:25px;
+background:#0b3b5c;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+@keyframes fadeIn{
+from{opacity:0;transform:scale(0.9);}
+to{opacity:1;transform:scale(1);}
+}
+
+/* NO DATA */
+.no-data{
+text-align:center;
+padding:40px 20px;
+color:#666;
+background:white;
+border-radius:24px;
+}
+.no-data i{
+font-size:50px;
+margin-bottom:15px;
+color:#0b3b5c;
+opacity:0.5;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<i class="fa-solid fa-user-check"></i> Teacher Attendance ERP <span>2026</span>
+</div>
+
+<!-- LOADING SCREEN -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-box">
+        <i class="fa-regular fa-clock"></i>
+        <p>Please Wait</p>
+        <p class="small">Loading data...</p>
+    </div>
+</div>
+
+<div class="toggle">
+<button id="markTab" class="active">Mark Attendance</button>
+<button id="historyTab">History</button>
+</div>
+
+<div class="container">
+
+<div id="markSection">
+<div class="date-box">
+<div class="date-label">
+<i class="fa-regular fa-calendar"></i> Select Attendance Date
+</div>
+<div class="date-input-wrapper">
+<i class="fa-regular fa-calendar-check"></i>
+<input type="date" id="attendanceDate">
+</div>
+</div>
+<div id="teachersContainer"></div>
+</div>
+
+<div id="historySection" style="display:none;">
+<div class="month-filter">
+<select id="monthSelect">
+<option value="all">All Months</option>
+<option value="01">January</option>
+<option value="02">February</option>
+<option value="03">March</option>
+<option value="04">April</option>
+<option value="05">May</option>
+<option value="06">June</option>
+<option value="07">July</option>
+<option value="08">August</option>
+<option value="09">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+<button id="filterMonthBtn"><i class="fa-regular fa-filter"></i> Filter</button>
+</div>
+<div id="historyContainer"></div>
+</div>
+
+</div>
+
+<button class="save-btn" id="saveBtn"><i class="fa-regular fa-floppy-disk"></i> Save Attendance</button>
+
+<div class="popup-overlay" id="popupOverlay">
+<div class="popup" id="popupBox">
+<i class="fa-solid fa-circle-check"></i>
+<h3 id="popupTitle"></h3>
+<p id="popupMsg"></p>
+<button onclick="closePopup()">OK</button>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+authDomain:"apni-duniya-b53d7.firebaseapp.com",
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const teachersContainer=document.getElementById("teachersContainer");
+const historyContainer=document.getElementById("historyContainer");
+const dateInput=document.getElementById("attendanceDate");
+const loadingScreen=document.getElementById("loadingScreen");
+const markSection=document.getElementById("markSection");
+const historySection=document.getElementById("historySection");
+const markTab=document.getElementById("markTab");
+const historyTab=document.getElementById("historyTab");
+const monthSelect=document.getElementById("monthSelect");
+const filterBtn=document.getElementById("filterMonthBtn");
+
+dateInput.value=new Date().toISOString().split("T")[0];
+
+let teachers=[];
+let attendance={};
+let allAttendanceData={};
+let savedAttendance={};
+
+function showLoading(){
+loadingScreen.classList.add("active");
+}
+function hideLoading(){
+loadingScreen.classList.remove("active");
+}
+
+function showPopup(type,title,msg){
+const box=document.getElementById("popupBox");
+box.className="popup "+type;
+document.getElementById("popupTitle").innerText=title;
+document.getElementById("popupMsg").innerText=msg;
+document.getElementById("popupOverlay").style.display="flex";
+}
+window.closePopup=function(){
+document.getElementById("popupOverlay").style.display="none";
+}
+
+function formatDate(dateStr){
+const d=new Date(dateStr);
+const options={day:'numeric',month:'long',year:'numeric'};
+return d.toLocaleDateString('en-IN',options);
+}
+
+function getDayName(dateStr){
+const d=new Date(dateStr);
+return d.toLocaleDateString('en-IN',{weekday:'long'});
+}
+
+async function loadTeachers(){
+showLoading();
+try{
+const snap=await get(ref(db,"teachers"));
+teachers=[];
+if(snap.exists()){
+snap.forEach(child=>{
+teachers.push({id:child.key,...child.val()});
+});
+}
+// Load saved attendance for today
+await loadSavedAttendance();
+renderTeachers();
+}catch(error){
+console.error("Error loading teachers:",error);
+showPopup("error","Error","Failed to load teachers data");
+}finally{
+hideLoading();
+}
+}
+
+async function loadSavedAttendance(){
+try{
+const snap=await get(ref(db,"attendance/"+dateInput.value));
+savedAttendance=snap.exists()?snap.val():{};
+}catch(error){
+console.error("Error loading saved attendance:",error);
+savedAttendance={};
+}
+}
+
+function renderTeachers(){
+if(teachers.length===0){
+teachersContainer.innerHTML=`<div class="no-data"><i class="fa-regular fa-user"></i><br><p>No teachers found</p></div>`;
+return;
+}
+teachersContainer.innerHTML="";
+teachers.forEach(t=>{
+const photoUrl = t.photoURL || 'https://ui-avatars.com/api/?name='+encodeURIComponent(t.name)+'&background=0b3b5c&color=fff&size=60';
+const savedStatus = savedAttendance[t.id] || null;
+let activeClass = '';
+let presentClass = '', absentClass = '', leaveClass = '';
+
+if(savedStatus==='present'){
+activeClass='active present';
+presentClass='active present';
+}
+else if(savedStatus==='absent'){
+activeClass='active absent';
+absentClass='active absent';
+}
+else if(savedStatus==='leave'){
+activeClass='active leave';
+leaveClass='active leave';
+}
+
+if(savedStatus){
+attendance[t.id]=savedStatus;
+}
+
+teachersContainer.innerHTML+=`
+<div class="teacher-card ${savedStatus?'saved':''}" id="card-${t.id}">
+<div class="teacher-top">
+<div class="teacher-photo loading" id="photo-${t.id}">
+<img src="${photoUrl}" onload="this.parentElement.classList.remove('loading')" onerror="this.parentElement.classList.remove('loading')">
+</div>
+<div class="teacher-info">
+<div class="teacher-name">${t.name} <span>${t.teacherId || '2026'}</span></div>
+<div class="teacher-sub"><i class="fa-regular fa-building"></i> ${t.subject || 'Teaching Staff'}</div>
+</div>
+</div>
+<div class="status-row">
+<button class="status-btn present ${presentClass}" onclick="setStatus('${t.id}','present',this)">Present</button>
+<button class="status-btn absent ${absentClass}" onclick="setStatus('${t.id}','absent',this)">Absent</button>
+<button class="status-btn leave ${leaveClass}" onclick="setStatus('${t.id}','leave',this)">Leave</button>
+</div>
+</div>`;
+});
+}
+
+window.setStatus=function(id,status,btn){
+attendance[id]=status;
+const card=document.getElementById('card-'+id);
+card.classList.add('saved');
+btn.parentElement.querySelectorAll(".status-btn").forEach(b=>b.classList.remove("active","present","absent","leave"));
+btn.classList.add("active",status);
+};
+
+document.getElementById("saveBtn").addEventListener("click",async()=>{
+if(Object.keys(attendance).length===0){
+showPopup("error","Error","Please mark attendance first.");
+return;
+}
+showLoading();
+try{
+const selectedDate=dateInput.value;
+await set(ref(db,"attendance/"+selectedDate),attendance);
+showPopup("success","Success","Attendance Saved Successfully.");
+}catch(error){
+console.error("Error saving attendance:",error);
+showPopup("error","Error","Failed to save attendance.");
+}finally{
+hideLoading();
+}
+});
+
+dateInput.addEventListener("change",async()=>{
+showLoading();
+await loadSavedAttendance();
+renderTeachers();
+hideLoading();
+});
+
+async function loadAllAttendanceData(){
+try{
+const snap=await get(ref(db,"attendance"));
+allAttendanceData=snap.exists()?snap.val():{};
+}catch(error){
+console.error("Error loading attendance:",error);
+allAttendanceData={};
+}
+}
+
+function filterByMonth(month){
+if(month==='all') return Object.keys(allAttendanceData);
+return Object.keys(allAttendanceData).filter(date=>date.substring(5,7)===month);
+}
+
+async function loadHistory(){
+showLoading();
+await loadAllAttendanceData();
+historyContainer.innerHTML="";
+
+if(Object.keys(allAttendanceData).length===0){
+historyContainer.innerHTML=`<div class="no-data"><i class="fa-regular fa-calendar-xmark"></i><br><p>No attendance records found</p></div>`;
+hideLoading();
+return;
+}
+
+const selectedMonth=monthSelect.value;
+let dates=filterByMonth(selectedMonth);
+
+if(dates.length===0){
+historyContainer.innerHTML=`<div class="no-data"><i class="fa-regular fa-calendar-xmark"></i><br><p>No records for selected month</p></div>`;
+hideLoading();
+return;
+}
+
+dates.sort((a,b)=>b.localeCompare(a));
+
+// Calculate statistics
+let totalPresent=0,totalAbsent=0,totalLeave=0,totalRecords=0;
+dates.forEach(date=>{
+let records=allAttendanceData[date];
+teachers.forEach(teacher=>{
+const status=records[teacher.id];
+if(status==='present') totalPresent++;
+else if(status==='absent') totalAbsent++;
+else if(status==='leave') totalLeave++;
+if(status) totalRecords++;
+});
+});
+
+if(totalRecords>0){
+historyContainer.innerHTML+=`
+<div class="stats-card">
+<div class="stat-item"><div class="stat-value">${totalPresent}</div><div class="stat-label">Present</div></div>
+<div class="stat-item"><div class="stat-value">${totalAbsent}</div><div class="stat-label">Absent</div></div>
+<div class="stat-item"><div class="stat-value">${totalLeave}</div><div class="stat-label">Leave</div></div>
+</div>`;
+}
+
+dates.forEach(date=>{
+let records=allAttendanceData[date];
+let displayDate=formatDate(date);
+let dayName=getDayName(date);
+
+let html=`
+<div class="history-card">
+<div class="history-header">
+<div class="history-date-icon"><i class="fa-regular fa-calendar"></i></div>
+<div class="history-date-info">
+<div class="history-date">${displayDate}</div>
+<div class="history-day">${dayName}</div>
+</div>
+</div>
+<div class="history-list">`;
+
+teachers.forEach(teacher=>{
+const status=records[teacher.id] || 'not-marked';
+const photoUrl = teacher.photoURL || 'https://ui-avatars.com/api/?name='+encodeURIComponent(teacher.name)+'&background=0b3b5c&color=fff&size=40';
+
+let statusClass='not-marked';
+let statusText='Not Marked';
+if(status==='present'){statusClass='present';statusText='Present';}
+else if(status==='absent'){statusClass='absent';statusText='Absent';}
+else if(status==='leave'){statusClass='leave';statusText='Leave';}
+
+html+=`
+<div class="history-teacher">
+<img src="${photoUrl}" loading="lazy">
+<div class="history-teacher-info">
+<div class="history-teacher-name">${teacher.name}</div>
+<div class="history-teacher-detail">${teacher.subject || 'Teaching Staff'}</div>
+</div>
+<div class="badge ${statusClass}">${statusText}</div>
+</div>`;
+});
+
+html+=`</div></div>`;
+historyContainer.innerHTML+=html;
+});
+
+hideLoading();
+}
+
+filterBtn.addEventListener("click",loadHistory);
+
+markTab.onclick=function(){
+markSection.style.display="block";
+historySection.style.display="none";
+markTab.classList.add("active");
+historyTab.classList.remove("active");
+};
+
+historyTab.onclick=function(){
+markSection.style.display="none";
+historySection.style.display="block";
+historyTab.classList.add("active");
+markTab.classList.remove("active");
+loadHistory();
+};
+
+loadTeachers();
+
+document.getElementById("popupOverlay").addEventListener("click",function(e){
+if(e.target===this) closePopup();
+});
+
+// Image loading handler
+window.addEventListener('load',function(){
+document.querySelectorAll('.teacher-photo').forEach(el=>{
+el.classList.remove('loading');
+});
+});
+</script>
+
+</body>
+</html>

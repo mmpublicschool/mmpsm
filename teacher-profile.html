@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M.M Public School | Teacher Login</title>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+}
+
+.logo-area {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.logo-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 40px;
+    color: white;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+.logo-area h1 {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.logo-area p {
+    color: rgba(255,255,255,0.8);
+    font-size: 14px;
+}
+
+.login-card {
+    background: white;
+    border-radius: 32px;
+    padding: 32px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.login-header h2 {
+    color: #0a2a66;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.login-header p {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 8px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 16px;
+    color: #0a2a66;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 16px 16px 16px 48px;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 15px;
+    transition: all 0.2s;
+    background: #f8fafd;
+}
+
+.input-wrapper input:focus {
+    border-color: #0a2a66;
+    background: white;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(10,42,102,0.1);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 16px;
+    color: #6c757d;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #4a5568;
+    cursor: pointer;
+}
+
+.remember input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #0a2a66;
+}
+
+.forgot-link {
+    color: #0a2a66;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    border: none;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 10px 20px -5px #0a2a66a0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.login-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -5px #0a2a66c0;
+}
+
+.login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eef2f6;
+}
+
+.register-link p {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #0a2a66;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.error-message {
+    background: #fee;
+    color: #dc3545;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    border-left: 4px solid #dc3545;
+}
+
+.error-message.show {
+    display: flex;
+}
+
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    border-left: 4px solid #28a745;
+}
+
+.success-message.show {
+    display: flex;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.popup-card {
+    background: white;
+    border-radius: 32px;
+    padding: 32px;
+    max-width: 340px;
+    width: 90%;
+    text-align: center;
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.popup-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.popup-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 12px;
+}
+
+.popup-msg {
+    color: #4a5568;
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.popup-btn {
+    background: #0a2a66;
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.popup-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #6c757d;
+}
+
+.test-credentials {
+    background: #e8f0fe;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    border: 1px dashed #0a2a66;
+    display: none; /* छुपा दिया, सिर्फ डिबगिंग के लिए */
+}
+
+.test-credentials.show {
+    display: block;
+}
+</style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="logo-area">
+        <div class="logo-icon">
+            <i class="fas fa-school"></i>
+        </div>
+        <h1>M.M Public School</h1>
+        <p>Mundeshwari · Teacher Portal</p>
+    </div>
+    
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Teacher Login</h2>
+            <p>Enter your username & password</p>
+        </div>
+        
+        <!-- Success Message (hidden by default) -->
+        <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle"></i>
+            <span id="successText">Login successful! Redirecting...</span>
+        </div>
+        
+        <!-- Error Message (hidden by default) -->
+        <div id="errorMessage" class="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText">Invalid username or password</span>
+        </div>
+        
+        <!-- Test Credentials (hidden - sirf debug ke liye) -->
+        <div id="testCreds" class="test-credentials">
+            <strong>Debug Info:</strong> <span id="debugInfo"></span>
+        </div>
+        
+        <form id="loginForm">
+            <div class="input-group">
+                <label>Username</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="username" placeholder="Enter your username" autocomplete="off" autofocus>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label>Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="password" placeholder="Enter your password">
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword(this)"></i>
+                </div>
+            </div>
+            
+            <div class="remember-forgot">
+                <label class="remember">
+                    <input type="checkbox" id="rememberMe"> Remember me
+                </label>
+                <span class="forgot-link" onclick="showContactPopup()">Need help?</span>
+            </div>
+            
+            <button type="submit" id="loginBtn" class="login-btn">
+                <span>Login</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+        
+        <div class="register-link">
+            <p>New teacher? <a href="teacher-signup.html">Register here</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Popup -->
+<div id="loadingPopup" class="popup">
+    <div class="popup-card">
+        <div style="width: 50px; height: 50px; border: 4px solid #e0e0e0; border-top: 4px solid #0a2a66; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+        <div class="popup-title">Verifying...</div>
+        <div class="popup-msg">Please wait</div>
+    </div>
+</div>
+
+<!-- Contact Popup -->
+<div id="contactPopup" class="popup">
+    <div class="popup-card">
+        <span class="popup-close" onclick="document.getElementById('contactPopup').style.display='none'">&times;</span>
+        <div class="popup-icon">📞</div>
+        <div class="popup-title">Contact Administrator</div>
+        <div class="popup-msg">
+            <strong>Email:</strong> mmpsm.support@gmail.com<br>
+            <strong>Phone:</strong> +91 8084873902
+        </div>
+        <button class="popup-btn" onclick="document.getElementById('contactPopup').style.display='none'">OK</button>
+    </div>
+</div>
+
+<!-- Success Popup (auto shows on success) -->
+<div id="successPopup" class="popup">
+    <div class="popup-card">
+        <div class="popup-icon">✅</div>
+        <div class="popup-title">Login Successful!</div>
+        <div class="popup-msg" id="successPopupMsg">Redirecting to dashboard...</div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, query, orderByChild, equalTo, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+// Firebase Config - यही config है जो registration mein use हुआ है
+const firebaseConfig = {
+    apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    authDomain: "apni-duniya-b53d7.firebaseapp.com",
+    databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId: "apni-duniya-b53d7"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// DOM Elements
+const loginForm = document.getElementById('loginForm');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const loginBtn = document.getElementById('loginBtn');
+const errorMessage = document.getElementById('errorMessage');
+const errorText = document.getElementById('errorText');
+const successMessage = document.getElementById('successMessage');
+const successText = document.getElementById('successText');
+const rememberMe = document.getElementById('rememberMe');
+const loadingPopup = document.getElementById('loadingPopup');
+const contactPopup = document.getElementById('contactPopup');
+const successPopup = document.getElementById('successPopup');
+const successPopupMsg = document.getElementById('successPopupMsg');
+const testCreds = document.getElementById('testCreds');
+const debugInfo = document.getElementById('debugInfo');
+
+// Toggle Password Visibility
+window.togglePassword = function(icon) {
+    const input = icon.previousElementSibling;
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+};
+
+// Show Contact Popup
+window.showContactPopup = function() {
+    contactPopup.style.display = 'flex';
+};
+
+// Load saved credentials
+function loadSavedCredentials() {
+    try {
+        const savedUsername = localStorage.getItem('rememberedUsername');
+        const savedPassword = localStorage.getItem('rememberedPassword');
+        
+        if (savedUsername && savedPassword) {
+            usernameInput.value = savedUsername;
+            passwordInput.value = savedPassword;
+            rememberMe.checked = true;
+        }
+    } catch (e) {
+        console.log('localStorage error:', e);
+    }
+}
+loadSavedCredentials();
+
+// Show Error
+function showError(message) {
+    errorText.textContent = message;
+    errorMessage.classList.add('show');
+    successMessage.classList.remove('show');
+    setTimeout(() => {
+        errorMessage.classList.remove('show');
+    }, 3000);
+}
+
+// Show Success
+function showSuccess(message) {
+    successText.textContent = message;
+    successMessage.classList.add('show');
+    errorMessage.classList.remove('show');
+}
+
+// Show Loading
+function showLoading() {
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="spinner"></span> Verifying...';
+    loadingPopup.style.display = 'flex';
+}
+
+// Hide Loading
+function hideLoading() {
+    loginBtn.disabled = false;
+    loginBtn.innerHTML = '<span>Login</span> <i class="fas fa-arrow-right"></i>';
+    loadingPopup.style.display = 'none';
+}
+
+// Show Success Popup and Redirect
+function showSuccessAndRedirect(teacherId, teacherName) {
+    successPopupMsg.innerHTML = `Welcome ${teacherName}!<br>Redirecting to dashboard...`;
+    successPopup.style.display = 'flex';
+    
+    setTimeout(() => {
+        window.location.href = `teacher-profile-text.html?id=${teacherId}`;
+    }, 2000);
+}
+
+// MAIN LOGIN FUNCTION
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+    
+    // Validation
+    if (!username || !password) {
+        showError('Please enter both username and password');
+        return;
+    }
+    
+    showLoading();
+    showSuccess('Verifying credentials...');
+    
+    try {
+        // 1. Sabse pehle saare teachers ka data check karo
+        console.log('Checking username:', username);
+        
+        const teachersRef = ref(db, 'teachers');
+        const snapshot = await get(teachersRef);
+        
+        let foundTeacher = null;
+        let foundTeacherId = null;
+        let allUsernames = [];
+        
+        if (snapshot.exists()) {
+            console.log('Total teachers found:', Object.keys(snapshot.val()).length);
+            
+            // Har teacher ko check karo
+            snapshot.forEach((childSnapshot) => {
+                const teacher = childSnapshot.val();
+                const teacherId = childSnapshot.key;
+                
+                // Debug ke liye saare usernames save karo
+                if (teacher.username) {
+                    allUsernames.push(teacher.username);
+                }
+                
+                // Check username and password
+                if (teacher.username === username) {
+                    console.log('Username matched for:', teacherId);
+                    
+                    if (teacher.password === password) {
+                        console.log('Password matched!');
+                        foundTeacher = teacher;
+                        foundTeacherId = teacherId;
+                    } else {
+                        console.log('Password did not match for this username');
+                    }
+                }
+            });
+            
+            // Debug info show karo (hidden)
+            debugInfo.innerText = `Found ${allUsernames.length} teachers: ${allUsernames.join(', ')}`;
+            testCreds.classList.add('show');
+            
+        } else {
+            console.log('No teachers found in database!');
+            debugInfo.innerText = 'No teachers in database';
+            testCreds.classList.add('show');
+        }
+        
+        hideLoading();
+        
+        if (foundTeacher && foundTeacherId) {
+            // SUCCESS - Sahi username aur password
+            console.log('Login successful for:', foundTeacher.name);
+            showSuccess(`Welcome ${foundTeacher.name}! Redirecting...`);
+            
+            // Remember me
+            if (rememberMe.checked) {
+                localStorage.setItem('rememberedUsername', username);
+                localStorage.setItem('rememberedPassword', password);
+            } else {
+                localStorage.removeItem('rememberedUsername');
+                localStorage.removeItem('rememberedPassword');
+            }
+            
+            // Session save karo
+            sessionStorage.setItem('currentTeacherId', foundTeacherId);
+            sessionStorage.setItem('currentTeacherName', foundTeacher.name);
+            sessionStorage.setItem('loggedIn', 'true');
+            
+            // Success popup dikhao aur redirect karo
+            showSuccessAndRedirect(foundTeacherId, foundTeacher.name);
+            
+        } else {
+            // FAIL - Galat username ya password
+            console.log('Login failed for username:', username);
+            
+            // Check karo ki username exist karta hai ya nahi
+            if (allUsernames.includes(username)) {
+                showError('Incorrect password. Please try again.');
+            } else {
+                showError('Username not found. Please register first.');
+            }
+        }
+        
+    } catch (error) {
+        hideLoading();
+        showError('Login failed. Please try again.');
+        console.error('Login error details:', error);
+        
+        // Firebase connection error?
+        if (error.code) {
+            console.log('Firebase error code:', error.code);
+            debugInfo.innerText = `Firebase error: ${error.code}`;
+            testCreds.classList.add('show');
+        }
+    }
+});
+
+// Enter key support
+passwordInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        loginForm.dispatchEvent(new Event('submit'));
+    }
+});
+
+// Close popups on outside click
+window.addEventListener('click', (e) => {
+    if (e.target === contactPopup) {
+        contactPopup.style.display = 'none';
+    }
+    if (e.target === successPopup) {
+        successPopup.style.display = 'none';
+    }
+});
+
+// Focus on username
+usernameInput.focus();
+
+// Debug: Check Firebase connection on load
+(async function checkConnection() {
+    try {
+        const testRef = ref(db, 'teachers');
+        const testSnap = await get(testRef);
+        if (testSnap.exists()) {
+            console.log('✅ Firebase connected. Teachers found:', Object.keys(testSnap.val()).length);
+        } else {
+            console.log('⚠️ Firebase connected but no teachers found');
+        }
+    } catch (e) {
+        console.error('❌ Firebase connection error:', e);
+    }
+})();
+</script>
+</body>
+</html>

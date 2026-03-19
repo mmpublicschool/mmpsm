@@ -1,0 +1,878 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>India Holiday Portal</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+body {
+    background: #f5f7fb;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #2c3e50;
+    letter-spacing: 0.3px;
+}
+
+.year-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.arrow {
+    cursor: pointer;
+    font-size: 16px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    background: white;
+    color: #2c3e50;
+    border: 1px solid #dce2ec;
+    user-select: none;
+    line-height: 1;
+    transition: all 0.15s;
+}
+
+.arrow:hover {
+    background: #f0f4fa;
+    border-color: #b8c6da;
+    transform: scale(1.02);
+}
+
+.current-year {
+    font-size: 14px;
+    font-weight: 500;
+    color: #2c3e50;
+    background: white;
+    padding: 6px 16px;
+    border-radius: 30px;
+    border: 1px solid #dce2ec;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid #e9eef4;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.search-box {
+    margin-bottom: 16px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 30px;
+    border: 1px solid #d4deec;
+    font-size: 14px;
+    color: #1f2f40;
+    background: #ffffff;
+    transition: all 0.2s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #5f7d9c;
+    box-shadow: 0 0 0 3px rgba(95, 125, 156, 0.1);
+}
+
+.search-box input::placeholder {
+    color: #9aabbf;
+    font-size: 13px;
+}
+
+/* upcoming section */
+.upcoming-section {
+    background: linear-gradient(135deg, #f0f7ff, #e9f2fe);
+    border: 1px solid #c4d6f0;
+    border-radius: 18px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.upcoming-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.upcoming-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1d4e7c;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(29, 78, 124, 0.08);
+    padding: 2px 10px;
+    border-radius: 40px;
+    width: fit-content;
+}
+
+.upcoming-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #103456;
+}
+
+.upcoming-date {
+    font-size: 13px;
+    color: #4f6b89;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.upcoming-right {
+    background: white;
+    border-radius: 40px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #baceec;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.days-number {
+    font-weight: 700;
+    font-size: 20px;
+    color: #1d4e7c;
+}
+
+.days-label {
+    font-size: 11px;
+    color: #4f6b89;
+    font-weight: 500;
+}
+
+/* month sections */
+.month-section {
+    margin-bottom: 16px;
+}
+
+.month-heading {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1d3a5c;
+    padding: 8px 0 5px 4px;
+    border-bottom: 1.5px solid #dae2f0;
+    margin-bottom: 8px;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 5;
+    letter-spacing: 0.2px;
+}
+
+.holiday-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.holiday-card {
+    background: #ffffff;
+    border: 1px solid #eaeef7;
+    border-radius: 14px;
+    padding: 12px 16px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: block;
+}
+
+.holiday-card:hover {
+    background: #f5faff;
+    border-color: #9cb5d8;
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(50, 80, 130, 0.05);
+}
+
+.holiday-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a3045;
+    margin-bottom: 6px;
+}
+
+.holiday-date {
+    font-size: 12px;
+    color: #4f6b89;
+    background: #f0f4fc;
+    padding: 3px 14px;
+    border-radius: 40px;
+    border: 1px solid #d6e2f2;
+    display: inline-block;
+}
+
+.loading, .error, .no-holidays {
+    text-align: center;
+    color: #62748c;
+    padding: 30px 16px;
+    font-size: 14px;
+    background: #f9fcff;
+    border-radius: 16px;
+    border: 1px solid #e6ecf5;
+}
+
+.error {
+    color: #b13e2e;
+    background: #fff7f5;
+    border-color: #fccac2;
+}
+
+.footer-note {
+    text-align: center;
+    margin-top: 14px;
+    color: #7e90aa;
+    font-size: 11px;
+}
+
+/* modal - professional with timer */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 32px;
+    max-width: 380px;
+    width: 100%;
+    padding: 26px;
+    position: relative;
+    box-shadow: 0 30px 60px rgba(0, 15, 40, 0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+.modal.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #7e90aa;
+    background: #f0f4fc;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+
+.modal-close:hover {
+    background: #e2eaf7;
+    color: #1d4e7c;
+    transform: rotate(90deg);
+}
+
+.modal-icon {
+    font-size: 36px;
+    background: #ecf3fe;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1d4e7c;
+    margin-bottom: 12px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #103456;
+    margin-bottom: 4px;
+}
+
+.modal-subtitle {
+    font-size: 13px;
+    color: #4f6b89;
+    margin-bottom: 20px;
+}
+
+/* timer styles */
+.timer-container {
+    background: #1d4e7c;
+    border-radius: 18px;
+    padding: 18px;
+    margin: 16px 0;
+    color: white;
+}
+
+.timer-label {
+    font-size: 11px;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.timer-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.timer-block {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 10px 6px;
+    flex: 1;
+    text-align: center;
+    backdrop-filter: blur(4px);
+}
+
+.timer-number {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.timer-unit {
+    font-size: 10px;
+    opacity: 0.8;
+    text-transform: uppercase;
+}
+
+.timer-colon {
+    font-size: 24px;
+    font-weight: 800;
+    opacity: 0.7;
+}
+
+.modal-info {
+    background: #f8fbfe;
+    border-radius: 16px;
+    padding: 14px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px dashed #d6e2f2;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: #4f6b89;
+    font-size: 13px;
+}
+
+.info-value {
+    color: #103456;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.modal-description {
+    background: #f0f7ff;
+    border-radius: 16px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #1d3e62;
+    border-left: 4px solid #1d4e7c;
+    margin-top: 16px;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+<div class="title">🇮🇳 INDIA HOLIDAYS</div>
+
+<div class="year-nav">
+<div class="arrow" onclick="changeYear(-1)">←</div>
+<div class="current-year" id="yearDisplay"></div>
+<div class="arrow" onclick="changeYear(1)">→</div>
+</div>
+</div>
+
+<div class="card">
+
+<div class="search-box">
+<input type="text" id="search" placeholder="search holidays...">
+</div>
+
+<!-- upcoming section - new design with name above date -->
+<div id="upcomingContainer" class="upcoming-section">
+<div class="upcoming-left">
+<span class="upcoming-label" id="upcomingBadge">NEXT HOLIDAY</span>
+<span id="upcomingName" class="upcoming-name">loading...</span>
+<span id="upcomingDate" class="upcoming-date"></span>
+</div>
+<div class="upcoming-right">
+<span class="days-number" id="daysNumber">-</span>
+<span class="days-label">days left</span>
+</div>
+</div>
+
+<div id="holidayList" class="loading">loading holidays...</div>
+
+</div>
+
+<div class="footer-note">
+<span id="yearRange"></span> · google calendar sync
+</div>
+
+</div>
+
+<!-- Modal with timer -->
+<div id="holidayModal" class="modal">
+<div class="modal-content">
+<div class="modal-close" onclick="closeModal()">✕</div>
+
+<div class="modal-icon" id="modalIcon">🎉</div>
+<div class="modal-title" id="modalTitle">Holiday Name</div>
+<div class="modal-subtitle" id="modalSubtitle"></div>
+
+<!-- live timer -->
+<div class="timer-container">
+<div class="timer-label">⏳ COUNTDOWN</div>
+<div class="timer-grid">
+<div class="timer-block">
+<div class="timer-number" id="timerDays">00</div>
+<div class="timer-unit">days</div>
+</div>
+<div class="timer-colon">:</div>
+<div class="timer-block">
+<div class="timer-number" id="timerHours">00</div>
+<div class="timer-unit">hours</div>
+</div>
+<div class="timer-colon">:</div>
+<div class="timer-block">
+<div class="timer-number" id="timerMinutes">00</div>
+<div class="timer-unit">mins</div>
+</div>
+<div class="timer-colon">:</div>
+<div class="timer-block">
+<div class="timer-number" id="timerSeconds">00</div>
+<div class="timer-unit">secs</div>
+</div>
+</div>
+</div>
+
+<div class="modal-info">
+<div class="info-row">
+<span class="info-label">📅 Date</span>
+<span class="info-value" id="modalDate">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">📆 Month</span>
+<span class="info-value" id="modalMonth">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">🗓️ Year</span>
+<span class="info-value" id="modalYear">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">⏰ Day</span>
+<span class="info-value" id="modalDayOfWeek">-</span>
+</div>
+</div>
+
+<div class="modal-description" id="modalDescription">
+Click on any holiday to see countdown with live timer.
+</div>
+</div>
+</div>
+
+<script>
+const apiKey = "AIzaSyCmvq11VNoBRaa2_5RYPxNdfxu6HVgRnNI";
+const calendarId = "en.indian#holiday@group.v.calendar.google.com";
+
+let currentYear = new Date().getFullYear();
+const MIN_YEAR = 2000;
+const MAX_YEAR = 2050;
+
+if(currentYear < MIN_YEAR) currentYear = MIN_YEAR;
+if(currentYear > MAX_YEAR) currentYear = MAX_YEAR;
+
+document.getElementById("yearDisplay").innerText = currentYear;
+document.getElementById("yearRange").innerText = MIN_YEAR + ' - ' + MAX_YEAR;
+
+const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+let timerInterval = null;
+let currentTimerDate = null;
+
+// holiday descriptions
+const holidayDescriptions = {
+    "republic day": "India became a sovereign republic on this day in 1950. The Constitution came into effect, and it's celebrated with parades and cultural events across the country.",
+    "independence day": "India gained freedom from British rule on August 15, 1947. A national holiday marked by flag hoisting, parades, and patriotic celebrations.",
+    "gandhi jayanti": "Birth anniversary of Mahatma Gandhi, the father of the nation. Observed as a day of peace, non-violence, and prayers.",
+    "diwali": "Festival of Lights, symbolizing victory of light over darkness. Celebrated with lamps, fireworks, sweets, and family gatherings.",
+    "holi": "Festival of colors, marking the arrival of spring. People play with colors, water, and celebrate with joy and sweets.",
+    "eid": "Islamic festival marking the end of Ramadan. Celebrated with prayers, feasts, and charity.",
+    "christmas": "Birthday of Jesus Christ. Celebrated with church services, cakes, and family gatherings.",
+    "dussehra": "Marks the victory of Lord Rama over Ravana. Celebrated with Ramlila performances and burning of Ravana effigies.",
+    "makar sankranti": "Harvest festival celebrated with kite flying, sesame sweets, and bonfires.",
+    "raksha bandhan": "Sisters tie sacred threads on brothers' wrists, symbolizing love and protection.",
+    "janmashtami": "Birth of Lord Krishna. Celebrated with fasting, prayers, and Dahi Handi ceremonies.",
+    "mahashivratri": "Night of Lord Shiva. Devotees fast, chant prayers, and offer bel leaves.",
+    "guru nanak jayanti": "Birth anniversary of Guru Nanak Dev, first Sikh guru. Celebrated with prayers, langar, and processions.",
+    "buddha purnima": "Birth, enlightenment, and death anniversary of Gautam Buddha. Observed with prayers and meditation.",
+    "mahavir jayanti": "Birth anniversary of Lord Mahavira, last Jain Tirthankara. Jains visit temples and offer prayers.",
+    "pongal": "Tamil harvest festival celebrated with cooking of sweet rice, decorations, and family gatherings.",
+    "onam": "Kerala harvest festival marked by flower carpets, boat races, and festive meals.",
+    "chhat puja": "Sun worship festival celebrated in Bihar and UP with offerings to the sun god."
+};
+
+// update upcoming holiday
+function updateUpcomingHoliday(events) {
+    let upcomingNameDiv = document.getElementById('upcomingName');
+    let upcomingDateDiv = document.getElementById('upcomingDate');
+    let daysNumberSpan = document.getElementById('daysNumber');
+    let upcomingBadge = document.getElementById('upcomingBadge');
+    
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    let fullDayEvents = events.filter(event => event.start && event.start.date);
+    fullDayEvents.sort((a, b) => new Date(a.start.date) - new Date(b.start.date));
+    
+    let upcoming = null;
+    for(let event of fullDayEvents) {
+        let eventDate = new Date(event.start.date);
+        eventDate.setHours(0, 0, 0, 0);
+        if(eventDate >= today) {
+            upcoming = event;
+            break;
+        }
+    }
+    
+    if(upcoming) {
+        let dateObj = new Date(upcoming.start.date);
+        let day = dateObj.getDate();
+        let month = monthNamesShort[dateObj.getMonth()];
+        let year = dateObj.getFullYear();
+        
+        let eventDate = new Date(upcoming.start.date);
+        eventDate.setHours(0, 0, 0, 0);
+        let diffTime = eventDate - today;
+        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        upcomingNameDiv.innerText = upcoming.summary;
+        upcomingDateDiv.innerText = day + ' ' + month + ' ' + year;
+        daysNumberSpan.innerText = diffDays >= 0 ? diffDays : 0;
+        
+        if(diffDays === 0) upcomingBadge.innerText = 'TODAY';
+        else if(diffDays === 1) upcomingBadge.innerText = 'TOMORROW';
+        else upcomingBadge.innerText = 'NEXT HOLIDAY';
+    } else {
+        upcomingNameDiv.innerText = 'no upcoming holidays';
+        upcomingDateDiv.innerText = '';
+        daysNumberSpan.innerText = '-';
+        upcomingBadge.innerText = 'NEXT HOLIDAY';
+    }
+}
+
+// update timer every second
+function startTimer(targetDate) {
+    if(timerInterval) clearInterval(timerInterval);
+    
+    function updateTimer() {
+        let now = new Date().getTime();
+        let target = new Date(targetDate).getTime();
+        let distance = target - now;
+        
+        if(distance < 0) {
+            document.getElementById('timerDays').innerText = '00';
+            document.getElementById('timerHours').innerText = '00';
+            document.getElementById('timerMinutes').innerText = '00';
+            document.getElementById('timerSeconds').innerText = '00';
+            return;
+        }
+        
+        let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        document.getElementById('timerDays').innerText = days.toString().padStart(2, '0');
+        document.getElementById('timerHours').innerText = hours.toString().padStart(2, '0');
+        document.getElementById('timerMinutes').innerText = minutes.toString().padStart(2, '0');
+        document.getElementById('timerSeconds').innerText = seconds.toString().padStart(2, '0');
+    }
+    
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
+}
+
+// show modal with holiday details and timer
+function showHolidayDetails(name, dateStr) {
+    let modal = document.getElementById('holidayModal');
+    let dateObj = new Date(dateStr);
+    let day = dateObj.getDate();
+    let month = monthNames[dateObj.getMonth()];
+    let year = dateObj.getFullYear();
+    let dayOfWeek = dayNames[dateObj.getDay()];
+    
+    let formattedDate = day + ' ' + month + ' ' + year;
+    
+    document.getElementById('modalTitle').innerText = name;
+    document.getElementById('modalSubtitle').innerText = formattedDate;
+    document.getElementById('modalDate').innerText = day + ' ' + month + ' ' + year;
+    document.getElementById('modalMonth').innerText = month;
+    document.getElementById('modalYear').innerText = year;
+    document.getElementById('modalDayOfWeek').innerText = dayOfWeek;
+    
+    // set icon based on holiday name
+    let icon = '🎉';
+    if(name.toLowerCase().includes('diwali')) icon = '🪔';
+    else if(name.toLowerCase().includes('holi')) icon = '🎨';
+    else if(name.toLowerCase().includes('eid')) icon = '🌙';
+    else if(name.toLowerCase().includes('christmas')) icon = '🎄';
+    else if(name.toLowerCase().includes('republic')) icon = '🇮🇳';
+    else if(name.toLowerCase().includes('independence')) icon = '🇮🇳';
+    else if(name.toLowerCase().includes('gandhi')) icon = '🕊️';
+    else if(name.toLowerCase().includes('raksha')) icon = '🧵';
+    else if(name.toLowerCase().includes('janmashtami')) icon = '🥁';
+    else if(name.toLowerCase().includes('guru')) icon = '📿';
+    else if(name.toLowerCase().includes('mahashivratri')) icon = '🔱';
+    else if(name.toLowerCase().includes('pongal')) icon = '🌾';
+    else if(name.toLowerCase().includes('onam')) icon = '🌸';
+    document.getElementById('modalIcon').innerText = icon;
+    
+    // set description
+    let desc = 'A traditional Indian holiday celebrated with cultural events and family gatherings.';
+    for(let key in holidayDescriptions) {
+        if(name.toLowerCase().includes(key)) {
+            desc = holidayDescriptions[key];
+            break;
+        }
+    }
+    document.getElementById('modalDescription').innerText = desc;
+    
+    // start timer
+    startTimer(dateStr);
+    
+    modal.classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('holidayModal').classList.remove('active');
+    if(timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
+
+// click outside to close
+window.onclick = function(event) {
+    let modal = document.getElementById('holidayModal');
+    if(event.target === modal) {
+        closeModal();
+    }
+}
+
+async function loadHolidays(){
+let list = document.getElementById("holidayList");
+list.innerHTML = '<div class="loading">loading holidays...</div>';
+
+try{
+let url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?key=${apiKey}&timeMin=${currentYear}-01-01T00:00:00Z&timeMax=${currentYear}-12-31T23:59:59Z&singleEvents=true&orderBy=startTime`;
+
+let response = await fetch(url);
+let data = await response.json();
+
+if(!data.items){
+list.innerHTML="<div class='error'>unable to load holidays</div>";
+return;
+}
+
+updateUpcomingHoliday(data.items);
+displayHolidays(data.items);
+
+} catch(e){
+console.error(e);
+list.innerHTML="<div class='error'>connection issue</div>";
+}
+}
+
+function displayHolidays(events){
+let searchText = document.getElementById("search").value.toLowerCase().trim();
+let list = document.getElementById("holidayList");
+list.innerHTML = "";
+
+let fullDayEvents = events.filter(event => event.start && event.start.date);
+
+if(fullDayEvents.length === 0){
+list.innerHTML = "<div class='no-holidays'>no holidays for " + currentYear + "</div>";
+return;
+}
+
+let filtered = fullDayEvents.filter(event => 
+event.summary && event.summary.toLowerCase().includes(searchText)
+);
+
+if(filtered.length === 0){
+list.innerHTML = "<div class='no-holidays'>no matching holidays</div>";
+return;
+}
+
+filtered.sort((a, b) => new Date(a.start.date) - new Date(b.start.date));
+
+// group by month
+let grouped = {};
+filtered.forEach(event => {
+    let dateObj = new Date(event.start.date);
+    let month = dateObj.getMonth();
+    if(!grouped[month]) grouped[month] = [];
+    grouped[month].push(event);
+});
+
+let html = '';
+
+// display months in order
+for(let month = 0; month < 12; month++) {
+    if(grouped[month]) {
+        html += `<div class="month-section"><div class="month-heading">📌 ${monthNames[month]} ${currentYear}</div><div class="holiday-grid">`;
+        
+        grouped[month].forEach(event => {
+            let name = event.summary;
+            let dateObj = new Date(event.start.date);
+            let day = dateObj.getDate();
+            let monthShort = monthNamesShort[dateObj.getMonth()];
+            let year = dateObj.getFullYear();
+            let formattedDate = day + ' ' + monthShort + ' ' + year;
+            
+            html += `
+            <div class="holiday-card" onclick='showHolidayDetails("${name.replace(/'/g, "\\'")}", "${event.start.date}")'>
+                <div class="holiday-name">${name}</div>
+                <div class="holiday-date">${formattedDate}</div>
+            </div>
+            `;
+        });
+        
+        html += '</div></div>';
+    }
+}
+
+list.innerHTML = html;
+}
+
+function changeYear(value){
+let newYear = currentYear + value;
+if(newYear >= MIN_YEAR && newYear <= MAX_YEAR){
+currentYear = newYear;
+document.getElementById("yearDisplay").innerText = currentYear;
+loadHolidays();
+}
+}
+
+let searchTimeout;
+document.getElementById("search").addEventListener("input", function() {
+clearTimeout(searchTimeout);
+searchTimeout = setTimeout(() => {
+loadHolidays();
+}, 250);
+});
+
+// update every minute
+setInterval(() => {
+    if(window.lastEvents) {
+        updateUpcomingHoliday(window.lastEvents);
+    }
+}, 60000);
+
+// store events
+const originalDisplay = displayHolidays;
+displayHolidays = function(events) {
+    window.lastEvents = events;
+    originalDisplay(events);
+};
+
+loadHolidays();
+</script>
+
+</body>
+</html>
+```

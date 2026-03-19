@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About School | M.M Public School</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(to bottom,#eef2ff,#f9fbff);
+overflow-x:hidden;
+}
+
+/* HEADER */
+.header{
+background:linear-gradient(135deg,#0a2a66,#1e4b8f);
+color:white;
+padding:22px;
+text-align:center;
+font-weight:700;
+letter-spacing:1px;
+font-size:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+animation:slideDown 1s ease;
+}
+
+/* HERO */
+.hero{
+background:linear-gradient(135deg,#0a2a66,#1e4b8f);
+color:white;
+padding:70px 20px 110px;
+text-align:center;
+position:relative;
+}
+
+.hero h1{
+font-size:32px;
+font-weight:800;
+animation:fadeUp 1.2s ease;
+}
+
+.hero p{
+opacity:0.9;
+margin-top:12px;
+font-size:15px;
+animation:fadeUp 1.6s ease;
+}
+
+.hero::after{
+content:'';
+position:absolute;
+bottom:-50px;
+left:0;
+width:100%;
+height:90px;
+background:white;
+border-top-left-radius:60% 90px;
+border-top-right-radius:60% 90px;
+}
+
+/* CONTAINER */
+.container{
+max-width:550px;
+margin:-70px auto 50px;
+padding:0 18px;
+}
+
+/* CARD */
+.card{
+background:white;
+padding:26px;
+border-radius:24px;
+box-shadow:0 20px 40px rgba(0,0,0,0.08);
+margin-bottom:24px;
+transition:0.4s;
+animation:fadeUp 1.5s ease;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 25px 50px rgba(0,0,0,0.12);
+}
+
+.card h3{
+color:#0a2a66;
+margin-bottom:14px;
+display:flex;
+align-items:center;
+gap:10px;
+font-size:18px;
+}
+
+.card p, .card li{
+font-size:14px;
+color:#555;
+line-height:1.7;
+}
+
+.card ul{
+margin-top:8px;
+padding-left:20px;
+}
+
+/* PRINCIPAL MESSAGE */
+.principal-box{
+background:linear-gradient(135deg,#0a2a66,#1e4b8f);
+color:white;
+border-radius:24px;
+padding:24px;
+margin-bottom:24px;
+animation:fadeUp 2s ease;
+}
+
+.principal-box h3{
+margin-bottom:10px;
+}
+
+.principal-box p{
+font-size:14px;
+line-height:1.6;
+opacity:0.95;
+}
+
+/* FOOTER */
+.footer{
+text-align:center;
+font-size:12px;
+color:#777;
+margin-top:20px;
+animation:fadeUp 2.2s ease;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@keyframes slideDown{
+from{
+opacity:0;
+transform:translateY(-30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+M. M PUBLIC SCHOOL<br>
+<span style="font-size:12px;font-weight:400;">MUNDESHWARI</span>
+</div>
+
+<div class="hero">
+<h1>About Our School</h1>
+<p>Inspiring Excellence & Building Future Leaders</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+<h3><i class="fa-solid fa-school"></i> School Overview</h3>
+<p>
+M.M Public School Mundeshwari is committed to providing quality education
+with modern facilities and experienced faculty. We focus on academic excellence,
+moral values, and overall personality development.
+</p>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-bullseye"></i> Our Mission</h3>
+<p>
+To nurture young minds with knowledge, discipline, and confidence
+so they can achieve success in life.
+</p>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-eye"></i> Our Vision</h3>
+<p>
+To become a leading educational institution recognized for excellence
+in academics and character building.
+</p>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-building"></i> Facilities</h3>
+<ul>
+<li>Smart Classrooms</li>
+<li>Science & Computer Labs</li>
+<li>Library & Reading Room</li>
+<li>Sports & Cultural Activities</li>
+<li>Safe & Secure Campus</li>
+</ul>
+</div>
+
+<div class="principal-box">
+<h3><i class="fa-solid fa-user-tie"></i> Principal's Message</h3>
+<p>
+Welcome to M.M Public School. Our goal is to create a supportive and inspiring
+environment where students grow academically and personally.
+We believe in discipline, dedication, and determination.
+</p>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-location-dot"></i> Contact Information</h3>
+<p>
+📍 Mundeshwari, Bihar<br>
+📞 +91 9153531472<br>
+📧 mmpublicschool@email.com
+</p>
+</div>
+
+<div class="footer">
+© 2026 M.M Public School Mundeshwari
+</div>
+
+</div>
+
+</body>
+</html>

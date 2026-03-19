@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>M.M Public school mundeshwari</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: #eef2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 0 30px 0;
+            min-height: 100vh;
+        }
+        .portal-wrapper {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px 32px 24px 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,20,50,0.1);
+        }
+        .gov-header {
+            background: #0b3b5c;
+            color: white;
+            padding: 22px 18px 18px;
+            text-align: center;
+            border-bottom: 4px solid #f6b83e;
+        }
+        .school-name {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+        .header-sub {
+            font-size: 1rem;
+            opacity: 0.95;
+            margin: 5px 0 6px;
+        }
+        .acad-year {
+            background: rgba(255,255,255,0.18);
+            padding: 6px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        .user-toggle {
+            display: flex;
+            background: white;
+            padding: 12px 16px;
+            gap: 10px;
+            border-bottom: 1px solid #dde3ed;
+        }
+        .user-btn {
+            flex: 1;
+            background: white;
+            border: 2px solid #0b3b5c;
+            color: #0b3b5c;
+            font-weight: 600;
+            padding: 10px 0;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        .user-btn.active {
+            background: #0b3b5c;
+            color: white;
+        }
+        .filter-panel {
+            background: white;
+            padding: 12px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid #eaeef4;
+        }
+        .custom-select {
+            position: relative;
+            flex: 1;
+            min-width: 140px;
+        }
+        .select-selected {
+            background: white;
+            border: 1.5px solid #d7e1ee;
+            border-radius: 50px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.2s;
+        }
+        .select-selected:hover {
+            border-color: #0b3b5c;
+        }
+        .select-selected i {
+            color: #5f7d9c;
+        }
+        .select-items {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            z-index: 100;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            border: 1px solid #e2eaf2;
+        }
+        .select-items.active {
+            display: block;
+            animation: slideDown 0.2s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .select-item {
+            padding: 12px 18px;
+            cursor: pointer;
+            transition: 0.1s;
+            border-bottom: 1px solid #f0f4fa;
+        }
+        .select-item:hover {
+            background: #f0f7ff;
+        }
+        .select-item.selected {
+            background: #e3efff;
+            color: #0b3b5c;
+            font-weight: 500;
+        }
+        .search-wrapper {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            background: #f4f7fb;
+            border-radius: 50px;
+            padding: 0 16px;
+            border: 1.5px solid #d7e1ee;
+        }
+        .search-wrapper i { color: #5f7d9c; margin-right: 5px; }
+        .search-wrapper input {
+            border: none;
+            background: transparent;
+            padding: 10px 0;
+            width: 100%;
+            outline: none;
+        }
+        
+        /* Professional Modal Styles */
+        .select-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .select-modal.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content {
+            background: white;
+            border-radius: 32px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-header {
+            background: #0b3b5c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .modal-header h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        .modal-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .modal-search {
+            padding: 15px;
+            border-bottom: 1px solid #e2eaf2;
+        }
+        .modal-search input {
+            width: 100%;
+            padding: 12px 18px;
+            border: 2px solid #d7e1ee;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        .modal-search input:focus {
+            border-color: #0b3b5c;
+        }
+        .options-list {
+            padding: 10px 15px 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            background: #f8fafd;
+            border: 1.5px solid #e2eaf2;
+            border-radius: 20px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .option-item:hover {
+            border-color: #0b3b5c;
+            background: #edf4ff;
+            transform: translateX(5px);
+        }
+        .option-item.selected {
+            background: #0b3b5c;
+            border-color: #0b3b5c;
+            color: white;
+        }
+        .option-item i {
+            width: 30px;
+            font-size: 1.2rem;
+            color: #5f7d9c;
+            margin-right: 10px;
+        }
+        .option-item.selected i {
+            color: white;
+        }
+        
+        /* Form Styles */
+        .form-section {
+            padding: 16px;
+            background: #f8fafd;
+            border-bottom: 8px solid #edf2f9;
+        }
+        .form-card {
+            background: white;
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid #dae2ec;
+        }
+        .form-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0b3b5c;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1e3a5f;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .input-label i {
+            color: #5f7d9c;
+            font-size: 0.9rem;
+        }
+        .input-field {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1.5px solid #d7e1ee;
+            border-radius: 24px;
+            font-size: 0.95rem;
+            background: white;
+            outline: none;
+            transition: 0.1s;
+        }
+        .input-field:focus {
+            border-color: #0b3b5c;
+            box-shadow: 0 0 0 3px rgba(11,59,92,0.1);
+        }
+        .select-btn {
+            width: 100%;
+            padding: 14px 18px;
+            background: white;
+            border: 1.5px solid #d7e1ee;
+            border-radius: 24px;
+            font-size: 0.95rem;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.2s;
+        }
+        .select-btn:hover {
+            border-color: #0b3b5c;
+            background: #f8fafd;
+        }
+        .select-btn i {
+            color: #5f7d9c;
+        }
+        .selected-display {
+            font-weight: 500;
+            color: #0b3b5c;
+        }
+        .input-textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1.5px solid #d7e1ee;
+            border-radius: 24px;
+            font-size: 0.95rem;
+            min-height: 120px;
+            resize: vertical;
+            outline: none;
+        }
+        .input-textarea:focus {
+            border-color: #0b3b5c;
+            box-shadow: 0 0 0 3px rgba(11,59,92,0.1);
+        }
+        .char-hint {
+            font-size: 0.75rem;
+            color: #4f6f8f;
+            margin-top: 6px;
+            text-align: right;
+        }
+        .btn-primary {
+            background: #0b3b5c;
+            color: white;
+            width: 100%;
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #0d4a73;
+            transform: scale(0.99);
+        }
+        .btn-primary:disabled {
+            background: #9bb0c7;
+            cursor: not-allowed;
+        }
+        
+        /* Doubt List Styles */
+        .doubt-list {
+            padding: 16px;
+            background: white;
+        }
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .list-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0b3b5c;
+        }
+        .sort-btn {
+            background: #eef3f9;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid #cbd6e6;
+        }
+        .doubt-card {
+            background: white;
+            border-radius: 26px;
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid #e3eaf2;
+            border-left-width: 8px;
+            border-left-style: solid;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+            position: relative;
+        }
+        .doubt-card.pending { border-left-color: #e68a2e; }
+        .doubt-card.answered { border-left-color: #1e7e34; }
+        .doubt-card.closed { border-left-color: #7f8fa4; }
+        
+        /* Teacher Controls */
+        .teacher-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        .controls-btn {
+            background: #f0f4fa;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            transition: 0.2s;
+        }
+        .controls-btn:hover {
+            background: #e1e9f3;
+        }
+        .controls-dropdown {
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            width: 180px;
+            z-index: 100;
+            display: none;
+            border: 1px solid #e2eaf2;
+        }
+        .controls-dropdown.active {
+            display: block;
+            animation: fadeIn 0.15s ease;
+        }
+        .control-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.1s;
+            border-bottom: 1px solid #f0f4fa;
+        }
+        .control-item:last-child {
+            border-bottom: none;
+        }
+        .control-item:hover {
+            background: #f5f9ff;
+        }
+        .control-item.delete:hover {
+            color: #c0392b;
+        }
+        .control-item i {
+            width: 20px;
+            color: #5f7d9c;
+        }
+        
+        .meta-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding-right: 40px;
+        }
+        .student-name {
+            font-weight: 700;
+            color: #123456;
+            font-size: 1rem;
+        }
+        .class-chip {
+            background: #e0eaf9;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #0b3b5c;
+        }
+        .subject-badge {
+            background: #f0f4fb;
+            padding: 5px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin: 5px 0;
+            font-weight: 500;
+        }
+        .doubt-text {
+            font-size: 1rem;
+            color: #1d2b41;
+            margin: 8px 0 10px;
+            line-height: 1.4;
+        }
+        .status-time {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+        .timestamp {
+            font-size: 0.7rem;
+            color: #62738b;
+        }
+        .status-badge {
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-pending { background: #fde9d9; color: #b25200; }
+        .status-answered { background: #def1de; color: #1e7e34; }
+        .status-closed { background: #e9edf2; color: #4a5e75; }
+        
+        /* Reply Thread */
+        .reply-thread {
+            margin-top: 15px;
+            border-top: 1px dashed #b9ccde;
+            padding-top: 12px;
+        }
+        .reply-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        .reply-sender {
+            font-weight: 700;
+            min-width: 70px;
+        }
+        .reply-sender.teacher { color: #b85e00; }
+        .reply-sender.student { color: #0b3b5c; }
+        .reply-content {
+            background: #f3f8ff;
+            padding: 10px 14px;
+            border-radius: 20px;
+            flex: 1;
+        }
+        .reply-text {
+            margin-bottom: 5px;
+        }
+        .reply-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            color: #6c839c;
+        }
+        .reply-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .reply-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.7rem;
+            color: #5f7d9c;
+        }
+        .reply-actions button:hover {
+            color: #0b3b5c;
+        }
+        
+        .teacher-reply-area {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .teacher-reply-area input {
+            flex: 1;
+            border: 1.5px solid #cbd6e6;
+            border-radius: 40px;
+            padding: 12px 18px;
+            outline: none;
+        }
+        .teacher-reply-area button {
+            background: #0b3b5c;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7f9a;
+        }
+        
+        /* Professional Dialog */
+        .dialog-overlay {
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1999;
+            display: none;
+        }
+        .dialog-overlay.active { display: block; }
+        .professional-dialog {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px 25px;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px rgba(0,20,50,0.3);
+            z-index: 2000;
+            width: 340px;
+            text-align: center;
+            display: none;
+            animation: dialogPop 0.3s ease;
+        }
+        @keyframes dialogPop {
+            from { transform: translate(-50%, -40%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
+        .professional-dialog.active { display: block; }
+        .dialog-icon {
+            font-size: 4rem;
+            color: #0b3b5c;
+            margin-bottom: 15px;
+        }
+        .dialog-icon.success { color: #28a745; }
+        .dialog-icon.warning { color: #dc3545; }
+        .dialog-icon.info { color: #17a2b8; }
+        .dialog-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #123456;
+        }
+        .dialog-text {
+            color: #4a5e75;
+            margin-bottom: 25px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .dialog-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .dialog-btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            min-width: 100px;
+        }
+        .dialog-btn.primary {
+            background: #0b3b5c;
+            color: white;
+        }
+        .dialog-btn.primary:hover {
+            background: #0d4a73;
+        }
+        .dialog-btn.secondary {
+            background: #e9ecf1;
+            color: #1e3a5f;
+        }
+        .dialog-btn.secondary:hover {
+            background: #d3dae3;
+        }
+        .dialog-btn.delete {
+            background: #dc3545;
+            color: white;
+        }
+        .dialog-btn.delete:hover {
+            background: #c82333;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Teacher Login Modal specific */
+        .teacher-login-input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #d7e1ee;
+            border-radius: 50px;
+            font-size: 1rem;
+            margin: 20px 0;
+            outline: none;
+        }
+        .teacher-login-input:focus {
+            border-color: #0b3b5c;
+        }
+    </style>
+</head>
+<body>
+<div class="portal-wrapper">
+    <div class="gov-header">
+        <div class="school-name">M.M Public school </div>
+        <div class="header-sub"><i class="fas fa-comments"></i> Official Doubt Portal</div>
+        <div class="acad-year"><i class="far fa-calendar"></i> Session 2026–27</div>
+    </div>
+
+    <div class="user-toggle">
+        <button class="user-btn active" id="studentToggle"><i class="fas fa-user-graduate"></i> Student</button>
+        <button class="user-btn" id="teacherToggle"><i class="fas fa-chalkboard-teacher"></i> Teacher</button>
+    </div>
+
+    <div class="filter-panel">
+        <div class="custom-select" id="subjectSelect">
+            <div class="select-selected">
+                <span id="selectedSubjectDisplay">All subjects</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="select-items" id="selectItems"></div>
+        </div>
+        <div class="custom-select" id="statusSelect">
+            <div class="select-selected">
+                <span id="selectedStatusDisplay">All status</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="select-items" id="statusItems">
+                <div class="select-item selected" data-value="all">All status</div>
+                <div class="select-item" data-value="pending">Pending</div>
+                <div class="select-item" data-value="answered">Answered</div>
+                <div class="select-item" data-value="closed">Closed</div>
+            </div>
+        </div>
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search doubt...">
+        </div>
+    </div>
+
+    <!-- Student Form -->
+    <div class="form-section" id="studentFormSection">
+        <div class="form-card">
+            <div class="form-title"><i class="fas fa-pencil-alt"></i> Submit Your Doubt</div>
+            
+            <div class="input-group">
+                <label class="input-label"><i class="fas fa-user"></i> Full Name</label>
+                <input class="input-field" type="text" id="studentName" placeholder="e.g. Ayush bhai">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label"><i class="fas fa-graduation-cap"></i> Class</label>
+                <button class="select-btn" id="classSelectBtn">
+                    <span id="selectedClassText">Select class</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label"><i class="fas fa-book"></i> Subject</label>
+                <button class="select-btn" id="subjectSelectBtn">
+                    <span id="selectedSubjectText">Select subject</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label"><i class="fas fa-chapter"></i> Chapter (Optional)</label>
+                <input class="input-field" type="text" id="doubtChapter" placeholder="e.g. Trigonometry, Carbon Compounds">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label"><i class="fas fa-question-circle"></i> Your Doubt *</label>
+                <textarea class="input-textarea" id="doubtDesc" placeholder="Write your doubt in detail..."></textarea>
+                <div class="char-hint" id="charCount">0/10 minimum</div>
+            </div>
+            
+            <button class="btn-primary" id="submitDoubtBtn" disabled>
+                <i class="fas fa-paper-plane"></i> Submit Doubt
+            </button>
+        </div>
+    </div>
+
+    <!-- Doubts List -->
+    <div class="doubt-list">
+        <div class="list-header">
+            <span class="list-title"><i class="far fa-comment-alt"></i> Recent Doubts</span>
+            <span class="sort-btn" id="sortBtn"><i class="fas fa-arrow-down-wide-short"></i> Latest first</span>
+        </div>
+        <div id="doubtsContainer"></div>
+        <div id="emptyMessage" class="empty-state" style="display: none;">
+            <i class="far fa-frown"></i>
+            <h3>No doubts found</h3>
+            <p>Try changing filters or submit a new doubt.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Class Select Modal -->
+<div class="select-modal" id="classModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-graduation-cap"></i> Select Class</h3>
+            <p>Complete A to Z Classes (Nursery to PhD)</p>
+        </div>
+        <div class="modal-search">
+            <input type="text" id="classSearch" placeholder="Search class...">
+        </div>
+        <div class="options-list" id="classList"></div>
+    </div>
+</div>
+
+<!-- Subject Select Modal -->
+<div class="select-modal" id="subjectModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-book-open"></i> Select Subject</h3>
+            <p>NCERT Curriculum (Bihar Board)</p>
+        </div>
+        <div class="modal-search">
+            <input type="text" id="subjectSearch" placeholder="Search subject...">
+        </div>
+        <div class="options-list" id="subjectList"></div>
+    </div>
+</div>
+
+<!-- Teacher Login Modal (NEW) -->
+<div class="professional-dialog" id="teacherLoginDialog">
+    <div class="dialog-icon info"><i class="fas fa-chalkboard-teacher"></i></div>
+    <div class="dialog-title">Teacher Login</div>
+    <div class="dialog-text">This section is only for teachers.<br>Please enter your Teacher ID to continue.</div>
+    <input type="text" class="teacher-login-input" id="teacherIdInput" placeholder="Enter Your Id">
+    <div class="dialog-buttons">
+        <button class="dialog-btn secondary" id="teacherLoginCancel">Cancel</button>
+        <button class="dialog-btn primary" id="teacherLoginSubmit">Login</button>
+    </div>
+</div>
+
+<!-- Professional Dialogs -->
+<div class="dialog-overlay" id="dialogOverlay"></div>
+<div class="professional-dialog" id="successDialog">
+    <div class="dialog-icon success"><i class="fas fa-check-circle"></i></div>
+    <div class="dialog-title" id="successTitle">Success!</div>
+    <div class="dialog-text" id="successMessage">Operation completed successfully.</div>
+    <div class="dialog-buttons">
+        <button class="dialog-btn primary" id="successOkBtn">OK</button>
+    </div>
+</div>
+
+<div class="professional-dialog" id="confirmDialog">
+    <div class="dialog-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+    <div class="dialog-title" id="confirmTitle">Confirm Action</div>
+    <div class="dialog-text" id="confirmMessage">Are you sure?</div>
+    <div class="dialog-buttons">
+        <button class="dialog-btn secondary" id="confirmCancelBtn">Cancel</button>
+        <button class="dialog-btn delete" id="confirmOkBtn">Confirm</button>
+    </div>
+</div>
+
+<div class="professional-dialog" id="editReplyDialog">
+    <div class="dialog-icon info"><i class="fas fa-edit"></i></div>
+    <div class="dialog-title">Edit Reply</div>
+    <textarea id="editReplyText" style="width:100%; padding:12px; border-radius:20px; border:2px solid #d7e1ee; margin:15px 0; min-height:100px;"></textarea>
+    <div class="dialog-buttons">
+        <button class="dialog-btn secondary" id="editCancelBtn">Cancel</button>
+        <button class="dialog-btn primary" id="editSaveBtn">Save</button>
+    </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, push, onValue, remove, update, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+        authDomain: "apni-duniya-b53d7.firebaseapp.com",
+        databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+        projectId: "apni-duniya-b53d7",
+        storageBucket: "apni-duniya-b53d7.firebasestorage.app",
+        messagingSenderId: "178853058918",
+        appId: "1:178853058918:web:91dfaa5c5e41446da290a7",
+        measurementId: "G-SW5SH1V2BB"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const doubtsRef = ref(database, 'doubts');
+
+    // ==================== COMPLETE A TO Z CLASSES ====================
+    const classList = [
+        // Pre-Primary
+        { name: "Nursery", icon: "fa-child", category: "Pre-Primary" },
+        { name: "LKG", icon: "fa-child", category: "Pre-Primary" },
+        { name: "UKG", icon: "fa-child", category: "Pre-Primary" },
+        
+        // Primary (1-5)
+        { name: "Class 1", icon: "fa-book-open", category: "Primary" },
+        { name: "Class 2", icon: "fa-book-open", category: "Primary" },
+        { name: "Class 3", icon: "fa-book-open", category: "Primary" },
+        { name: "Class 4", icon: "fa-book-open", category: "Primary" },
+        { name: "Class 5", icon: "fa-book-open", category: "Primary" },
+        
+        // Middle (6-8)
+        { name: "Class 6", icon: "fa-school", category: "Middle" },
+        { name: "Class 7", icon: "fa-school", category: "Middle" },
+        { name: "Class 8", icon: "fa-school", category: "Middle" },
+        
+        // Secondary (9-10)
+        { name: "Class 9", icon: "fa-user-graduate", category: "Secondary" },
+        { name: "Class 10", icon: "fa-user-graduate", category: "Secondary" },
+        
+        // Senior Secondary (11-12)
+        { name: "Class 11 (Science)", icon: "fa-flask", category: "Class 11" },
+        { name: "Class 11 (Commerce)", icon: "fa-chart-line", category: "Class 11" },
+        { name: "Class 11 (Arts)", icon: "fa-paint-brush", category: "Class 11" },
+        { name: "Class 12 (Science)", icon: "fa-flask", category: "Class 12" },
+        { name: "Class 12 (Commerce)", icon: "fa-chart-line", category: "Class 12" },
+        { name: "Class 12 (Arts)", icon: "fa-paint-brush", category: "Class 12" },
+        
+        // ITI / Vocational
+        { name: "ITI (Electrician)", icon: "fa-bolt", category: "ITI / Vocational" },
+        { name: "ITI (Fitter)", icon: "fa-tools", category: "ITI / Vocational" },
+        { name: "ITI (Welder)", icon: "fa-fire", category: "ITI / Vocational" },
+        { name: "ITI (Carpenter)", icon: "fa-hammer", category: "ITI / Vocational" },
+        { name: "ITI (Mechanic)", icon: "fa-car", category: "ITI / Vocational" },
+        
+        // Polytechnic / Diploma
+        { name: "Polytechnic (Engineering)", icon: "fa-gear", category: "Polytechnic" },
+        { name: "Polytechnic (Computer)", icon: "fa-laptop-code", category: "Polytechnic" },
+        { name: "Polytechnic (Civil)", icon: "fa-building", category: "Polytechnic" },
+        
+        // Undergraduate (UG)
+        { name: "BA (Bachelor of Arts)", icon: "fa-landmark", category: "Undergraduate" },
+        { name: "BSc (Bachelor of Science)", icon: "fa-flask", category: "Undergraduate" },
+        { name: "BCom (Bachelor of Commerce)", icon: "fa-chart-line", category: "Undergraduate" },
+        { name: "BCA (Computer Applications)", icon: "fa-laptop", category: "Undergraduate" },
+        { name: "BBA (Business Administration)", icon: "fa-briefcase", category: "Undergraduate" },
+        { name: "B.Tech (Engineering)", icon: "fa-microchip", category: "Undergraduate" },
+        { name: "B.Ed (Education)", icon: "fa-chalkboard-user", category: "Undergraduate" },
+        { name: "LLB (Law)", icon: "fa-gavel", category: "Undergraduate" },
+        { name: "MBBS (Medical)", icon: "fa-stethoscope", category: "Undergraduate" },
+        { name: "BAMS (Ayurveda)", icon: "fa-leaf", category: "Undergraduate" },
+        { name: "BHMS (Homeopathy)", icon: "fa-capsules", category: "Undergraduate" },
+        
+        // Postgraduate (PG)
+        { name: "MA (Master of Arts)", icon: "fa-landmark", category: "Postgraduate" },
+        { name: "MSc (Master of Science)", icon: "fa-flask", category: "Postgraduate" },
+        { name: "MCom (Master of Commerce)", icon: "fa-chart-line", category: "Postgraduate" },
+        { name: "MCA (Computer Applications)", icon: "fa-laptop", category: "Postgraduate" },
+        { name: "MBA (Business Administration)", icon: "fa-briefcase", category: "Postgraduate" },
+        { name: "M.Tech (Engineering)", icon: "fa-microchip", category: "Postgraduate" },
+        { name: "M.Ed (Education)", icon: "fa-chalkboard-user", category: "Postgraduate" },
+        { name: "LLM (Law)", icon: "fa-gavel", category: "Postgraduate" },
+        { name: "MD (Medical)", icon: "fa-stethoscope", category: "Postgraduate" },
+        
+        // PhD / Doctorate
+        { name: "PhD (Doctor of Philosophy)", icon: "fa-graduation-cap", category: "Doctorate" },
+        { name: "D.Litt (Doctor of Letters)", icon: "fa-feather", category: "Doctorate" },
+        { name: "D.Sc (Doctor of Science)", icon: "fa-flask", category: "Doctorate" }
+    ];
+
+    // ==================== ALL NCERT SUBJECTS ====================
+    const ncertSubjects = [
+        { name: "Mathematics", icon: "fa-calculator", category: "Mathematics" },
+        { name: "Science", icon: "fa-flask", category: "Science" },
+        { name: "Physics", icon: "fa-atom", category: "Science" },
+        { name: "Chemistry", icon: "fa-flask", category: "Science" },
+        { name: "Biology", icon: "fa-dna", category: "Science" },
+        { name: "English", icon: "fa-book", category: "Languages" },
+        { name: "Hindi", icon: "fa-language", category: "Languages" },
+        { name: "Sanskrit", icon: "fa-om", category: "Languages" },
+        { name: "Urdu", icon: "fa-pen-fancy", category: "Languages" },
+        { name: "History", icon: "fa-landmark", category: "Social Science" },
+        { name: "Geography", icon: "fa-map", category: "Social Science" },
+        { name: "Political Science", icon: "fa-gavel", category: "Social Science" },
+        { name: "Economics", icon: "fa-chart-line", category: "Social Science" },
+        { name: "Sociology", icon: "fa-users", category: "Arts" },
+        { name: "Psychology", icon: "fa-brain", category: "Arts" },
+        { name: "Philosophy", icon: "fa-thought-bubble", category: "Arts" },
+        { name: "Accountancy", icon: "fa-calculator", category: "Commerce" },
+        { name: "Business Studies", icon: "fa-briefcase", category: "Commerce" },
+        { name: "Computer Science", icon: "fa-laptop-code", category: "Vocational" },
+        { name: "Physical Education", icon: "fa-person-running", category: "Sports" },
+        { name: "Fine Arts", icon: "fa-paint-brush", category: "Arts" },
+        { name: "Music", icon: "fa-music", category: "Arts" }
+    ];
+
+    ncertSubjects.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Populate filter dropdown
+    const selectItems = document.getElementById('selectItems');
+    selectItems.innerHTML = '<div class="select-item selected" data-value="all">All subjects</div>';
+    ncertSubjects.forEach(subject => {
+        const item = document.createElement('div');
+        item.className = 'select-item';
+        item.dataset.value = subject.name;
+        item.innerText = subject.name;
+        selectItems.appendChild(item);
+    });
+
+    // State variables
+    let doubts = [];
+    let currentUser = 'student';  // 'student' or 'teacher'
+    let sortAscending = false;
+    let currentSubjectFilter = 'all';
+    let currentStatusFilter = 'all';
+    let selectedClass = '';
+    let selectedSubject = '';
+
+    // Listen to Firebase real-time updates
+    onValue(doubtsRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            doubts = Object.entries(data).map(([id, value]) => ({
+                id,
+                ...value,
+                timestamp: new Date(value.timestamp),
+                replies: value.replies || []
+            }));
+        } else {
+            doubts = [];
+        }
+        renderDoubts();
+    });
+
+    // Dialog Functions
+    function showSuccess(title, message) {
+        document.getElementById('successTitle').innerText = title;
+        document.getElementById('successMessage').innerText = message;
+        document.getElementById('successDialog').classList.add('active');
+        document.getElementById('dialogOverlay').classList.add('active');
+    }
+
+    function closeSuccess() {
+        document.getElementById('successDialog').classList.remove('active');
+        document.getElementById('dialogOverlay').classList.remove('active');
+    }
+
+    function showConfirm(title, message, onConfirm) {
+        document.getElementById('confirmTitle').innerText = title;
+        document.getElementById('confirmMessage').innerText = message;
+        document.getElementById('confirmDialog').classList.add('active');
+        document.getElementById('dialogOverlay').classList.add('active');
+        
+        document.getElementById('confirmOkBtn').onclick = () => {
+            onConfirm();
+            closeConfirm();
+        };
+    }
+
+    function closeConfirm() {
+        document.getElementById('confirmDialog').classList.remove('active');
+        document.getElementById('dialogOverlay').classList.remove('active');
+    }
+
+    document.getElementById('successOkBtn').addEventListener('click', closeSuccess);
+    document.getElementById('confirmCancelBtn').addEventListener('click', closeConfirm);
+    document.getElementById('dialogOverlay').addEventListener('click', () => {
+        closeSuccess();
+        closeConfirm();
+        closeTeacherLogin();
+    });
+
+    // Teacher Login Modal Functions
+    const teacherLoginDialog = document.getElementById('teacherLoginDialog');
+    const teacherIdInput = document.getElementById('teacherIdInput');
+    const teacherLoginCancel = document.getElementById('teacherLoginCancel');
+    const teacherLoginSubmit = document.getElementById('teacherLoginSubmit');
+
+    function openTeacherLogin() {
+        teacherIdInput.value = '';
+        teacherLoginDialog.classList.add('active');
+        document.getElementById('dialogOverlay').classList.add('active');
+    }
+
+    function closeTeacherLogin() {
+        teacherLoginDialog.classList.remove('active');
+        document.getElementById('dialogOverlay').classList.remove('active');
+    }
+
+    teacherLoginCancel.addEventListener('click', closeTeacherLogin);
+
+    teacherLoginSubmit.addEventListener('click', async () => {
+        const teacherId = teacherIdInput.value.trim();
+        if (!teacherId) {
+            showSuccess('Error', 'Please enter Teacher ID');
+            return;
+        }
+
+        // Show loading on button
+        const originalText = teacherLoginSubmit.innerText;
+        teacherLoginSubmit.innerHTML = '<span class="loading-spinner"></span> Verifying...';
+        teacherLoginSubmit.disabled = true;
+
+        try {
+            const teacherRef = ref(database, 'teachers/' + teacherId);
+            const snapshot = await get(teacherRef);
+            
+            if (snapshot.exists()) {
+                // Valid teacher ID
+                currentUser = 'teacher';
+                // Update UI
+                document.getElementById('studentToggle').classList.remove('active');
+                document.getElementById('teacherToggle').classList.add('active');
+                document.getElementById('studentFormSection').style.display = 'none';
+                closeTeacherLogin();
+                renderDoubts();
+                showSuccess('Welcome', 'Teacher login successful');
+            } else {
+                // Invalid teacher ID
+                showSuccess('Access Denied', 'Invalid Teacher ID');
+            }
+        } catch (error) {
+            console.error('Error verifying teacher ID:', error);
+            showSuccess('Error', 'Verification failed. Try again.');
+        } finally {
+            teacherLoginSubmit.innerHTML = originalText;
+            teacherLoginSubmit.disabled = false;
+        }
+    });
+
+    // Handle Enter key in teacher ID input
+    teacherIdInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            teacherLoginSubmit.click();
+        }
+    });
+
+    // Class Modal Functions
+    const classModal = document.getElementById('classModal');
+    const classBtn = document.getElementById('classSelectBtn');
+    const classSearch = document.getElementById('classSearch');
+    const classListContainer = document.getElementById('classList');
+
+    function renderClassList(searchTerm = '') {
+        classListContainer.innerHTML = '';
+        const grouped = {};
+        
+        classList.forEach(cls => {
+            if (searchTerm && !cls.name.toLowerCase().includes(searchTerm.toLowerCase())) return;
+            if (!grouped[cls.category]) grouped[cls.category] = [];
+            grouped[cls.category].push(cls);
+        });
+
+        Object.keys(grouped).sort().forEach(category => {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.innerHTML = `<div style="font-size:0.8rem; font-weight:600; color:#5f7d9c; margin:10px 0 5px 5px;">${category}</div>`;
+            
+            grouped[category].forEach(cls => {
+                const item = document.createElement('div');
+                item.className = 'option-item';
+                item.innerHTML = `<i class="fas ${cls.icon}"></i><span>${cls.name}</span>`;
+                item.addEventListener('click', () => {
+                    selectedClass = cls.name;
+                    document.getElementById('selectedClassText').innerHTML = selectedClass;
+                    classModal.classList.remove('active');
+                    classSearch.value = '';
+                    checkSubmitButton();
+                });
+                categoryDiv.appendChild(item);
+            });
+            classListContainer.appendChild(categoryDiv);
+        });
+    }
+
+    renderClassList();
+    classBtn.addEventListener('click', () => { renderClassList(classSearch.value); classModal.classList.add('active'); });
+    classSearch.addEventListener('input', (e) => renderClassList(e.target.value));
+    classModal.addEventListener('click', (e) => { if (e.target === classModal) { classModal.classList.remove('active'); classSearch.value = ''; } });
+
+    // Subject Modal Functions
+    const subjectModal = document.getElementById('subjectModal');
+    const subjectBtn = document.getElementById('subjectSelectBtn');
+    const subjectSearch = document.getElementById('subjectSearch');
+    const subjectListContainer = document.getElementById('subjectList');
+
+    function renderSubjectList(searchTerm = '') {
+        subjectListContainer.innerHTML = '';
+        const grouped = {};
+        
+        ncertSubjects.forEach(subject => {
+            if (searchTerm && !subject.name.toLowerCase().includes(searchTerm.toLowerCase())) return;
+            if (!grouped[subject.category]) grouped[subject.category] = [];
+            grouped[subject.category].push(subject);
+        });
+
+        Object.keys(grouped).sort().forEach(category => {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.innerHTML = `<div style="font-size:0.8rem; font-weight:600; color:#5f7d9c; margin:10px 0 5px 5px;">${category}</div>`;
+            
+            grouped[category].forEach(subject => {
+                const item = document.createElement('div');
+                item.className = 'option-item';
+                item.innerHTML = `<i class="fas ${subject.icon}"></i><span>${subject.name}</span>`;
+                item.addEventListener('click', () => {
+                    selectedSubject = subject.name;
+                    document.getElementById('selectedSubjectText').innerHTML = selectedSubject;
+                    subjectModal.classList.remove('active');
+                    subjectSearch.value = '';
+                    checkSubmitButton();
+                });
+                categoryDiv.appendChild(item);
+            });
+            subjectListContainer.appendChild(categoryDiv);
+        });
+    }
+
+    renderSubjectList();
+    subjectBtn.addEventListener('click', () => { renderSubjectList(subjectSearch.value); subjectModal.classList.add('active'); });
+    subjectSearch.addEventListener('input', (e) => renderSubjectList(e.target.value));
+    subjectModal.addEventListener('click', (e) => { if (e.target === subjectModal) { subjectModal.classList.remove('active'); subjectSearch.value = ''; } });
+
+    // Form Validation
+    function checkSubmitButton() {
+        const name = document.getElementById('studentName').value.trim();
+        const desc = document.getElementById('doubtDesc').value;
+        document.getElementById('submitDoubtBtn').disabled = !(name && selectedClass && selectedSubject && desc.length >= 10);
+    }
+
+    document.getElementById('studentName').addEventListener('input', checkSubmitButton);
+    document.getElementById('doubtDesc').addEventListener('input', function() {
+        document.getElementById('charCount').innerText = this.value.length + '/10 minimum';
+        checkSubmitButton();
+    });
+
+    // Submit Doubt to Firebase
+    document.getElementById('submitDoubtBtn').addEventListener('click', async function() {
+        const name = document.getElementById('studentName').value.trim();
+        const chapter = document.getElementById('doubtChapter').value.trim();
+        const doubtText = document.getElementById('doubtDesc').value.trim();
+
+        if (!name || !selectedClass || !selectedSubject || doubtText.length < 10) {
+            showSuccess('Error', 'Please fill all fields correctly.');
+            return;
+        }
+
+        // Show loading state
+        const btn = this;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="loading-spinner"></span> Submitting...';
+        btn.disabled = true;
+
+        try {
+            const newDoubtRef = push(doubtsRef);
+            await set(newDoubtRef, {
+                studentName: name,
+                studentClass: selectedClass,
+                subject: selectedSubject,
+                chapter: chapter || '',
+                doubtText: doubtText,
+                status: 'pending',
+                timestamp: new Date().toISOString(),
+                replies: []
+            });
+
+            // Clear form
+            document.getElementById('studentName').value = '';
+            document.getElementById('doubtChapter').value = '';
+            document.getElementById('doubtDesc').value = '';
+            document.getElementById('charCount').innerText = '0/10 minimum';
+            selectedClass = ''; selectedSubject = '';
+            document.getElementById('selectedClassText').innerHTML = 'Select class';
+            document.getElementById('selectedSubjectText').innerHTML = 'Select subject';
+            checkSubmitButton();
+            
+            showSuccess('Success!', 'Your doubt has been submitted successfully.');
+        } catch (error) {
+            console.error('Error submitting doubt:', error);
+            showSuccess('Error', 'Failed to submit doubt. Please try again.');
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    });
+
+    // Teacher Reply Functions
+    window.addTeacherReply = async function(doubtId) {
+        if (currentUser !== 'teacher') return;
+        const input = document.getElementById('replyInput_' + doubtId);
+        const replyText = input.value.trim();
+        if (!replyText) return;
+
+        const doubt = doubts.find(d => d.id === doubtId);
+        if (!doubt || doubt.status === 'closed') return;
+
+        try {
+            const replyId = 'r_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+            const newReplies = [...(doubt.replies || []), {
+                id: replyId,
+                sender: 'teacher',
+                message: replyText,
+                time: new Date().toISOString()
+            }];
+
+            await update(ref(database, `doubts/${doubtId}`), {
+                replies: newReplies,
+                status: doubt.status === 'pending' ? 'answered' : doubt.status
+            });
+
+            input.value = '';
+            showSuccess('Reply Sent', 'Your reply has been added successfully.');
+        } catch (error) {
+            console.error('Error adding reply:', error);
+            showSuccess('Error', 'Failed to add reply.');
+        }
+    };
+
+    window.editReply = function(doubtId, replyId) {
+        const doubt = doubts.find(d => d.id === doubtId);
+        const reply = doubt?.replies.find(r => r.id === replyId);
+        if (!reply) return;
+
+        document.getElementById('editReplyText').value = reply.message;
+        document.getElementById('editReplyDialog').classList.add('active');
+        document.getElementById('dialogOverlay').classList.add('active');
+
+        document.getElementById('editSaveBtn').onclick = async () => {
+            const newText = document.getElementById('editReplyText').value.trim();
+            if (newText) {
+                try {
+                    const updatedReplies = doubt.replies.map(r => 
+                        r.id === replyId ? {...r, message: newText} : r
+                    );
+                    await update(ref(database, `doubts/${doubtId}`), {
+                        replies: updatedReplies
+                    });
+                    
+                    document.getElementById('editReplyDialog').classList.remove('active');
+                    document.getElementById('dialogOverlay').classList.remove('active');
+                    showSuccess('Updated', 'Reply has been updated.');
+                } catch (error) {
+                    console.error('Error updating reply:', error);
+                    showSuccess('Error', 'Failed to update reply.');
+                }
+            }
+        };
+    };
+
+    window.deleteReply = function(doubtId, replyId) {
+        showConfirm('Delete Reply', 'Are you sure you want to delete this reply?', async () => {
+            const doubt = doubts.find(d => d.id === doubtId);
+            if (doubt) {
+                try {
+                    const updatedReplies = doubt.replies.filter(r => r.id !== replyId);
+                    await update(ref(database, `doubts/${doubtId}`), {
+                        replies: updatedReplies
+                    });
+                    showSuccess('Deleted', 'Reply has been deleted.');
+                } catch (error) {
+                    console.error('Error deleting reply:', error);
+                    showSuccess('Error', 'Failed to delete reply.');
+                }
+            }
+        });
+    };
+
+    window.closeDoubt = function(doubtId) {
+        showConfirm('Close Doubt', 'Are you sure you want to close this doubt?', async () => {
+            try {
+                await update(ref(database, `doubts/${doubtId}`), {
+                    status: 'closed'
+                });
+                showSuccess('Closed', 'Doubt has been closed.');
+            } catch (error) {
+                console.error('Error closing doubt:', error);
+                showSuccess('Error', 'Failed to close doubt.');
+            }
+        });
+    };
+
+    window.deleteDoubt = function(doubtId) {
+        showConfirm('Delete Doubt', 'Are you sure you want to delete this doubt permanently?', async () => {
+            try {
+                await remove(ref(database, `doubts/${doubtId}`));
+                showSuccess('Deleted', 'Doubt has been deleted.');
+            } catch (error) {
+                console.error('Error deleting doubt:', error);
+                showSuccess('Error', 'Failed to delete doubt.');
+            }
+        });
+    };
+
+    window.toggleControls = function(doubtId) {
+        const dropdown = document.getElementById('controls_' + doubtId);
+        dropdown.classList.toggle('active');
+    };
+
+    // Render Doubts
+    function renderDoubts() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+        let filtered = doubts.filter(d => {
+            const subjMatch = currentSubjectFilter === 'all' || d.subject === currentSubjectFilter;
+            const statMatch = currentStatusFilter === 'all' || d.status === currentStatusFilter;
+            const searchMatch = searchTerm === '' || 
+                d.doubtText.toLowerCase().includes(searchTerm) || 
+                d.studentName.toLowerCase().includes(searchTerm) || 
+                d.subject.toLowerCase().includes(searchTerm);
+            return subjMatch && statMatch && searchMatch;
+        });
+
+        filtered.sort((a,b) => sortAscending ? a.timestamp - b.timestamp : b.timestamp - a.timestamp);
+
+        const container = document.getElementById('doubtsContainer');
+        const emptyDiv = document.getElementById('emptyMessage');
+
+        if (filtered.length === 0) {
+            emptyDiv.style.display = 'block';
+            container.innerHTML = '';
+            return;
+        }
+
+        emptyDiv.style.display = 'none';
+        let html = '';
+
+        filtered.forEach(d => {
+            const timeStr = d.timestamp.toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+            
+            let repliesHtml = '';
+            if (d.replies && d.replies.length) {
+                repliesHtml = '<div class="reply-thread">';
+                d.replies.forEach(reply => {
+                    const replyTime = new Date(reply.time).toLocaleString('en-IN', { hour:'2-digit', minute:'2-digit' });
+                    repliesHtml += `
+                        <div class="reply-item">
+                            <span class="reply-sender ${reply.sender}">${reply.sender === 'teacher' ? 'Teacher' : d.studentName}</span>
+                            <div class="reply-content">
+                                <div class="reply-text">${reply.message}</div>
+                                <div class="reply-meta">
+                                    <span>${replyTime}</span>
+                                    ${currentUser === 'teacher' ? `
+                                        <div class="reply-actions">
+                                            <button onclick="editReply('${d.id}', '${reply.id}')"><i class="fas fa-edit"></i> Edit</button>
+                                            <button onclick="deleteReply('${d.id}', '${reply.id}')"><i class="fas fa-trash"></i> Delete</button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                repliesHtml += '</div>';
+            }
+
+            const teacherControls = currentUser === 'teacher' ? `
+                <div class="teacher-controls">
+                    <button class="controls-btn" onclick="toggleControls('${d.id}')"><i class="fas fa-ellipsis-v"></i></button>
+                    <div class="controls-dropdown" id="controls_${d.id}">
+                        <div class="control-item" onclick="deleteDoubt('${d.id}')"><i class="fas fa-trash"></i> Delete Doubt</div>
+                        ${d.status !== 'closed' ? `<div class="control-item" onclick="closeDoubt('${d.id}')"><i class="fas fa-lock"></i> Close Doubt</div>` : ''}
+                    </div>
+                </div>
+            ` : '';
+
+            const teacherReplyArea = (currentUser === 'teacher' && d.status !== 'closed') ? `
+                <div class="teacher-reply-area">
+                    <input type="text" placeholder="Type your reply..." id="replyInput_${d.id}">
+                    <button onclick="addTeacherReply('${d.id}')"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            ` : '';
+
+            html += `
+                <div class="doubt-card ${d.status}" data-id="${d.id}">
+                    ${teacherControls}
+                    <div class="meta-line">
+                        <span class="student-name"><i class="fas fa-user-circle"></i> ${d.studentName} · ${d.studentClass}</span>
+                        <span class="class-chip">${d.subject}</span>
+                    </div>
+                    <span class="subject-badge">${d.chapter || 'General'}</span>
+                    <div class="doubt-text">${d.doubtText}</div>
+                    <div class="status-time">
+                        <span class="timestamp"><i class="far fa-clock"></i> ${timeStr}</span>
+                        <span class="status-badge status-${d.status}">${d.status}</span>
+                    </div>
+                    ${repliesHtml}
+                    ${teacherReplyArea}
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // Setup Custom Selects
+    function setupCustomSelect(triggerId, itemsId, displayId, callback) {
+        const trigger = document.querySelector(triggerId + ' .select-selected');
+        const items = document.querySelector(itemsId);
+        
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            items.classList.toggle('active');
+        });
+
+        document.querySelectorAll(itemsId + ' .select-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll(itemsId + ' .select-item').forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+                document.querySelector(displayId).innerText = item.innerText;
+                items.classList.remove('active');
+                callback(item.dataset.value);
+            });
+        });
+
+        document.addEventListener('click', () => {
+            items.classList.remove('active');
+        });
+    }
+
+    setupCustomSelect('#subjectSelect', '#selectItems', '#selectedSubjectDisplay', (value) => {
+        currentSubjectFilter = value;
+        renderDoubts();
+    });
+
+    setupCustomSelect('#statusSelect', '#statusItems', '#selectedStatusDisplay', (value) => {
+        currentStatusFilter = value;
+        renderDoubts();
+    });
+
+    // Search and Sort
+    document.getElementById('searchInput').addEventListener('input', renderDoubts);
+    document.getElementById('sortBtn').addEventListener('click', function() {
+        sortAscending = !sortAscending;
+        this.innerHTML = sortAscending ? '<i class="fas fa-arrow-up-wide-short"></i> Oldest first' : '<i class="fas fa-arrow-down-wide-short"></i> Latest first';
+        renderDoubts();
+    });
+
+    // User Toggle - Student (no login needed)
+    document.getElementById('studentToggle').addEventListener('click', function() {
+        currentUser = 'student';
+        document.getElementById('studentToggle').classList.add('active');
+        document.getElementById('teacherToggle').classList.remove('active');
+        document.getElementById('studentFormSection').style.display = 'block';
+        renderDoubts();
+    });
+
+    // Teacher Toggle - Now opens login modal instead of directly switching
+    document.getElementById('teacherToggle').addEventListener('click', function() {
+        // If already teacher, do nothing (already active) or maybe allow re-login? We'll just open modal
+        if (currentUser === 'teacher') {
+            // Optional: could show message "Already logged in"
+            return;
+        }
+        openTeacherLogin();
+    });
+
+    // Edit Reply Dialog Close
+    document.getElementById('editCancelBtn').addEventListener('click', () => {
+        document.getElementById('editReplyDialog').classList.remove('active');
+        document.getElementById('dialogOverlay').classList.remove('active');
+    });
+</script>
+</body>
+</html>

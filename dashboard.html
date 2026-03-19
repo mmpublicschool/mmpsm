@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>S.C.C.M Dashboard</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SCCM School">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: #f0f5fb;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ===== ORIGINAL LOADING SCREEN (PRESERVED) ===== */
+        .dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 20, 40, 0.7);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .dialog-overlay.active {
+            display: flex;
+        }
+
+        .dialog-box {
+            background: white;
+            width: 90%;
+            max-width: 380px;
+            padding: 35px 30px;
+            border-radius: 30px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        /* ===== WELCOME POPUP WITH CLOSE BUTTON ===== */
+        .welcome-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 15000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .welcome-popup.active {
+            display: flex;
+        }
+
+        .welcome-card {
+            background: white;
+            width: 90%;
+            max-width: 380px;
+            border-radius: 40px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+            animation: slideUp 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            transition: all 0.3s;
+            border: none;
+            font-size: 18px;
+            color: #64748b;
+        }
+
+        .welcome-close:hover {
+            background: #e2e8f0;
+            transform: rotate(90deg);
+            color: #dc2626;
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            border-radius: 0 0 50% 50%;
+        }
+
+        .welcome-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 10px auto 20px;
+            position: relative;
+            z-index: 1;
+            object-fit: cover;
+        }
+
+        .welcome-card h2 {
+            font-size: 32px;
+            color: #1e293b;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .welcome-badge {
+            background: #eef2ff;
+            color: #2563eb;
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 600;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        .welcome-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background: #f8fafc;
+            padding: 15px 5px;
+            border-radius: 20px;
+        }
+
+        .stat-item i {
+            font-size: 24px;
+            color: #2563eb;
+            margin-bottom: 5px;
+        }
+
+        .stat-item .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .stat-item .stat-label {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .welcome-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .welcome-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37,99,235,0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Auto close timer bar */
+        .auto-close-timer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: #2563eb;
+            width: 100%;
+            animation: timer 5s linear forwards;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+
+        @keyframes timer {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        /* ===== PROFESSIONAL DIALOG SYSTEM ===== */
+        .dialog-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #2563eb;
+        }
+
+        .dialog-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .dialog-message {
+            color: #475569;
+            font-size: 16px;
+            margin: 15px 0 25px;
+            line-height: 1.6;
+        }
+
+        .dialog-btn {
+            background: #2563eb;
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .dialog-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37,99,235,0.3);
+        }
+
+        .dialog-btn.danger {
+            background: #dc2626;
+        }
+
+        .dialog-btn.danger:hover {
+            background: #b91c1c;
+        }
+
+        /* ===== NOTIFICATION POPUP ===== */
+        .notification-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            width: 90%;
+            max-width: 340px;
+            padding: 30px;
+            border-radius: 40px;
+            text-align: center;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+            display: none;
+            z-index: 10000;
+            animation: popIn 0.3s ease;
+        }
+
+        .notification-popup.active {
+            display: block;
+        }
+
+        .notification-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: white;
+        }
+
+        .notification-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .notification-text {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .notification-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .noti-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .noti-btn.primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .noti-btn.primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .noti-btn.secondary {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .noti-btn.secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* ===== NOTIFICATION PANEL ===== */
+        .notification-panel {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            width: 320px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 200;
+            max-height: 500px;
+            overflow-y: auto;
+            animation: slideDown 0.3s ease;
+        }
+
+        .notification-panel.active {
+            display: block;
+        }
+
+        .notification-panel-header {
+            padding: 18px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: #1e293b;
+            position: sticky;
+            top: 0;
+            background: white;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .notification-panel-header i {
+            color: #2563eb;
+            cursor: pointer;
+        }
+
+        .notification-item {
+            padding: 15px 18px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-item:hover {
+            background: #f8fafc;
+        }
+
+        .notification-item.unread {
+            background: #eef2ff;
+            border-left: 4px solid #2563eb;
+        }
+
+        .notification-item-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 30px;
+        }
+
+        .notification-item-time {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .notification-item-message {
+            font-size: 13px;
+            color: #475569;
+            margin: 5px 0;
+        }
+
+        .notification-badge {
+            background: #2563eb;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+
+        .delete-notification {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #94a3b8;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s;
+            z-index: 5;
+        }
+
+        .delete-notification:hover {
+            color: #dc2626;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* ===== CUSTOM NAME INPUT DIALOG ===== */
+        .name-dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 20, 40, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .name-dialog-overlay.active {
+            display: flex;
+        }
+
+        .name-dialog-box {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 35px;
+            border-radius: 40px;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: popIn 0.3s ease;
+        }
+
+        .name-dialog-box h3 {
+            font-size: 28px;
+            color: #1e293b;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .name-dialog-box p {
+            color: #64748b;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 18px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 16px;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .name-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+        }
+
+        .name-dialog-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .name-dialog-actions button {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37,99,235,0.3);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* ===== PHOTO UPDATE DIALOG ===== */
+        .photo-dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 20, 40, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .photo-dialog-overlay.active {
+            display: flex;
+        }
+
+        .photo-dialog-box {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 35px;
+            border-radius: 40px;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: popIn 0.3s ease;
+        }
+
+        .photo-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 4px solid #2563eb;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-preview i {
+            font-size: 40px;
+            color: #94a3b8;
+            line-height: 120px;
+        }
+
+        .photo-upload-btn {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 15px 0;
+            display: inline-block;
+        }
+
+        .photo-upload-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* Loading Dots Animation */
+        .loading-dots:after {
+            content: '';
+            animation: dots 1.2s steps(4, end) infinite;
+            display: inline-block;
+            width: 24px;
+            text-align: left;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            height: 65px;
+            background: #1e3a8a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #menuBtn {
+            font-size: 24px;
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transition: 0.2s;
+        }
+
+        #menuBtn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transition: 0.2s;
+        }
+
+        .notification-bell:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #1e3a8a;
+        }
+
+        /* ===== MENU ===== */
+        .sideMenu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100%;
+            background: white;
+            box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            z-index: 1000;
+            padding: 30px 20px;
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 30px;
+            overflow-y: auto;
+        }
+
+        .sideMenu.active {
+            transform: translateX(0);
+        }
+
+        .profile {
+            text-align: center;
+            padding: 15px 0 25px;
+            border-bottom: 2px solid #eef2f6;
+            margin-bottom: 20px;
+        }
+
+        .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #2563eb;
+            box-shadow: 0 8px 20px rgba(37,99,235,0.3);
+            background: #f8fafc;
+        }
+
+        .profile h3 {
+            margin-top: 15px;
+            font-size: 1.4rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .menuItem {
+            padding: 14px 18px;
+            margin: 8px 0;
+            border-radius: 14px;
+            background: #f8fafc;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menuItem i {
+            width: 24px;
+            color: #2563eb;
+            font-size: 1.1rem;
+        }
+
+        .menuItem:hover {
+            background: #e6f0ff;
+            border-color: #2563eb;
+            transform: translateX(5px);
+            color: #1e293b;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            margin: 20px;
+            padding: 20px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 15px 30px rgba(30,58,138,0.3);
+        }
+
+        .hero img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid white;
+            object-fit: cover;
+            background: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .hero img:hover {
+            transform: scale(1.05);
+        }
+
+        .hero b {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .hero div div {
+            opacity: 0.9;
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        /* ===== MAIN CARDS ===== */
+        .main {
+            padding: 10px 20px 90px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px 12px;
+            border-radius: 22px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #1e293b;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            transition: all 0.25s;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card i {
+            font-size: 2rem;
+            color: #2563eb;
+            margin-bottom: 5px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -8px rgba(37,99,235,0.3);
+            border-color: #2563eb;
+            background: #fafcff;
+        }
+
+        /* ===== MORE MENU CARD ===== */
+        .moreCard {
+            position: relative;
+        }
+
+        .moreMenu {
+            position: absolute;
+            bottom: 75px;
+            right: 10px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 20px 40px rgba(0,0,0,.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 999;
+            min-width: 220px;
+            transform-origin: bottom right;
+            animation: menuPop 0.3s ease;
+        }
+
+        .moreMenu.active {
+            display: flex;
+        }
+
+        @keyframes menuPop {
+            0% {
+                opacity: 0;
+                transform: translateY(10px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .moreMenu .menuItem {
+            padding: 16px 18px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.25s;
+            border-bottom: 1px solid #f1f5f9;
+            margin: 0;
+            border-radius: 0;
+            background: white;
+        }
+
+        .moreMenu .menuItem:last-child {
+            border-bottom: none;
+        }
+
+        .moreMenu .menuItem i {
+            font-size: 18px;
+            color: #2563eb;
+            transition: transform 0.3s;
+        }
+
+        .moreMenu .menuItem:hover {
+            background: #f1f5f9;
+            padding-left: 25px;
+        }
+
+        .moreMenu .menuItem:hover i {
+            transform: scale(1.2);
+        }
+
+        .badgeNew {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #2563eb;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 30px;
+            animation: newPulse 1.2s infinite;
+        }
+
+        @keyframes newPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* ===== BOTTOM NAVIGATION ===== */
+        .bottomNav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            z-index: 90;
+        }
+
+        .navBtn {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #64748b;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 40px;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .navBtn i {
+            font-size: 1.5rem;
+            color: #64748b;
+        }
+
+        .navBtn.active {
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        .navBtn.active i {
+            color: #2563eb;
+        }
+
+        /* ===== PROFILE POPUP ===== */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .popupBox {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 35px;
+            width: 90%;
+            max-width: 340px;
+            text-align: center;
+            box-shadow: 0 40px 70px rgba(0,0,0,0.4);
+            animation: popIn 0.3s;
+        }
+
+        .popupBox img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid #2563eb;
+            margin-bottom: 15px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .popupBox img:hover {
+            transform: scale(1.05);
+        }
+
+        .popupBox b {
+            font-size: 1.5rem;
+            color: #1e293b;
+            display: block;
+            margin-bottom: 25px;
+        }
+
+        .popupBox button {
+            margin: 8px 0;
+            padding: 14px;
+            border: none;
+            background: #f1f5f9;
+            color: #1e293b;
+            border-radius: 50px;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+
+        .popupBox button i {
+            color: #2563eb;
+        }
+
+        .popupBox button:hover {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+            transform: translateX(5px);
+        }
+
+        .popupBox button:hover i {
+            color: white;
+        }
+
+        .close-btn {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+            border-color: #fecaca !important;
+        }
+
+        .close-btn:hover {
+            background: #dc2626 !important;
+            color: white !important;
+        }
+
+        .photoActiveBtn {
+            display: flex;
+            align-items: center;
+        }
+
+        .photoActiveBtn .activeTag {
+            margin-left: auto;
+            background: #22c55e;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 20px;
+            animation: activePulse 1.2s infinite;
+            box-shadow: 0 0 8px rgba(34,197,94,0.6);
+        }
+
+        @keyframes activePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .sideCount {
+            margin-left: auto;
+            background: linear-gradient(135deg, #ff4d4d, #ff0000);
+            color: #fff;
+            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-weight: 700;
+            animation: countPulse 1.2s infinite;
+            box-shadow: 0 0 8px rgba(255,0,0,0.5);
+        }
+
+        @keyframes countPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ORIGINAL DIALOG LOADING SCREEN (PRESERVED) -->
+<div class="dialog-overlay" id="dialogOverlay">
+    <div class="dialog-box">
+        <div class="dialog-icon" id="dialogIcon"><i class="fas fa-circle-notch"></i></div>
+        <div class="dialog-title" id="dialogTitle">Loading</div>
+        <div class="dialog-message" id="dialogMessage">Please wait<span class="loading-dots"></span></div>
+        <button class="dialog-btn" id="dialogBtn">OK</button>
+    </div>
+</div>
+
+<!-- WELCOME POPUP WITH CLOSE BUTTON -->
+<div class="welcome-popup" id="welcomePopup">
+    <div class="welcome-card">
+        <div class="welcome-close" onclick="closeWelcomePopup()">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="auto-close-timer" id="autoCloseTimer"></div>
+        <img id="welcomeImg" src="#" alt="Profile" class="welcome-avatar">
+        <h2 id="welcomeName"></h2>
+        <div class="welcome-badge" id="welcomeGrade">Student</div>
+        
+        <div class="welcome-stats">
+            <div class="stat-item">
+                <i class="fas fa-pencil-alt"></i>
+                <div class="stat-value" id="welcomeTests">0</div>
+                <div class="stat-label">Tests</div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <div class="stat-value" id="welcomeRank">0</div>
+                <div class="stat-label">Rank</div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-bookmark"></i>
+                <div class="stat-value" id="welcomeSaved">0</div>
+                <div class="stat-label">Saved</div>
+            </div>
+        </div>
+        
+        <button class="welcome-btn" onclick="closeWelcomePopup()">
+            <i class="fas fa-rocket"></i> Continue to Dashboard
+        </button>
+    </div>
+</div>
+
+<!-- SIDE MENU -->
+<div class="sideMenu" id="menu">
+    <div class="profile">
+        <img id="userPhoto" src="#" alt="Profile">
+        <h3 id="userName">Loading...</h3>
+    </div>
+
+    <div class="menuItem"><i class="fas fa-home"></i> Dashboard</div>
+    <div class="menuItem" onclick="goTest()"><i class="fas fa-pencil-alt"></i> Online Test</div>
+    <div class="menuItem" onclick="goBoard()"><i class="fas fa-trophy"></i> Leaderboard</div>
+    <div class="menuItem" onclick="goAdmin()"><i class="fas fa-cog"></i> Admin Panel</div>
+    <div class="menuItem" onclick="openServedQuestion()">
+        <i class="fas fa-book-open-reader"></i>
+        Saved Question
+        <span class="sideCount" id="savedCount">0</span>
+    </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="header-left">
+        <div id="menuBtn"><i class="fas fa-bars"></i></div>
+        <div><i class="fas fa-school" style="margin-right: 10px;"></i>S.C.C.M</div>
+    </div>
+    <div class="notification-bell" id="notificationBell">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge" id="notificationBadge">0</span>
+    </div>
+</div>
+
+<!-- NOTIFICATION PANEL -->
+<div class="notification-panel" id="notificationPanel">
+    <div class="notification-panel-header">
+        <span>Notifications</span>
+        <div>
+            <i class="fas fa-trash-alt" onclick="deleteAllNotifications()" style="margin-right: 15px; color: #dc2626;"></i>
+            <i class="fas fa-check-double" onclick="markAllRead()"></i>
+        </div>
+    </div>
+    <div id="notificationList"></div>
+</div>
+
+<!-- NOTIFICATION PERMISSION POPUP -->
+<div class="notification-popup" id="notificationPermissionPopup">
+    <div class="notification-icon">
+        <i class="fas fa-bell"></i>
+    </div>
+    <div class="notification-title">Stay Updated!</div>
+    <div class="notification-text">Get notified about tests, results, and important updates</div>
+    <div class="notification-buttons">
+        <button class="noti-btn secondary" onclick="closeNotificationPopup()">Later</button>
+        <button class="noti-btn primary" onclick="enableNotifications()">Allow</button>
+    </div>
+</div>
+
+<!-- HERO SECTION -->
+<div class="hero">
+    <img id="heroImg" src="#" alt="Profile" onclick="openProfile()">
+    <div>
+        <b>Welcome, <span id="heroName"></span></b>
+        <div><i class="fas fa-laptop"></i> Online Test Dashboard</div>
+    </div>
+</div>
+
+<!-- MAIN CARDS -->
+<div class="main">
+    <div class="card" onclick="goTest()"><i class="fas fa-pencil-alt"></i> Online Test</div>
+    <div class="card" onclick="goBoard()"><i class="fas fa-trophy"></i> Leaderboard</div>
+    <div class="card" onclick="goAdmin()"><i class="fas fa-cog"></i> Admin</div>
+    <div class="card" onclick="openResults()"><i class="fas fa-chart-bar"></i> Results</div>
+    <div class="card"><i class="fas fa-bullhorn"></i> Updates</div>
+    <div class="card moreCard" onclick="toggleMoreMenu(event)">
+        <i class="fas fa-ellipsis-h"></i>
+        <span>More</span>
+        <div class="moreMenu" id="moreMenu">
+            <div class="menuItem" onclick="openHistory()">
+                <span class="badgeNew">NEW</span>
+                <i class="fas fa-clock-rotate-left"></i>
+                Test History
+            </div>
+            <div class="menuItem" onclick="openLeaderboard()">
+                <span class="badgeNew">NEW</span>
+                <i class="fas fa-ranking-star"></i>
+                Check Your Leaderboard
+            </div>
+            <div class="menuItem" onclick="openRetest()">
+                <span class="badgeNew">NEW</span>
+                <i class="fas fa-rotate"></i>
+                Test Try Again
+            </div>
+            <div class="menuItem" onclick="openReviewReply()">
+                <span class="badgeNew">NEW</span>
+                <i class="fas fa-comments"></i>
+                Test Review and Reply
+            </div>
+            <div class="menuItem" onclick="openServedQuestion()">
+                <span class="badgeNew">NEW</span>
+                <i class="fas fa-book-open-reader"></i>
+                Test Served Question
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BOTTOM NAVIGATION -->
+<div class="bottomNav">
+    <div class="navBtn active" onclick="goDashboard()"><i class="fas fa-home"></i> Home</div>
+    <div class="navBtn" onclick="goTest()"><i class="fas fa-pencil-alt"></i> Test</div>
+    <div class="navBtn" onclick="openProfile()"><i class="fas fa-user-circle"></i> Profile</div>
+</div>
+
+<!-- PROFILE POPUP -->
+<div class="popup" id="profilePopup">
+    <div class="popupBox">
+        <img id="popupImg" src="#" onclick="showPhotoDialog()">
+        <b id="popupName"></b>
+        <button onclick="showNameDialog()"><i class="fas fa-edit"></i> Change Name</button>
+        <button onclick="showPhotoDialog()" class="photoActiveBtn">
+            <i class="fas fa-camera"></i> Change Photo
+            <span class="activeTag">ACTIVE</span>
+        </button>
+        <button class="close-btn" onclick="closeProfile()"><i class="fas fa-times"></i> Close</button>
+    </div>
+</div>
+
+<!-- CUSTOM NAME INPUT DIALOG -->
+<div class="name-dialog-overlay" id="nameDialogOverlay">
+    <div class="name-dialog-box">
+        <i class="fas fa-user-edit" style="font-size: 50px; color: #2563eb; margin-bottom: 15px;"></i>
+        <h3>Change Name</h3>
+        <p>Enter your new full name below</p>
+        <input type="text" class="name-input" id="newNameInput" placeholder="e.g., PKSSS" autocomplete="off">
+        <div class="name-dialog-actions">
+            <button class="btn-secondary" onclick="closeNameDialog()"><i class="fas fa-times"></i> Cancel</button>
+            <button class="btn-primary" onclick="updateName()"><i class="fas fa-check"></i> Update</button>
+        </div>
+    </div>
+</div>
+
+<!-- PHOTO UPDATE DIALOG -->
+<div class="photo-dialog-overlay" id="photoDialogOverlay">
+    <div class="photo-dialog-box">
+        <i class="fas fa-camera" style="font-size: 50px; color: #2563eb; margin-bottom: 15px;"></i>
+        <h3>Update Photo</h3>
+        <div class="photo-preview" id="photoPreview" onclick="document.getElementById('photoInput').click()">
+            <img id="currentPhotoPreview" src="#" alt="Preview">
+        </div>
+        <input type="file" id="photoInput" accept="image/*" style="display: none;">
+        <div class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
+            <i class="fas fa-cloud-upload-alt"></i> Choose Photo
+        </div>
+        <div class="name-dialog-actions">
+            <button class="btn-secondary" onclick="closePhotoDialog()"><i class="fas fa-times"></i> Cancel</button>
+            <button class="btn-primary" onclick="updatePhoto()"><i class="fas fa-check"></i> Update</button>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE NOTIFICATION CONFIRMATION DIALOG -->
+<div class="dialog-overlay" id="deleteConfirmDialog">
+    <div class="dialog-box">
+        <div class="dialog-icon"><i class="fas fa-exclamation-triangle" style="color: #dc2626;"></i></div>
+        <div class="dialog-title">Delete Notification</div>
+        <div class="dialog-message" id="deleteMessage">Are you sure you want to delete this notification?</div>
+        <div style="display: flex; gap: 10px;">
+            <button class="dialog-btn" onclick="cancelDelete()" style="background: #f1f5f9; color: #475569;">Cancel</button>
+            <button class="dialog-btn danger" id="confirmDeleteBtn">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getDatabase, ref, get, update, push, onValue, set, remove } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+    import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCy1r8BXbe-W9UBsCrFDFgkHy-j7lYFwYg",
+        authDomain: "mmpublicschoolmundeshwar-233a4.firebaseapp.com",
+        databaseURL: "https://mmpublicschoolmundeshwar-233a4-default-rtdb.firebaseio.com",
+        projectId: "mmpublicschoolmundeshwar-233a4",
+        storageBucket: "mmpublicschoolmundeshwar-233a4.firebasestorage.app",
+        messagingSenderId: "34014305665",
+        appId: "1:34014305665:web:543d0aed6c75d6d8549c80"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const storage = getStorage(app);
+    const messaging = getMessaging(app);
+
+    // ===== ELEMENTS =====
+    const dialogOverlay = document.getElementById('dialogOverlay');
+    const dialogIcon = document.getElementById('dialogIcon');
+    const dialogTitle = document.getElementById('dialogTitle');
+    const dialogMessage = document.getElementById('dialogMessage');
+    const dialogBtn = document.getElementById('dialogBtn');
+    const welcomePopup = document.getElementById('welcomePopup');
+    const deleteConfirmDialog = document.getElementById('deleteConfirmDialog');
+    const deleteMessage = document.getElementById('deleteMessage');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    const nameDialogOverlay = document.getElementById('nameDialogOverlay');
+    const newNameInput = document.getElementById('newNameInput');
+    const photoDialogOverlay = document.getElementById('photoDialogOverlay');
+    const photoInput = document.getElementById('photoInput');
+    const currentPhotoPreview = document.getElementById('currentPhotoPreview');
+    const notificationBell = document.getElementById('notificationBell');
+    const notificationPanel = document.getElementById('notificationPanel');
+    const notificationBadge = document.getElementById('notificationBadge');
+    const notificationList = document.getElementById('notificationList');
+    const notificationPermissionPopup = document.getElementById('notificationPermissionPopup');
+
+    let currentUser = null;
+    let userId = localStorage.getItem("userId");
+    let notificationCount = 0;
+    let selectedPhoto = null;
+    let currentDeleteId = null;
+    let welcomeTimer;
+
+    // ===== DIALOG FUNCTIONS =====
+    function showLoading(message = 'Loading') {
+        dialogIcon.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>';
+        dialogTitle.textContent = 'Please Wait';
+        dialogMessage.innerHTML = message + '<span class="loading-dots"></span>';
+        dialogOverlay.classList.add('active');
+        
+        dialogBtn.style.opacity = '0.6';
+        dialogBtn.style.cursor = 'not-allowed';
+        dialogBtn.disabled = true;
+    }
+
+    function showAlert(icon, title, message, callback = null) {
+        dialogIcon.innerHTML = icon;
+        dialogTitle.textContent = title;
+        dialogMessage.textContent = message;
+        dialogOverlay.classList.add('active');
+        
+        dialogBtn.style.opacity = '1';
+        dialogBtn.style.cursor = 'pointer';
+        dialogBtn.disabled = false;
+        
+        const closeHandler = () => {
+            dialogOverlay.classList.remove('active');
+            dialogBtn.removeEventListener('click', closeHandler);
+            if (callback) callback();
+        };
+        
+        dialogBtn.addEventListener('click', closeHandler, { once: true });
+    }
+
+    function hideDialog() {
+        dialogOverlay.classList.remove('active');
+    }
+
+    // ===== NAME DIALOG FUNCTIONS =====
+    window.showNameDialog = () => {
+        closeProfile();
+        newNameInput.value = '';
+        nameDialogOverlay.classList.add('active');
+        setTimeout(() => newNameInput.focus(), 100);
+    };
+
+    window.closeNameDialog = () => {
+        nameDialogOverlay.classList.remove('active');
+    };
+
+    // ===== PHOTO DIALOG FUNCTIONS =====
+    window.showPhotoDialog = () => {
+        closeProfile();
+        if (currentUser && currentUser.photo) {
+            currentPhotoPreview.src = currentUser.photo;
+        } else {
+            currentPhotoPreview.src = 'https://via.placeholder.com/120';
+        }
+        photoDialogOverlay.classList.add('active');
+    };
+
+    window.closePhotoDialog = () => {
+        photoDialogOverlay.classList.remove('active');
+        selectedPhoto = null;
+    };
+
+    // Photo input change
+    photoInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            selectedPhoto = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                currentPhotoPreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Update photo
+    window.updatePhoto = async () => {
+        const photoURL = currentPhotoPreview.src;
+        
+        if (!photoURL) {
+            showAlert('<i class="fas fa-info-circle"></i>', 'No Photo', 'Please select photo');
+            return;
+        }
+        
+        closePhotoDialog();
+        showLoading('Updating Photo...');
+        
+        try {
+            await update(ref(db, "users/" + userId), {
+                photo: photoURL
+            });
+            
+            document.getElementById("userPhoto").src = photoURL;
+            document.getElementById("heroImg").src = photoURL;
+            document.getElementById("popupImg").src = photoURL;
+            document.getElementById("welcomeImg").src = photoURL;
+            
+            if (currentUser) {
+                currentUser.photo = photoURL;
+            }
+            
+            setTimeout(() => {
+                hideDialog();
+                showAlert('<i class="fas fa-check-circle"></i>', 'Success', 'Photo Updated');
+            }, 300);
+            
+        } catch (err) {
+            console.error(err);
+            hideDialog();
+            showAlert('<i class="fas fa-exclamation-circle"></i>', 'Error', 'Update Failed');
+        }
+    };
+
+    // ===== WELCOME POPUP FUNCTIONS =====
+    window.closeWelcomePopup = () => {
+        welcomePopup.classList.remove('active');
+        if (welcomeTimer) {
+            clearTimeout(welcomeTimer);
+        }
+    };
+
+    // ===== NOTIFICATION FUNCTIONS =====
+    function checkNotificationPermission() {
+        if (!("Notification" in window)) {
+            console.log("Browser doesn't support notifications");
+            return;
+        }
+        
+        if (Notification.permission === "default") {
+            setTimeout(() => {
+                notificationPermissionPopup.classList.add('active');
+            }, 2000);
+        }
+    }
+
+    window.enableNotifications = async () => {
+        try {
+            const permission = await Notification.requestPermission();
+            if (permission === "granted") {
+                const token = await getToken(messaging, {
+                    vapidKey: "YOUR_VAPID_KEY"
+                });
+                
+                if (token) {
+                    await set(ref(db, `fcmTokens/${userId}`), token);
+                }
+                
+                showAlert('<i class="fas fa-check-circle"></i>', 'Success!', 'Notifications enabled');
+                notificationPermissionPopup.classList.remove('active');
+                
+                addNotification('Notifications Enabled', 'You will now receive real-time updates');
+            }
+        } catch (error) {
+            console.error('FCM Error:', error);
+        }
+    };
+
+    window.closeNotificationPopup = () => {
+        notificationPermissionPopup.classList.remove('active');
+    };
+
+    // Listen for foreground messages
+    onMessage(messaging, (payload) => {
+        console.log('Foreground message:', payload);
+        
+        showAlert(
+            '<i class="fas fa-bell"></i>',
+            payload.notification?.title || 'New Notification',
+            payload.notification?.body || 'You have a new message'
+        );
+        
+        loadNotifications();
+    });
+
+    // Add notification
+    async function addNotification(title, message, type = 'info') {
+        if (!userId) return;
+        
+        const notificationRef = ref(db, `notifications/${userId}`);
+        await push(notificationRef, {
+            title: title,
+            message: message,
+            type: type,
+            time: new Date().toLocaleString(),
+            read: false,
+            timestamp: Date.now()
+        });
+    }
+
+    // Delete single notification
+    window.deleteNotification = async (id, event) => {
+        event.stopPropagation();
+        currentDeleteId = id;
+        deleteMessage.textContent = 'Are you sure you want to delete this notification?';
+        deleteConfirmDialog.classList.add('active');
+        
+        confirmDeleteBtn.onclick = async () => {
+            if (!userId || !currentDeleteId) return;
+            
+            deleteConfirmDialog.classList.remove('active');
+            showLoading('Deleting...');
+            
+            try {
+                await remove(ref(db, `notifications/${userId}/${currentDeleteId}`));
+                hideDialog();
+                showAlert('<i class="fas fa-check-circle"></i>', 'Deleted', 'Notification removed');
+            } catch (error) {
+                hideDialog();
+                showAlert('<i class="fas fa-exclamation-circle"></i>', 'Error', 'Failed to delete');
+            }
+            
+            currentDeleteId = null;
+        };
+    };
+
+    // Delete all notifications
+    window.deleteAllNotifications = () => {
+        deleteMessage.textContent = 'Delete all notifications? This cannot be undone.';
+        deleteConfirmDialog.classList.add('active');
+        
+        confirmDeleteBtn.onclick = async () => {
+            if (!userId) return;
+            
+            deleteConfirmDialog.classList.remove('active');
+            showLoading('Deleting all...');
+            
+            try {
+                await remove(ref(db, `notifications/${userId}`));
+                hideDialog();
+                showAlert('<i class="fas fa-check-circle"></i>', 'Deleted', 'All notifications removed');
+                loadNotifications();
+            } catch (error) {
+                hideDialog();
+                showAlert('<i class="fas fa-exclamation-circle"></i>', 'Error', 'Failed to delete');
+            }
+        };
+    };
+
+    window.cancelDelete = () => {
+        deleteConfirmDialog.classList.remove('active');
+        currentDeleteId = null;
+    };
+
+    // Load notifications
+    function loadNotifications() {
+        if (!userId) return;
+        
+        const notificationsRef = ref(db, `notifications/${userId}`);
+        onValue(notificationsRef, (snap) => {
+            notificationList.innerHTML = '';
+            let unreadCount = 0;
+            
+            if (snap.exists()) {
+                const notifications = Object.entries(snap.val()).reverse();
+                
+                notifications.forEach(([id, notif]) => {
+                    if (!notif.read) unreadCount++;
+                    
+                    notificationList.innerHTML += `
+                        <div class="notification-item ${!notif.read ? 'unread' : ''}" onclick="markNotificationRead('${id}')">
+                            <div class="delete-notification" onclick="deleteNotification('${id}', event)">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div class="notification-item-title">
+                                ${notif.title}
+                                ${!notif.read ? '<span class="notification-badge">New</span>' : ''}
+                            </div>
+                            <div class="notification-item-message">${notif.message}</div>
+                            <div class="notification-item-time">${notif.time}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                notificationList.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;">No notifications yet</div>';
+            }
+            
+            notificationBadge.textContent = unreadCount;
+            notificationCount = unreadCount;
+            
+            if (unreadCount > 0) {
+                notificationBadge.style.display = 'flex';
+            } else {
+                notificationBadge.style.display = 'none';
+            }
+        });
+    }
+
+    window.markNotificationRead = async (id) => {
+        if (!userId) return;
+        await update(ref(db, `notifications/${userId}/${id}`), { read: true });
+        loadNotifications();
+    };
+
+    window.markAllRead = async () => {
+        if (!userId) return;
+        
+        const snap = await get(ref(db, `notifications/${userId}`));
+        if (snap.exists()) {
+            const updates = {};
+            Object.keys(snap.val()).forEach(key => {
+                updates[`${key}/read`] = true;
+            });
+            await update(ref(db, `notifications/${userId}`), updates);
+        }
+        
+        notificationPanel.classList.remove('active');
+        loadNotifications();
+        showAlert('<i class="fas fa-check-circle"></i>', 'Done', 'All notifications marked as read');
+    };
+
+    // Toggle notification panel
+    notificationBell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        notificationPanel.classList.toggle('active');
+    });
+
+    // ===== CHECK UPCOMING TESTS =====
+    async function checkUpcomingTests() {
+        try {
+            const snap = await get(ref(db, "onlineTest/current"));
+            if (snap.exists()) {
+                const test = snap.val();
+                const now = Date.now();
+                const oneHour = 60 * 60 * 1000;
+                
+                if (test.startTime - now <= oneHour && test.startTime > now) {
+                    const minutesLeft = Math.floor((test.startTime - now) / (60 * 1000));
+                    
+                    const notifiedSnap = await get(ref(db, `testNotified/${userId}/${test.testId}`));
+                    
+                    if (!notifiedSnap.exists()) {
+                        addNotification(
+                            '⏰ Test Starting Soon!',
+                            `Your test "${test.title}" starts in ${minutesLeft} minutes. Get ready!`,
+                            'warning'
+                        );
+                        
+                        await set(ref(db, `testNotified/${userId}/${test.testId}`), true);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error checking upcoming tests:', error);
+        }
+    }
+
+    setInterval(checkUpcomingTests, 60000);
+
+    // ===== LOAD SAVED COUNT =====
+    function loadSavedQuestionCount() {
+        if (!userId) return;
+        
+        const savedRef = ref(db, "savedQuestions/" + userId);
+        
+        onValue(savedRef, (snap) => {
+            let total = 0;
+            if (snap.exists()) {
+                total = Object.keys(snap.val()).length;
+            }
+            document.getElementById("savedCount").innerText = total;
+            document.getElementById("welcomeSaved").innerText = total;
+        });
+    }
+
+    // ===== LOAD TEST STATS =====
+    async function loadTestStats() {
+        if (!userId) return;
+        
+        try {
+            const testSnap = await get(ref(db, `testResults/${userId}`));
+            let testCount = 0;
+            if (testSnap.exists()) {
+                testCount = Object.keys(testSnap.val()).length;
+            }
+            document.getElementById("welcomeTests").innerText = testCount;
+            
+            const rankSnap = await get(ref(db, `leaderboard/${userId}`));
+            if (rankSnap.exists()) {
+                document.getElementById("welcomeRank").innerText = rankSnap.val().rank || 'NA';
+            }
+        } catch (error) {
+            console.error('Error loading stats:', error);
+        }
+    }
+
+    // ===== CHECK USER =====
+    if (!userId) {
+        showAlert('<i class="fas fa-exclamation-triangle"></i>', 'Not Logged In', 'Please login first', () => {
+            location.href = "index.html";
+        });
+    } else {
+        // Show original loading
+        showLoading('Fetching profile');
+        
+        get(ref(db, "users/" + userId))
+            .then((snap) => {
+                if (snap.exists()) {
+                    currentUser = snap.val();
+                    
+                    // Update all UI
+                    const userName = currentUser.username;
+                    const userPhoto = currentUser.photo || 'https://via.placeholder.com/100';
+                    
+                    document.getElementById("userName").innerText = userName;
+                    document.getElementById("heroName").innerText = userName;
+                    document.getElementById("popupName").innerText = userName;
+                    document.getElementById("welcomeName").innerText = userName;
+                    
+                    document.getElementById("userPhoto").src = userPhoto;
+                    document.getElementById("heroImg").src = userPhoto;
+                    document.getElementById("popupImg").src = userPhoto;
+                    document.getElementById("welcomeImg").src = userPhoto;
+                    
+                    // Load stats
+                    loadTestStats();
+                    loadSavedQuestionCount();
+                    loadNotifications();
+                    
+                    // Hide loading and show welcome popup
+                    hideDialog();
+                    
+                    // Show welcome popup after a slight delay
+                    setTimeout(() => {
+                        welcomePopup.classList.add('active');
+                        
+                        // Auto close after 5 seconds
+                        welcomeTimer = setTimeout(() => {
+                            welcomePopup.classList.remove('active');
+                        }, 5000);
+                    }, 300);
+                    
+                    checkNotificationPermission();
+                    checkUpcomingTests();
+                    
+                    addNotification('Welcome Back!', `Hello ${userName}, ready for your next test?`, 'welcome');
+                } else {
+                    hideDialog();
+                    showAlert('<i class="fas fa-exclamation-circle"></i>', 'Error', 'User data not found', () => {
+                        localStorage.clear();
+                        location.href = "index.html";
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                hideDialog();
+                showAlert('<i class="fas fa-wifi-slash"></i>', 'Network Error', 'Check internet connection');
+            });
+    }
+
+    // ===== MENU LOGIC =====
+    const menu = document.getElementById("menu");
+    const menuBtn = document.getElementById("menuBtn");
+
+    menuBtn.onclick = (e) => {
+        e.stopPropagation();
+        menu.classList.toggle("active");
+    };
+
+    document.body.onclick = (e) => {
+        if (!menu.contains(e.target) && e.target.id !== "menuBtn") {
+            menu.classList.remove("active");
+        }
+        if (!notificationBell.contains(e.target) && !notificationPanel.contains(e.target)) {
+            notificationPanel.classList.remove("active");
+        }
+    };
+
+    // ===== MORE MENU TOGGLE =====
+    window.toggleMoreMenu = (e) => {
+        e.stopPropagation();
+        const moreMenu = document.getElementById("moreMenu");
+        moreMenu.classList.toggle("active");
+    };
+
+    document.addEventListener("click", (e) => {
+        const moreCard = document.querySelector(".moreCard");
+        const moreMenu = document.getElementById("moreMenu");
+        
+        if (moreCard && !moreCard.contains(e.target)) {
+            moreMenu.classList.remove("active");
+        }
+    });
+
+    // ===== NAVIGATION =====
+    window.goDashboard = () => {
+        showLoading('Loading Dashboard');
+        setTimeout(() => location.reload(), 300);
+    };
+
+    window.goTest = () => {
+        showLoading('Loading Test');
+        addNotification('Test Started', 'You have opened the online test section');
+        setTimeout(() => location.href = "online-test.html", 300);
+    };
+
+    window.goBoard = () => {
+        showLoading('Loading Leaderboard');
+        addNotification('Leaderboard', 'Checking leaderboard rankings');
+        setTimeout(() => location.href = "sccm-leaderboard.html", 300);
+    };
+
+    window.goAdmin = () => {
+        showLoading('Loading Admin');
+        addNotification('Admin Panel', 'Accessing admin controls');
+        setTimeout(() => location.href = "admin.html", 300);
+    };
+
+    window.openResults = () => {
+        showLoading('Loading Results');
+        addNotification('Results', 'Viewing your test results');
+        setTimeout(() => location.href = "test-result-page.html", 300);
+    };
+
+    window.openHistory = () => {
+        showLoading('Loading History');
+        addNotification('Test History', 'Checking your past tests');
+        setTimeout(() => location.href = "test-history.html", 300);
+    };
+
+    window.openLeaderboard = () => {
+        showLoading('Loading Leaderboard');
+        addNotification('Leaderboard', 'Checking your ranking');
+        setTimeout(() => location.href = "leaderboard-list.html", 300);
+    };
+
+    window.openRetest = () => {
+        showLoading('Loading Re-Test');
+        addNotification('Re-Test', 'Starting test again');
+        setTimeout(() => location.href = "test-review.html", 300);
+    };
+
+    window.openReviewReply = () => {
+        showLoading('Loading Review');
+        addNotification('Test Review', 'Reviewing your answers');
+        setTimeout(() => location.href = "test-review-reply.html", 300);
+    };
+
+    window.openServedQuestion = () => {
+        showLoading('Loading Saved Questions');
+        addNotification('Saved Questions', 'Viewing your saved questions');
+        setTimeout(() => location.href = "save.html", 300);
+    };
+
+    // ===== PROFILE POPUP =====
+    const popup = document.getElementById("profilePopup");
+
+    window.openProfile = () => {
+        popup.style.display = "flex";
+    };
+
+    window.closeProfile = () => {
+        popup.style.display = "none";
+    };
+
+    // ===== UPDATE NAME =====
+    window.updateName = async () => {
+        const newName = newNameInput.value.trim();
+        
+        if (!newName) {
+            showAlert('<i class="fas fa-info-circle"></i>', 'Empty Name', 'Please enter a valid name');
+            return;
+        }
+        
+        if (newName.length < 3) {
+            showAlert('<i class="fas fa-info-circle"></i>', 'Too Short', 'Name must be at least 3 characters');
+            return;
+        }
+        
+        closeNameDialog();
+        showLoading('Updating your name');
+        
+        try {
+            await update(ref(db, "users/" + userId), { username: newName });
+            
+            document.getElementById("userName").innerText = newName;
+            document.getElementById("heroName").innerText = newName;
+            document.getElementById("popupName").innerText = newName;
+            document.getElementById("welcomeName").innerText = newName;
+            
+            hideDialog();
+            addNotification('Name Updated', `Your name has been changed to ${newName}`);
+            showAlert('<i class="fas fa-check-circle"></i>', 'Success!', 'Name updated successfully');
+        } catch (error) {
+            console.error(error);
+            hideDialog();
+            showAlert('<i class="fas fa-exclamation-circle"></i>', 'Error', 'Failed to update name. Please try again.');
+        }
+    };
+</script>
+
+<script>
+    // Non-module functions
+    function openHistory() {
+        window.location.href = "test-history.html";
+    }
+    
+    function openLeaderboard() {
+        window.location.href = "leaderboard-list.html";
+    }
+    
+    function openRetest() {
+        window.location.href = "test-review.html";
+    }
+    
+    function openReviewReply() {
+        window.location.href = "test-review-reply.html";
+    }
+    
+    function openServedQuestion() {
+        window.location.href = "save.html";
+    }
+    
+    function openResults() {
+        window.location.href = "test-result-page.html";
+    }
+</script>
+
+<!-- Service Worker Registration -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/firebase-messaging-sw.js')
+                .then(reg => console.log('Service Worker registered:', reg))
+                .catch(err => console.log('Service Worker error:', err));
+        });
+    }
+</script>
+
+</body>
+</html>

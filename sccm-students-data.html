@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Student Management System</title>
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+/* ===== DASHBOARD STYLE LOADING POPUP ===== */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 20, 40, 0.7);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.dialog-overlay.active {
+    display: flex;
+}
+
+.dialog-box {
+    background: white;
+    width: 90%;
+    max-width: 380px;
+    padding: 35px 30px;
+    border-radius: 30px;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.dialog-icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+    color: #2563eb;
+}
+
+.dialog-icon i {
+    color: #2563eb;
+}
+
+.dialog-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.dialog-message {
+    color: #475569;
+    font-size: 16px;
+    margin: 15px 0 25px;
+    line-height: 1.6;
+}
+
+.loading-dots:after {
+    content: '';
+    animation: dots 1.2s steps(4, end) infinite;
+    display: inline-block;
+    width: 24px;
+    text-align: left;
+}
+
+@keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: #ffffff;
+    color: #1e293b;
+    padding: 18px 24px;
+    font-weight: 600;
+    font-size: 20px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header i {
+    color: #3b82f6;
+    font-size: 24px;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== STATS CARD ===== */
+.stats-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid #eef2f6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+}
+
+.stats-left h3 {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.stats-left .stats-number {
+    font-size: 36px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.stats-icon {
+    width: 60px;
+    height: 60px;
+    background: #eff6ff;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3b82f6;
+    font-size: 28px;
+}
+
+/* ===== STUDENT CARD - CRITICAL FIXES ===== */
+.student-card {
+    background: white;
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #eef2f6;
+    transition: all 0.2s ease;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    /* CRITICAL: Allow menu to overflow */
+    overflow: visible !important;
+    /* Ensure proper stacking context */
+    z-index: 1;
+}
+
+.student-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+    transform: translateY(-2px);
+    /* Increase z-index on hover to help with menu */
+    z-index: 10;
+}
+
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+.student-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: #f1f5f9;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.student-avatar:hover {
+    transform: scale(1.05);
+}
+
+.student-details {
+    flex: 1;
+}
+
+.student-name {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 16px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.student-uid {
+    font-size: 12px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.student-uid i {
+    font-size: 10px;
+    color: #64748b;
+}
+
+.student-status {
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.status-online {
+    color: #10b981;
+}
+
+.status-online i {
+    color: #10b981;
+}
+
+.status-offline {
+    color: #ef4444;
+}
+
+.status-offline i {
+    color: #ef4444;
+}
+
+.student-tests {
+    font-size: 12px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8fafc;
+    padding: 4px 10px;
+    border-radius: 30px;
+    width: fit-content;
+}
+
+.student-tests i {
+    color: #3b82f6;
+    font-size: 10px;
+}
+
+.more-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #64748b;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    position: relative;
+    z-index: 20; /* Higher than card */
+}
+
+.more-button:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+/* ===== FIXED CONTEXT MENU - HIGHEST Z-INDEX ===== */
+.context-menu {
+    position: absolute;
+    right: 20px;
+    top: 60px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25); /* Stronger shadow */
+    display: none;
+    z-index: 9999 !important; /* Very high z-index */
+    min-width: 220px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    animation: menuFade 0.2s ease;
+    /* Ensure menu is above everything */
+    pointer-events: auto;
+}
+
+/* When menu is active, ensure it's visible */
+.context-menu.active {
+    display: block;
+    /* Force hardware acceleration */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.menu-item {
+    padding: 14px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #334155;
+    transition: all 0.2s;
+    border-bottom: 1px solid #f1f5f9;
+    background: white;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-item i {
+    width: 18px;
+    color: #64748b;
+    font-size: 16px;
+}
+
+.menu-item:hover {
+    background: #f8fafc;
+}
+
+.menu-item.delete-item {
+    color: #ef4444;
+}
+
+.menu-item.delete-item i {
+    color: #ef4444;
+}
+
+@keyframes menuFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== PROFESSIONAL DIALOG ===== */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+}
+
+.dialog-overlay.active {
+    display: flex;
+}
+
+.dialog-container {
+    background: white;
+    width: 90%;
+    max-width: 420px;
+    border-radius: 28px;
+    box-shadow: 0 50px 80px rgba(0,0,0,0.3);
+    animation: dialogSlide 0.3s ease;
+    overflow: hidden;
+}
+
+@keyframes dialogSlide {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dialog-header {
+    padding: 28px 28px 16px;
+    text-align: center;
+}
+
+.dialog-icon {
+    width: 64px;
+    height: 64px;
+    background: #eff6ff;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    color: #3b82f6;
+    font-size: 30px;
+}
+
+.dialog-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.dialog-subtitle {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.dialog-content {
+    padding: 8px 28px 20px;
+}
+
+.dialog-field {
+    margin-bottom: 20px;
+}
+
+.dialog-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dialog-label i {
+    color: #3b82f6;
+    font-size: 12px;
+}
+
+.dialog-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 14px;
+    transition: all 0.2s;
+    outline: none;
+    background: #f8fafc;
+}
+
+.dialog-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+    background: white;
+}
+
+.dialog-textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 14px;
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+    background: #f8fafc;
+}
+
+.dialog-textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+    background: white;
+    outline: none;
+}
+
+.dialog-footer {
+    padding: 16px 28px 28px;
+    display: flex;
+    gap: 12px;
+}
+
+.dialog-button {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.dialog-button.primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.dialog-button.primary:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(59,130,246,0.3);
+}
+
+.dialog-button.secondary {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.dialog-button.secondary:hover {
+    background: #e2e8f0;
+}
+
+.dialog-button.danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.dialog-button.danger:hover {
+    background: #dc2626;
+    color: white;
+}
+
+/* ===== PROFILE PREVIEW ===== */
+.profile-preview {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-preview img {
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    border: 3px solid white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    object-fit: cover;
+    margin-bottom: 12px;
+}
+
+.profile-preview .preview-name {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 18px;
+}
+
+.profile-preview .preview-uid {
+    color: #64748b;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* ===== RESULTS LIST ===== */
+.results-list {
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.result-item {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 10px;
+    border: 1px solid #eef2f6;
+}
+
+.result-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.result-test-name {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 14px;
+}
+
+.result-score {
+    background: #3b82f6;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.result-details {
+    display: flex;
+    gap: 16px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.result-details i {
+    margin-right: 4px;
+    color: #3b82f6;
+}
+
+/* ===== TOAST NOTIFICATION ===== */
+.toast-notification {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: white;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    z-index: 6000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: toastSlide 0.3s ease;
+}
+
+@keyframes toastSlide {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 30px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+.toast-notification.success {
+    background: #10b981;
+}
+
+.toast-notification.error {
+    background: #ef4444;
+}
+
+.toast-notification i {
+    font-size: 18px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    background: white;
+    border-radius: 24px;
+    padding: 60px 20px;
+    text-align: center;
+    border: 1px solid #eef2f6;
+}
+
+.empty-state i {
+    font-size: 60px;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    color: #1e293b;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- DASHBOARD STYLE LOADING POPUP -->
+<div class="dialog-overlay" id="loadingDialog">
+    <div class="dialog-box">
+        <div class="dialog-icon">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </div>
+        <div class="dialog-title">Loading</div>
+        <div class="dialog-message">Please wait<span class="loading-dots"></span></div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+    <i class="fas fa-user-graduate"></i>
+    Student Management System
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+    <!-- STATS CARD will be added dynamically -->
+    <div id="statsContainer"></div>
+    
+    <!-- STUDENTS LIST -->
+    <div id="studentsList"></div>
+</div>
+
+<!-- PROFESSIONAL DIALOG (Reusable) -->
+<div class="dialog-overlay" id="dialogOverlay">
+    <div class="dialog-container" id="dialogContainer">
+        <div class="dialog-header">
+            <div class="dialog-icon" id="dialogIcon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="dialog-title" id="dialogTitle">Dialog Title</div>
+            <div class="dialog-subtitle" id="dialogSubtitle">Dialog subtitle or message</div>
+        </div>
+        <div class="dialog-content" id="dialogContent"></div>
+        <div class="dialog-footer" id="dialogFooter"></div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue, get, update, set, remove } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+// Firebase Configuration
+const app = initializeApp({
+    apiKey: "AIzaSyCy1r8BXbe-W9UBsCrFDFgkHy-j7lYFwYg",
+    databaseURL: "https://mmpublicschoolmundeshwar-233a4-default-rtdb.firebaseio.com"
+});
+
+const db = getDatabase(app);
+
+// DOM Elements
+const loadingDialog = document.getElementById('loadingDialog');
+const statsContainer = document.getElementById('statsContainer');
+const studentsList = document.getElementById('studentsList');
+const dialogOverlay = document.getElementById('dialogOverlay');
+const dialogIcon = document.getElementById('dialogIcon');
+const dialogTitle = document.getElementById('dialogTitle');
+const dialogSubtitle = document.getElementById('dialogSubtitle');
+const dialogContent = document.getElementById('dialogContent');
+const dialogFooter = document.getElementById('dialogFooter');
+
+// State
+let currentStudentUid = null;
+let allStudents = {};
+
+// ===== DIALOG FUNCTIONS =====
+function showLoading(message = 'Loading students') {
+    const dialogMessage = loadingDialog.querySelector('.dialog-message');
+    dialogMessage.innerHTML = message + '<span class="loading-dots"></span>';
+    loadingDialog.classList.add('active');
+}
+
+function hideLoading() {
+    loadingDialog.classList.remove('active');
+}
+
+// Show toast notification
+function showToast(message, type = 'success'){
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+    toast.innerHTML = `
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+        <span>${message}</span>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Show professional dialog
+function showDialog(options){
+    const { icon, title, subtitle, content, buttons } = options;
+    
+    dialogIcon.innerHTML = icon || '<i class="fas fa-info-circle"></i>';
+    dialogTitle.textContent = title || 'Notification';
+    dialogSubtitle.textContent = subtitle || '';
+    dialogContent.innerHTML = content || '';
+    
+    dialogFooter.innerHTML = '';
+    if(buttons && buttons.length){
+        buttons.forEach(btn => {
+            const button = document.createElement('button');
+            button.className = `dialog-button ${btn.class || 'secondary'}`;
+            button.innerHTML = btn.icon ? `<i class="fas ${btn.icon}"></i> ${btn.text}` : btn.text;
+            button.onclick = () => {
+                if(btn.action) btn.action();
+                if(!btn.keepOpen) hideDialog();
+            };
+            dialogFooter.appendChild(button);
+        });
+    }
+    
+    dialogOverlay.classList.add('active');
+}
+
+// Hide dialog
+function hideDialog(){
+    dialogOverlay.classList.remove('active');
+}
+
+// Close menus when clicking outside
+document.addEventListener('click', (e) => {
+    if(!e.target.closest('.more-button') && !e.target.closest('.context-menu')){
+        document.querySelectorAll('.context-menu.active').forEach(menu => {
+            menu.classList.remove('active');
+        });
+    }
+});
+
+// ===== LOAD STUDENTS =====
+async function loadStudents(){
+    showLoading('Loading students');
+    
+    try {
+        const usersSnap = await get(ref(db, 'users'));
+        
+        if(!usersSnap.exists()){
+            studentsList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-users-slash"></i>
+                    <h3>No Students Found</h3>
+                    <p>There are no students registered in the system yet.</p>
+                </div>
+            `;
+            hideLoading();
+            return;
+        }
+        
+        allStudents = usersSnap.val();
+        const studentCount = Object.keys(allStudents).length;
+        
+        // Update stats
+        statsContainer.innerHTML = `
+            <div class="stats-card">
+                <div class="stats-left">
+                    <h3><i class="fas fa-users" style="margin-right: 6px;"></i> Total Students</h3>
+                    <div class="stats-number">${studentCount}</div>
+                </div>
+                <div class="stats-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+            </div>
+        `;
+        
+        let html = '';
+        
+        for(const uid in allStudents){
+            const student = allStudents[uid];
+            
+            // Get test count
+            let testCount = 0;
+            try {
+                const testSnap = await get(ref(db, `testResults/${uid}`));
+                if(testSnap.exists()){
+                    testCount = Object.keys(testSnap.val()).length;
+                }
+            } catch(e){}
+            
+            const photo = student.photo || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(student.username || 'Student') + '&background=3b82f6&color=fff&size=128';
+            const name = student.username || 'Unnamed Student';
+            const online = student.online || false;
+            
+            html += `
+                <div class="student-card" id="student-${uid}">
+                    <div class="student-info">
+                        <img src="${photo}" class="student-avatar" onclick="viewProfile('${uid}')" loading="lazy">
+                        <div class="student-details">
+                            <div class="student-name">
+                                ${name}
+                            </div>
+                            <div class="student-uid">
+                                <i class="fas fa-id-card"></i> ${uid.substring(0, 8)}...${uid.substring(uid.length - 4)}
+                            </div>
+                            <div class="student-status">
+                                ${online ? 
+                                    '<span class="status-online"><i class="fas fa-circle"></i> Online</span>' : 
+                                    '<span class="status-offline"><i class="fas fa-circle"></i> Offline</span>'
+                                }
+                            </div>
+                            <div class="student-tests">
+                                <i class="fas fa-pencil-alt"></i> Tests Given: ${testCount}
+                            </div>
+                        </div>
+                    </div>
+                    <button class="more-button" onclick="toggleMenu('${uid}', event)">
+                        <i class="fas fa-ellipsis-vertical"></i>
+                    </button>
+                    
+                    <div class="context-menu" id="menu-${uid}">
+                        <div class="menu-item" onclick="viewProfile('${uid}')">
+                            <i class="fas fa-user"></i> View Profile
+                        </div>
+                        <div class="menu-item" onclick="viewResults('${uid}')">
+                            <i class="fas fa-chart-bar"></i> View Results
+                        </div>
+                        <div class="menu-item" onclick="sendMessage('${uid}')">
+                            <i class="fas fa-envelope"></i> Send Message
+                        </div>
+                        <div class="menu-item" onclick="changeName('${uid}')">
+                            <i class="fas fa-edit"></i> Change Name
+                        </div>
+                        <div class="menu-item" onclick="changePhoto('${uid}')">
+                            <i class="fas fa-camera"></i> Change Photo
+                        </div>
+                        <div class="menu-item delete-item" onclick="deleteStudent('${uid}')">
+                            <i class="fas fa-trash-alt"></i> Delete Student
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        studentsList.innerHTML = html;
+        hideLoading();
+        
+    } catch(error){
+        console.error('Error loading students:', error);
+        studentsList.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Error Loading Data</h3>
+                <p>Please check your internet connection and try again.</p>
+            </div>
+        `;
+        hideLoading();
+        showToast('Failed to load students', 'error');
+    }
+}
+
+// Initialize
+loadStudents();
+
+// ===== MENU FUNCTIONS =====
+window.toggleMenu = (uid, event) => {
+    event.stopPropagation();
+    
+    // Close all other menus first
+    document.querySelectorAll('.context-menu.active').forEach(menu => {
+        if(menu.id !== `menu-${uid}`){
+            menu.classList.remove('active');
+        }
+    });
+    
+    // Toggle current menu
+    const menu = document.getElementById(`menu-${uid}`);
+    if(menu){
+        menu.classList.toggle('active');
+        
+        // Ensure menu is visible by bringing parent card to front
+        const card = document.getElementById(`student-${uid}`);
+        if(card && menu.classList.contains('active')){
+            card.style.zIndex = '100';
+        } else if(card) {
+            card.style.zIndex = '1';
+        }
+    }
+    
+    currentStudentUid = uid;
+};
+
+// ===== VIEW PROFILE =====
+window.viewProfile = async (uid) => {
+    document.querySelectorAll('.context-menu.active').forEach(m => m.classList.remove('active'));
+    
+    try {
+        const snap = await get(ref(db, `users/${uid}`));
+        if(snap.exists()){
+            const student = snap.val();
+            
+            showDialog({
+                icon: '<i class="fas fa-user-circle"></i>',
+                title: 'Student Profile',
+                subtitle: 'Complete student information',
+                content: `
+                    <div class="profile-preview">
+                        <img src="${student.photo || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(student.username || 'Student') + '&background=3b82f6&color=fff&size=128'}">
+                        <div class="preview-name">${student.username || 'Unnamed Student'}</div>
+                        <div class="preview-uid">${uid}</div>
+                    </div>
+                    <div style="background: #f8fafc; border-radius: 16px; padding: 16px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <i class="fas fa-envelope" style="color: #3b82f6; width: 20px;"></i>
+                            <span style="color: #475569;">${student.email || 'No email provided'}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <i class="fas fa-calendar" style="color: #3b82f6; width: 20px;"></i>
+                            <span style="color: #475569;">${student.joined || 'Join date not available'}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fas fa-circle" style="color: ${student.online ? '#10b981' : '#ef4444'}; width: 20px;"></i>
+                            <span style="color: #475569;">${student.online ? 'Online' : 'Offline'}</span>
+                        </div>
+                    </div>
+                `,
+                buttons: [
+                    { text: 'Close', class: 'secondary', icon: 'fa-times', action: () => {} }
+                ]
+            });
+        }
+    } catch(error){
+        showToast('Error loading profile', 'error');
+    }
+};
+
+// ===== VIEW RESULTS =====
+window.viewResults = async (uid) => {
+    document.querySelectorAll('.context-menu.active').forEach(m => m.classList.remove('active'));
+    
+    try {
+        const snap = await get(ref(db, `testResults/${uid}`));
+        
+        if(!snap.exists()){
+            showDialog({
+                icon: '<i class="fas fa-chart-bar"></i>',
+                title: 'Test Results',
+                subtitle: 'No test results found for this student',
+                content: '<div style="text-align: center; padding: 20px;"><i class="fas fa-clipboard-list" style="font-size: 48px; color: #cbd5e1; margin-bottom: 15px;"></i><p style="color: #64748b;">This student hasn\'t taken any tests yet.</p></div>',
+                buttons: [
+                    { text: 'Close', class: 'secondary', icon: 'fa-times', action: () => {} }
+                ]
+            });
+            return;
+        }
+        
+        const results = snap.val();
+        let resultsHtml = '<div class="results-list">';
+        
+        Object.entries(results).forEach(([testId, result]) => {
+            resultsHtml += `
+                <div class="result-item">
+                    <div class="result-item-header">
+                        <span class="result-test-name">${testId.substring(0, 15)}...</span>
+                        <span class="result-score">${result.score || 0}%</span>
+                    </div>
+                    <div class="result-details">
+                        <span><i class="fas fa-clock"></i> ${result.date || 'N/A'}</span>
+                        <span><i class="fas fa-check-circle"></i> ${result.correct || 0}/${result.total || 0}</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        resultsHtml += '</div>';
+        
+        showDialog({
+            icon: '<i class="fas fa-chart-bar"></i>',
+            title: 'Test Results',
+            subtitle: `Total Tests: ${Object.keys(results).length}`,
+            content: resultsHtml,
+            buttons: [
+                { text: 'Close', class: 'secondary', icon: 'fa-times', action: () => {} }
+            ]
+        });
+        
+    } catch(error){
+        showToast('Error loading results', 'error');
+    }
+};
+
+// ===== SEND MESSAGE =====
+window.sendMessage = (uid) => {
+    document.querySelectorAll('.context-menu.active').forEach(m => m.classList.remove('active'));
+    
+    showDialog({
+        icon: '<i class="fas fa-envelope"></i>',
+        title: 'Send Message',
+        subtitle: 'Compose your message to the student',
+        content: `
+            <div class="dialog-field">
+                <div class="dialog-label">
+                    <i class="fas fa-pen"></i> Message
+                </div>
+                <textarea class="dialog-textarea" id="messageText" placeholder="Type your message here..."></textarea>
+            </div>
+        `,
+        buttons: [
+            { text: 'Cancel', class: 'secondary', icon: 'fa-times', action: () => {} },
+            { 
+                text: 'Send', 
+                class: 'primary', 
+                icon: 'fa-paper-plane', 
+                action: async () => {
+                    const message = document.getElementById('messageText')?.value;
+                    if(!message || !message.trim()){
+                        showToast('Please enter a message', 'error');
+                        return;
+                    }
+                    
+                    try {
+                        const messageRef = ref(db, `messages/${uid}/${Date.now()}`);
+                        await set(messageRef, {
+                            text: message.trim(),
+                            from: 'admin',
+                            timestamp: Date.now(),
+                            date: new Date().toLocaleString(),
+                            read: false
+                        });
+                        showToast('Message sent successfully', 'success');
+                    } catch(error){
+                        showToast('Failed to send message', 'error');
+                    }
+                },
+                keepOpen: false
+            }
+        ]
+    });
+};
+
+// ===== CHANGE NAME =====
+window.changeName = async (uid) => {
+    document.querySelectorAll('.context-menu.active').forEach(m => m.classList.remove('active'));
+    
+    try {
+        const snap = await get(ref(db, `users/${uid}`));
+        const currentName = snap.exists() ? snap.val().username : 'Student';
+        
+        showDialog({
+            icon: '<i class="fas fa-edit"></i>',
+            title: 'Change Student Name',
+            subtitle: `Current: ${currentName}`,
+            content: `
+                <div class="dialog-field">
+                    <div class="dialog-label">
+                        <i class="fas fa-user"></i> New Name
+                    </div>
+                    <input type="text" class="dialog-input" id="newNameInput" placeholder="Enter new name" value="${currentName}">
+                </div>
+            `,
+            buttons: [
+                { text: 'Cancel', class: 'secondary', icon: 'fa-times', action: () => {} },
+                { 
+                    text: 'Update', 
+                    class: 'primary', 
+                    icon: 'fa-check', 
+                    action: async () => {
+                        const newName = document.getElementById('newNameInput')?.value.trim();
+                        if(!newName){
+                            showToast('Please enter a name', 'error');
+                            return;
+                        }
+                        
+                        try {
+                            await update(ref(db, `users/${uid}`), { username: newName });
+                            
+                            // Update UI
+                            const card = document.getElementById(`student-${uid}`);
+                            if(card){
+                                const nameDiv = card.querySelector('.student-name');
+                                if(nameDiv) nameDiv.textContent = newName;
+                            }
+                            
+                            showToast('Name updated successfully', 'success');
+                        } catch(error){
+                            showToast('Failed to update name', 'error');
+                        }
+                    },
+                    keepOpen: false
+                }
+            ]
+        });
+    } catch(error){
+        showToast('Error loading student data', 'error');
+    }
+};
+
+// ===== CHANGE PHOTO =====
+window.changePhoto = async (uid) => {
+    document.querySelectorAll('.context-menu.active').forEach(m => m.classList.remove('active'));
+    
+    try {
+        const snap = await get(ref(db, `users/${uid}`));
+        const currentPhoto = snap.exists() ? snap.val().photo : 'https://ui-avatars.com/api/?name=Student&background=3b82f6&color=fff&size=128';
+        
+        showDialog({
+            icon: '<i class="fas fa-camera"></i>',
+            title: 'Change Student Photo',
+            subtitle: 'Enter a new photo URL',
+            content: `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="${currentPhoto}" style="width: 100px; height: 100px; border-radius: 16px; object-fit: cover; border: 3px solid #e2e8f0;" id="photoPreview">
+                </div>
+                <div class="dialog-field">
+                    <div class="dialog-label">
+                        <i class="fas fa-link"></i> Photo URL
+                    </div>
+                    <input type="url" class="dialog-input" id="photoUrlInput" placeholder="https://example.com/photo.jpg" value="${currentPhoto}">
+                </div>
+                <div style="font-size: 12px; color: #94a3b8; margin-top: 8px;">
+                    <i class="fas fa-info-circle"></i> Use any image URL (Google Drive, Imgur, etc.)
+                </div>
+            `,
+            buttons: [
+                { text: 'Cancel', class: 'secondary', icon: 'fa-times', action: () => {} },
+                { 
+                    text: 'Update', 
+                    class: 'primary', 
+                    icon: 'fa-check', 
+                    action: async () => {
+                        const photoUrl = document.getElementById('photoUrlInput')?.value.trim();
+                        if(!photoUrl){
+                            showToast('Please enter photo URL', 'error');
+                            return;
+                        }
+                        
+                        try {
+                            await update(ref(db, `users/${uid}`), { photo: photoUrl });
+                            
+                            // Update UI
+                            const card = document.getElementById(`student-${uid}`);
+                            if(card){
+                                const img = card.querySelector('.student-avatar');
+                                if(img) img.src = photoUrl;
+                            }
+                            
+                            showToast('Photo updated successfully', 'success');
+                        } catch(error){
+                            showToast('Failed to update photo', 'error');
+                        }
+                    },
+                    keepOpen: false
+                }
+            ]
+        });
+        
+        // Live preview
+        setTimeout(() => {
+            const input = document.getElementById('photoUrlInput');
+            const preview = document.getElementById('photoPreview');
+            if(input && preview){
+                input.addEventListener('input', () => {
+                    preview.src = input.value || 'https://ui-avatars.com/api/?name=Student&background=3b82f6&color=fff&size=128';
+                });
+            }
+        }, 100);
+        
+    } catch(error){
+        showToast('Error loading student data', 'error');
+    }
+};
+
+// ===== DELETE STUDENT =====
+window.deleteStudent = (uid) => {
+    document.querySelectorAll('.context-menu.active').forEach(m => m.classList.remove('active'));
+    
+    showDialog({
+        icon: '<i class="fas fa-exclamation-triangle" style="color: #dc2626;"></i>',
+        title: 'Delete Student',
+        subtitle: 'This action cannot be undone',
+        content: `
+            <div style="background: #fee2e2; border-radius: 16px; padding: 20px; text-align: center; color: #dc2626;">
+                <i class="fas fa-trash-alt" style="font-size: 32px; margin-bottom: 12px;"></i>
+                <p style="font-weight: 500;">Are you sure you want to delete this student?</p>
+                <p style="font-size: 12px; margin-top: 8px;">All associated data will be permanently removed.</p>
+            </div>
+        `,
+        buttons: [
+            { text: 'Cancel', class: 'secondary', icon: 'fa-times', action: () => {} },
+            { 
+                text: 'Delete', 
+                class: 'danger', 
+                icon: 'fa-trash-alt', 
+                action: async () => {
+                    try {
+                        // Delete user data
+                        await set(ref(db, `users/${uid}`), null);
+                        
+                        // Remove card from UI
+                        const card = document.getElementById(`student-${uid}`);
+                        if(card) card.remove();
+                        
+                        // Update stats
+                        const remainingCards = document.querySelectorAll('.student-card').length;
+                        statsContainer.innerHTML = `
+                            <div class="stats-card">
+                                <div class="stats-left">
+                                    <h3><i class="fas fa-users" style="margin-right: 6px;"></i> Total Students</h3>
+                                    <div class="stats-number">${remainingCards}</div>
+                                </div>
+                                <div class="stats-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                            </div>
+                        `;
+                        
+                        if(remainingCards === 0){
+                            studentsList.innerHTML = `
+                                <div class="empty-state">
+                                    <i class="fas fa-users-slash"></i>
+                                    <h3>No Students Found</h3>
+                                    <p>There are no students registered in the system yet.</p>
+                                </div>
+                            `;
+                        }
+                        
+                        showToast('Student deleted successfully', 'success');
+                    } catch(error){
+                        showToast('Failed to delete student', 'error');
+                    }
+                },
+                keepOpen: false
+            }
+        ]
+    });
+};
+
+</script>
+
+</body>
+</html>

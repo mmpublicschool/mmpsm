@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MM Public School - Coming Soon</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a2a66;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .school-icon {
+            width: 100px;
+            height: 100px;
+            background: #0a2a66;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #ffd700;
+        }
+
+        .school-icon i {
+            font-size: 50px;
+            color: white;
+        }
+
+        h1 {
+            color: #0a2a66;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .location {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .coming-soon {
+            font-size: 36px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        p {
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #0a2a66;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #1e4b8f;
+        }
+
+        .back-btn i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- School Icon -->
+        <div class="school-icon">
+            <i class="fa-solid fa-school"></i>
+        </div>
+        
+        <!-- School Name -->
+        <h1>M.M Public School</h1>
+        <div class="location">Mundeshwari, Kaimur</div>
+        
+        <!-- Coming Soon -->
+        <div class="coming-soon">Coming Soon</div>
+        
+        <!-- Message -->
+        <p>
+            हम नए features के साथ जल्द आ रहे हैं!<br>
+            Stay tuned for updates.
+        </p>
+        
+        <!-- Back Button -->
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> वापस जाएं
+        </a>
+    </div>
+
+</body>
+</html>

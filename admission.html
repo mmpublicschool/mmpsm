@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admission Open | M.M Public School</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(to bottom,#eef2ff,#f8fbff);
+overflow-x:hidden;
+}
+
+/* HEADER */
+.header{
+background:linear-gradient(135deg,#0a2a66,#1e4b8f);
+color:white;
+padding:20px;
+text-align:center;
+font-weight:700;
+letter-spacing:1px;
+font-size:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+animation:slideDown 1s ease;
+}
+
+/* HERO */
+.hero{
+background:linear-gradient(135deg,#0a2a66,#1e4b8f);
+color:white;
+padding:70px 20px 100px;
+text-align:center;
+position:relative;
+overflow:hidden;
+}
+
+.hero h1{
+font-size:32px;
+font-weight:800;
+animation:fadeUp 1.2s ease;
+}
+
+.hero p{
+opacity:0.9;
+margin-top:12px;
+font-size:15px;
+animation:fadeUp 1.6s ease;
+}
+
+.hero::after{
+content:'';
+position:absolute;
+bottom:-40px;
+left:0;
+width:100%;
+height:80px;
+background:white;
+border-top-left-radius:60% 80px;
+border-top-right-radius:60% 80px;
+}
+
+/* CONTAINER */
+.container{
+max-width:520px;
+margin:-60px auto 40px;
+padding:0 18px;
+}
+
+/* CARD */
+.card{
+background:rgba(255,255,255,0.95);
+backdrop-filter:blur(10px);
+padding:24px;
+border-radius:24px;
+box-shadow:0 20px 40px rgba(0,0,0,0.08);
+margin-bottom:22px;
+transition:0.4s;
+animation:fadeUp 1.5s ease;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 25px 50px rgba(0,0,0,0.12);
+}
+
+.card h3{
+color:#0a2a66;
+margin-bottom:14px;
+display:flex;
+align-items:center;
+gap:10px;
+font-size:18px;
+}
+
+.card p, .card li{
+font-size:14px;
+color:#555;
+line-height:1.7;
+}
+
+.card ul{
+margin-top:8px;
+padding-left:20px;
+}
+
+/* BUTTON */
+.admission-btn{
+width:100%;
+padding:18px;
+border:none;
+border-radius:50px;
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+background:linear-gradient(135deg,#0a2a66,#1e4b8f);
+color:white;
+box-shadow:0 15px 30px rgba(10,42,102,0.35);
+transition:0.4s;
+letter-spacing:0.5px;
+position:relative;
+overflow:hidden;
+animation:fadeUp 2s ease;
+}
+
+.admission-btn:hover{
+transform:translateY(-4px);
+box-shadow:0 20px 40px rgba(10,42,102,0.5);
+}
+
+.admission-btn::before{
+content:'';
+position:absolute;
+left:-100%;
+top:0;
+width:100%;
+height:100%;
+background:rgba(255,255,255,0.2);
+transform:skewX(-25deg);
+transition:0.5s;
+}
+
+.admission-btn:hover::before{
+left:120%;
+}
+
+/* FOOTER */
+.footer{
+text-align:center;
+font-size:12px;
+color:#777;
+margin-top:25px;
+animation:fadeUp 2.2s ease;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@keyframes slideDown{
+from{
+opacity:0;
+transform:translateY(-30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+M. M PUBLIC SCHOOL<br>
+<span style="font-size:12px;font-weight:400;">MUNDESHWARI</span>
+</div>
+
+<div class="hero">
+<h1>Admission Open 2026</h1>
+<p>Empowering young minds for a brighter future</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+<h3><i class="fa-solid fa-circle-info"></i> Admission Overview</h3>
+<p>
+Admissions are open from Nursery to Class 12. 
+Selection is based on eligibility and interaction process. 
+Limited seats available.
+</p>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-user-check"></i> Eligibility Criteria</h3>
+<ul>
+<li>Age as per class requirements</li>
+<li>Previous academic records</li>
+<li>Basic interaction (if required)</li>
+</ul>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-file-lines"></i> Required Documents</h3>
+<ul>
+<li>Aadhaar Card (Student & Parents)</li>
+<li>Birth Certificate</li>
+<li>Passport Size Photos</li>
+<li>Transfer Certificate (if applicable)</li>
+</ul>
+</div>
+
+<button class="admission-btn" onclick="applyNow()">
+<i class="fa-solid fa-graduation-cap"></i> APPLY FOR ADMISSION
+</button>
+
+<div class="footer">
+© 2026 M.M Public School Mundeshwari
+</div>
+
+</div>
+
+<script>
+function applyNow(){
+window.location.href="admission-from.html";
+}
+</script>
+
+</body>
+</html>

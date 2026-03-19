@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class Students</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: #f2f5f9;
+  padding: 20px;
+}
+
+/* header */
+.header {
+  background: #1e3a6b;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* filter card */
+.filter-section {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.filter-label {
+  font-weight: 600;
+  color: #1e3a6b;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* custom select - khud ka CSS */
+.select-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+select {
+  width: 100%;
+  padding: 12px 15px;
+  background: white;
+  border: 2px solid #dde5f2;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #0f2642;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  outline: none;
+}
+
+select:hover {
+  border-color: #3f6bc0;
+}
+
+.select-wrapper i {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5f7fb0;
+  pointer-events: none;
+}
+
+/* total count */
+.total-count {
+  background: #e5effd;
+  padding: 8px 16px;
+  border-radius: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #1e3a6b;
+}
+
+/* student list */
+.student-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+@media (min-width: 600px) {
+  .student-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* student card - simple design */
+.student-card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  gap: 15px;
+  border: 1px solid #e3ebf6;
+  transition: 0.2s;
+}
+
+.student-card:hover {
+  border-color: #b6cef2;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.profile-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 60px;
+  background: #edf3fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e3a6b;
+  font-size: 28px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.student-info {
+  flex: 1;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.student-info h4 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #0f2a4f;
+}
+
+.class-badge {
+  background: #e9f1fe;
+  padding: 4px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1e4895;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.class-badge i {
+  font-size: 11px;
+  color: #eba031;
+}
+
+/* ID row - ek line mein */
+.id-row {
+  background: #f2f8ff;
+  padding: 6px 12px;
+  border-radius: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  border: 1px solid #dae6fd;
+  max-width: 100%;
+}
+
+.id-row i {
+  color: #376ac5;
+  font-size: 14px;
+}
+
+.id-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1b3e7c;
+  background: white;
+  padding: 3px 12px;
+  border-radius: 30px;
+  border: 1px solid #cddfff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+/* about section */
+.about-text {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #c9d9f2;
+  font-size: 13px;
+  color: #2f4b7a;
+  display: flex;
+  gap: 8px;
+}
+
+.about-text i {
+  color: #b18b42;
+  font-size: 13px;
+}
+
+/* no data */
+.no-data {
+  text-align: center;
+  padding: 40px 20px;
+  background: white;
+  border-radius: 12px;
+  color: #57749e;
+  border: 1px dashed #adc6ee;
+  grid-column: 1/-1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.no-data i {
+  font-size: 40px;
+  color: #a2bde9;
+}
+
+/* hint */
+.hint {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #527299;
+  background: #e5f0fe;
+  padding: 8px 16px;
+  border-radius: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <i class="fas fa-graduation-cap"></i>
+  <span>Class Students</span>
+</div>
+
+<!-- filter section with custom select -->
+<div class="filter-section">
+  <div class="filter-label">
+    <i class="fas fa-filter"></i>
+    <span>Select Class</span>
+  </div>
+
+  <div class="select-wrapper">
+    <select id="classSelect">
+      <option value="" selected disabled>- select a class -</option>
+      <option value="Nursery">Nursery</option>
+      <option value="LKG">LKG</option>
+      <option value="UKG">UKG</option>
+      <option value="1">Class 1</option>
+      <option value="2">Class 2</option>
+      <option value="3">Class 3</option>
+      <option value="4">Class 4</option>
+      <option value="5">Class 5</option>
+      <option value="6">Class 6</option>
+      <option value="7">Class 7</option>
+      <option value="8">Class 8</option>
+      <option value="9">Class 9</option>
+      <option value="10">Class 10</option>
+      <option value="11">Class 11</option>
+      <option value="12">Class 12</option>
+    </select>
+    <i class="fas fa-chevron-down"></i>
+  </div>
+
+  <div class="total-count" id="totalCount">
+    <i class="fas fa-users"></i>
+    <span>Total Students: 0</span>
+  </div>
+</div>
+
+<!-- student list -->
+<div class="student-list" id="studentList">
+  <div class="no-data">
+    <i class="fas fa-arrow-pointer"></i>
+    <span>Select a class to view students</span>
+  </div>
+</div>
+
+<div class="hint">
+  <i class="fas fa-id-card"></i>
+  <span>Student IDs are masked for privacy</span>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+  databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+  projectId: "apni-duniya-b53d7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const classSelect = document.getElementById("classSelect");
+const studentList = document.getElementById("studentList");
+const totalCount = document.getElementById("totalCount");
+
+let allStudents = [];
+
+onValue(ref(db, "students"), (snap) => {
+  allStudents = [];
+  if (snap.exists()) {
+    snap.forEach(child => {
+      allStudents.push({
+        id: child.key,
+        ...child.val()
+      });
+    });
+  }
+  if (classSelect.value) {
+    renderStudents();
+  } else {
+    studentList.innerHTML = `<div class="no-data"><i class="fas fa-arrow-pointer"></i><span>Select a class to view students</span></div>`;
+    totalCount.innerHTML = `<i class="fas fa-users"></i><span>Total Students: 0</span>`;
+  }
+}, (err) => {
+  console.warn(err);
+  studentList.innerHTML = `<div class="no-data"><i class="fas fa-exclamation-triangle"></i><span>Error loading data</span></div>`;
+});
+
+classSelect.addEventListener("change", renderStudents);
+
+function renderStudents() {
+  const selectedClass = classSelect.value;
+
+  if (!selectedClass) {
+    studentList.innerHTML = `<div class="no-data"><i class="fas fa-hand-pointer"></i><span>Please select a class</span></div>`;
+    totalCount.innerHTML = `<i class="fas fa-users"></i><span>Total Students: 0</span>`;
+    return;
+  }
+
+  let filtered = allStudents.filter(s => String(s.class) === String(selectedClass));
+
+  if (filtered.length === 0) {
+    studentList.innerHTML = `<div class="no-data"><i class="fas fa-folder-open"></i><span>No students in class ${selectedClass}</span></div>`;
+    totalCount.innerHTML = `<i class="fas fa-users"></i><span>Total Students: 0</span>`;
+    return;
+  }
+
+  filtered.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+  studentList.innerHTML = "";
+
+  filtered.forEach(s => {
+    const card = document.createElement("div");
+    card.className = "student-card";
+
+    // ID ko chhota kiya - ek line mein
+    const rawId = s.id || '';
+    let maskedId = 'N/A';
+    if (rawId.length > 0) {
+      if (rawId.length > 8) {
+        maskedId = rawId.slice(0, 4) + '...' + rawId.slice(-2);
+      } else if (rawId.length > 4) {
+        maskedId = rawId.slice(0, 3) + '...';
+      } else {
+        maskedId = rawId;
+      }
+    }
+
+    const studentName = s.name || 'Unnamed Student';
+    const classDisplay = s.class || '—';
+    const aboutText = s.about && s.about.trim() !== '' ? s.about : 'No description';
+
+    let profileContent = '';
+    if (s.photoURL && s.photoURL.trim() !== '') {
+      profileContent = `<img src="${s.photoURL}" alt="profile" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fas fa-user\'></i>';">`;
+    } else {
+      profileContent = `<i class="fas fa-user"></i>`;
+    }
+
+    card.innerHTML = `
+      <div class="profile-image">
+        ${profileContent}
+      </div>
+      <div class="student-info">
+        <div class="name-row">
+          <h4>${studentName}</h4>
+          <span class="class-badge"><i class="fas fa-book-open"></i> ${classDisplay}</span>
+        </div>
+        <div class="id-row">
+          <i class="fas fa-qrcode"></i>
+          <span class="id-value" title="${rawId}">${maskedId}</span>
+        </div>
+        <div class="about-text">
+          <i class="fas fa-pencil-alt"></i>
+          <span>${aboutText}</span>
+        </div>
+      </div>
+    `;
+
+    studentList.appendChild(card);
+  });
+
+  totalCount.innerHTML = `<i class="fas fa-users"></i><span>Total Students: ${filtered.length}</span>`;
+}
+</script>
+
+</body>
+</html>

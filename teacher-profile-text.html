@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>M.M Public School | Teacher Dashboard</title>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background: #f5f7fb;
+    min-height: 100vh;
+}
+
+/* ===== LOADING SCREEN ===== */
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    color: #0a2a66;
+}
+
+.loading-logo {
+    width: 80px;
+    height: 80px;
+    background: #0a2a66;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.loading-logo i {
+    font-size: 40px;
+    color: white;
+}
+
+.loading-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.loading-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.loading-bar {
+    width: 200px;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.loading-progress {
+    width: 0%;
+    height: 100%;
+    background: #0a2a66;
+    animation: loading 1.5s infinite ease-in-out;
+}
+
+@keyframes loading {
+    0% { width: 0%; margin-left: 0; }
+    50% { width: 100%; margin-left: 0; }
+    100% { width: 0%; margin-left: 100%; }
+}
+
+/* ===== PHOTO LOADING SPINNER ===== */
+.photo-loading {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.photo-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #e0e0e0;
+    border-top: 3px solid #0a2a66;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: #0a2a66;
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-left i {
+    font-size: 20px;
+}
+
+.header-left h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.date-badge {
+    font-size: 12px;
+    background: rgba(255,255,255,0.2);
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.exit-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    padding: 12px;
+    padding-bottom: 30px;
+}
+
+/* ===== WELCOME CARD ===== */
+.welcome-card {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 20px 16px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+}
+
+.welcome-greeting {
+    font-size: 12px;
+    opacity: 0.9;
+    margin-bottom: 4px;
+}
+
+.welcome-name {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.welcome-about {
+    font-size: 13px;
+    opacity: 0.9;
+    font-style: italic;
+    border-left: 3px solid rgba(255,255,255,0.5);
+    padding-left: 12px;
+}
+
+/* ===== PROFILE CARD ===== */
+.profile-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    cursor: pointer;
+}
+
+.profile-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: #0a2a66;
+    overflow: hidden;
+    position: relative;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a2639;
+    margin-bottom: 4px;
+}
+
+.teacher-id {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 6px;
+    font-family: monospace;
+}
+
+.teacher-id i {
+    color: #0a2a66;
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+.status-badge {
+    font-size: 11px;
+    color: #28a745;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ===== STATS GRID ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.stat-card {
+    background: white;
+    padding: 16px 12px;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    cursor: pointer;
+    border: 1px solid rgba(10,42,102,0.05);
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0a2a66;
+    margin-bottom: 4px;
+}
+
+.stat-note {
+    font-size: 9px;
+    color: #ff9800;
+}
+
+/* ===== SECTION CARDS ===== */
+.section-card {
+    background: white;
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0a2a66;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.section-title i {
+    font-size: 15px;
+}
+
+.info-badge {
+    font-size: 10px;
+    color: #0a2a66;
+    background: #e8f0fe;
+    padding: 3px 8px;
+    border-radius: 20px;
+}
+
+/* ===== INFO ROWS ===== */
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #f0f0f0;
+    cursor: pointer;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-size: 13px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.info-label i {
+    width: 16px;
+    color: #0a2a66;
+    font-size: 12px;
+}
+
+.info-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a2639;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.change-count {
+    font-size: 9px;
+    color: #ff9800;
+    background: #fff3e0;
+    padding: 2px 6px;
+    border-radius: 12px;
+}
+
+/* ===== DEVICE ROWS ===== */
+.device-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+}
+
+.device-row:last-child {
+    border-bottom: none;
+}
+
+.device-icon {
+    width: 30px;
+    text-align: center;
+    color: #0a2a66;
+    font-size: 14px;
+}
+
+.device-label {
+    width: 70px;
+    font-size: 12px;
+    color: #666;
+}
+
+.device-value {
+    flex: 1;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1a2639;
+    word-break: break-word;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.action-bar {
+    display: flex;
+    gap: 8px;
+    margin: 16px 0;
+}
+
+.action-btn {
+    flex: 1;
+    background: white;
+    border: 1.5px solid #0a2a66;
+    color: #0a2a66;
+    padding: 12px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: #0a2a66;
+    color: white;
+}
+
+.delete-btn {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.delete-btn:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* ===== NOTE CARD ===== */
+.note-card {
+    background: #f0f7ff;
+    border-left: 4px solid #0a2a66;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    color: #1a2639;
+    margin: 16px 0;
+}
+
+.note-card i {
+    color: #0a2a66;
+    margin-right: 5px;
+}
+
+.note-list {
+    margin-top: 8px;
+    margin-left: 20px;
+}
+
+.note-list li {
+    margin-bottom: 4px;
+}
+
+/* ===== POPUPS ===== */
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.popup-content {
+    background: white;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 24px 24px 0 0;
+    padding: 20px;
+    animation: slideUp 0.3s ease;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#studentDetailsPopup {
+    z-index: 2100;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.popup-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0a2a66;
+}
+
+.close-popup {
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+}
+
+.popup-body {
+    margin-bottom: 20px;
+}
+
+.popup-field {
+    margin-bottom: 15px;
+}
+
+.popup-field label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.popup-field input, .popup-field select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.popup-field input:focus {
+    border-color: #0a2a66;
+    outline: none;
+}
+
+.popup-note {
+    font-size: 11px;
+    color: #ff9800;
+    background: #fff3e0;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.popup-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.popup-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #0a2a66;
+    color: white;
+}
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+/* Student List in Popup */
+.student-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.student-list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+}
+
+.student-list-item:hover {
+    background: #f8f9fc;
+}
+
+.student-list-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.student-list-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.student-list-avatar i {
+    font-size: 24px;
+    color: #0a2a66;
+}
+
+.student-list-info {
+    flex: 1;
+}
+
+.student-list-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a2639;
+    margin-bottom: 2px;
+}
+
+.student-list-class {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Edit Options Grid */
+.edit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.edit-option {
+    background: linear-gradient(145deg, #f8faff, #eef2f9);
+    border: none;
+    padding: 14px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0a2a66;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.edit-option i {
+    font-size: 18px;
+    color: #0a2a66;
+}
+
+.edit-option:hover {
+    background: #0a2a66;
+    color: white;
+}
+
+.edit-option:hover i {
+    color: white;
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="loading-screen">
+    <div class="loading-logo">
+        <i class="fas fa-school"></i>
+    </div>
+    <div class="loading-title">M.M Public School</div>
+    <div class="loading-subtitle">Preparing your dashboard...</div>
+    <div class="loading-bar">
+        <div class="loading-progress"></div>
+    </div>
+</div>
+
+<!-- Main Header -->
+<div class="header" id="mainHeader">
+    <div class="header-left">
+        <i class="fas fa-school"></i>
+        <h2>M.M Public School</h2>
+    </div>
+    <div class="header-right">
+        <div class="date-badge" id="currentDate"></div>
+        <button class="exit-btn" id="exitBtn">
+            <i class="fas fa-sign-out-alt"></i> Exit
+        </button>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container" id="mainContent">
+    <!-- Welcome Card -->
+    <div class="welcome-card">
+        <div class="welcome-greeting">Welcome back,</div>
+        <div class="welcome-name" id="teacherName">Teacher</div>
+        <div class="welcome-about" id="teacherAbout">Loading...</div>
+    </div>
+
+    <!-- Profile Card with Photo Loading -->
+    <div class="profile-card" onclick="showProfilePopup()">
+        <div class="profile-avatar" id="profileAvatar">
+            <div class="photo-loading" id="photoLoading" style="display: none;">
+                <div class="photo-spinner"></div>
+            </div>
+            <i class="fas fa-user-tie" id="avatarIcon"></i>
+            <img id="avatarImg" src="" style="display: none; width:100%; height:100%; object-fit:cover;" onload="hidePhotoLoading()" onerror="showAvatarFallback()">
+        </div>
+        <div class="profile-info">
+            <div class="profile-name" id="profileName">Loading...</div>
+            <div class="teacher-id">
+                <i class="fas fa-id-card"></i>
+                <span id="teacherIdDisplay">••••••••</span>
+            </div>
+            <div class="status-badge">
+                <i class="fas fa-circle" style="color: #28a745; font-size: 8px;"></i> Active
+            </div>
+        </div>
+        <i class="fas fa-chevron-right" style="color: #999;"></i>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <!-- Personal Information -->
+    <div class="section-card" id="personalSection">
+        <div class="section-header" onclick="showSectionPopup('personal')">
+            <div class="section-title">
+                <i class="fas fa-user"></i> Personal Info
+            </div>
+            <span class="info-badge"><i class="fas fa-info-circle"></i> tap</span>
+        </div>
+        <div id="personalInfo"></div>
+    </div>
+
+    <!-- Professional Details -->
+    <div class="section-card" id="professionalSection">
+        <div class="section-header" onclick="showSectionPopup('professional')">
+            <div class="section-title">
+                <i class="fas fa-briefcase"></i> Professional
+            </div>
+            <span class="info-badge"><i class="fas fa-info-circle"></i> tap</span>
+        </div>
+        <div id="professionalInfo"></div>
+    </div>
+
+    <!-- Activity -->
+    <div class="section-card" id="activitySection">
+        <div class="section-header" onclick="showActivityPopup()">
+            <div class="section-title">
+                <i class="fas fa-history"></i> Activity
+            </div>
+            <span class="info-badge"><i class="fas fa-info-circle"></i> tap</span>
+        </div>
+        <div id="activityInfo"></div>
+    </div>
+
+    <!-- Device Info -->
+    <div class="section-card" id="deviceSection">
+        <div class="section-header" onclick="showDevicePopup()">
+            <div class="section-title">
+                <i class="fas fa-mobile-alt"></i> Device
+            </div>
+            <span class="info-badge"><i class="fas fa-info-circle"></i> tap</span>
+        </div>
+        <div id="deviceInfo"></div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-bar">
+        <button class="action-btn" onclick="showEditOptions()">
+            <i class="fas fa-edit"></i> Edit
+        </button>
+        <button class="action-btn delete-btn" onclick="showDeletePopup()">
+            <i class="fas fa-trash"></i> Delete
+        </button>
+    </div>
+
+    <!-- Note Card -->
+    <div class="note-card">
+        <i class="fas fa-info-circle"></i>
+        <strong>Change Limits:</strong>
+        <ul class="note-list">
+            <li>📸 Photo: 50 times</li>
+            <li>📝 Name: 10 times</li>
+            <li>📚 Subject: 5 times</li>
+            <li>📱 Mobile: 3 times</li>
+            <li>✉️ Email: 5 times</li>
+            <li>💼 Experience: 1 time</li>
+            <li>📖 About: Unlimited</li>
+            <li>🔐 Password: Need Teacher ID to view</li>
+            <li>👤 Username: Need ID + Email</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ===== POPUPS ===== -->
+
+<!-- Exit Confirmation Popup -->
+<div id="exitPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>Exit Dashboard</h3>
+            <span class="close-popup" onclick="closePopup('exitPopup')">&times;</span>
+        </div>
+        <div class="popup-body" style="text-align: center;">
+            <i class="fas fa-sign-out-alt" style="font-size: 50px; color: #0a2a66; margin: 20px 0;"></i>
+            <p style="font-size: 16px; margin-bottom: 10px;">Are you sure you want to exit?</p>
+            <p style="font-size: 13px; color: #666;">You will be redirected to login page</p>
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-secondary" onclick="closePopup('exitPopup')">Cancel</button>
+            <button class="popup-btn btn-primary" onclick="confirmExit()">Exit</button>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Popup -->
+<div id="profilePopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>Profile Details</h3>
+            <span class="close-popup" onclick="closePopup('profilePopup')">&times;</span>
+        </div>
+        <div class="popup-body">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="width: 90px; height: 90px; border-radius: 50%; background: #f0f0f0; margin: 0 auto; overflow: hidden;" id="popupAvatarContainer">
+                    <img id="popupAvatarImg" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
+                    <div id="popupAvatarIcon" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:40px; color:#0a2a66;">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-field">
+                <label>Full Name</label>
+                <div style="font-weight: 600; font-size:16px;" id="popupName"></div>
+            </div>
+            <div class="popup-field">
+                <label>Teacher ID</label>
+                <div style="font-family: monospace; font-size: 16px; color:#0a2a66;" id="popupTeacherId">••••••••</div>
+            </div>
+            <div class="popup-field">
+                <label>About</label>
+                <div id="popupAbout">No bio added yet</div>
+            </div>
+            <div class="popup-field">
+                <label>Status</label>
+                <div><i class="fas fa-circle" style="color: #28a745; font-size: 10px;"></i> Active</div>
+            </div>
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-primary" onclick="closePopup('profilePopup')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Section Info Popup -->
+<div id="sectionPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3 id="sectionPopupTitle">Details</h3>
+            <span class="close-popup" onclick="closePopup('sectionPopup')">&times;</span>
+        </div>
+        <div class="popup-body" id="sectionPopupBody">
+            <!-- Dynamic content -->
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-primary" onclick="closePopup('sectionPopup')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- All Students Popup -->
+<div id="allStudentsPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>All Students (<span id="studentCountPopup">0</span>)</h3>
+            <span class="close-popup" onclick="closePopup('allStudentsPopup')">&times;</span>
+        </div>
+        <div class="popup-body">
+            <div class="student-list" id="allStudentsList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Student Details Popup (Full Profile) -->
+<div id="studentDetailsPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>Student Profile</h3>
+            <span class="close-popup" onclick="closePopup('studentDetailsPopup')">&times;</span>
+        </div>
+        <div class="popup-body" id="studentDetailsBody">
+            <!-- Dynamic content -->
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-primary" onclick="closePopup('studentDetailsPopup')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Options Popup -->
+<div id="editOptionsPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>Edit Options</h3>
+            <span class="close-popup" onclick="closePopup('editOptionsPopup')">&times;</span>
+        </div>
+        <div class="popup-body">
+            <div class="edit-grid">
+                <button class="edit-option" onclick="showEditFieldPopup('photo')">
+                    <i class="fas fa-camera"></i>
+                    <span>Photo</span>
+                    <span style="font-size:9px; color:#666;">50 left</span>
+                </button>
+                <button class="edit-option" onclick="showEditFieldPopup('name')">
+                    <i class="fas fa-user"></i>
+                    <span>Name</span>
+                    <span style="font-size:9px; color:#666;">10 left</span>
+                </button>
+                <button class="edit-option" onclick="showEditFieldPopup('subject')">
+                    <i class="fas fa-flask"></i>
+                    <span>Subject</span>
+                    <span style="font-size:9px; color:#666;">5 left</span>
+                </button>
+                <button class="edit-option" onclick="showEditFieldPopup('mobile')">
+                    <i class="fas fa-phone"></i>
+                    <span>Mobile</span>
+                    <span style="font-size:9px; color:#666;">3 left</span>
+                </button>
+                <button class="edit-option" onclick="showEditFieldPopup('email')">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                    <span style="font-size:9px; color:#666;">5 left</span>
+                </button>
+                <button class="edit-option" onclick="showEditFieldPopup('experience')">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Experience</span>
+                    <span style="font-size:9px; color:#ff9800;">1 left</span>
+                </button>
+                <button class="edit-option" onclick="showEditFieldPopup('about')">
+                    <i class="fas fa-quote-right"></i>
+                    <span>About</span>
+                    <span style="font-size:9px; color:#28a745;">∞</span>
+                </button>
+                <button class="edit-option" onclick="showChangePasswordPopup()">
+                    <i class="fas fa-key"></i>
+                    <span>Password</span>
+                </button>
+                <button class="edit-option" onclick="showChangeUsernamePopup()">
+                    <i class="fas fa-user-tag"></i>
+                    <span>Username</span>
+                </button>
+                <button class="edit-option" onclick="showViewPasswordPopup()">
+                    <i class="fas fa-eye"></i>
+                    <span>View Pass</span>
+                </button>
+            </div>
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-secondary" onclick="closePopup('editOptionsPopup')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Field Popup -->
+<div id="editFieldPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3 id="editFieldTitle">Edit</h3>
+            <span class="close-popup" onclick="closePopup('editFieldPopup')">&times;</span>
+        </div>
+        <div class="popup-body">
+            <div class="popup-field">
+                <label id="editFieldLabel">New Value</label>
+                <input type="text" id="editFieldInput" placeholder="Enter new value">
+            </div>
+            <div class="popup-note" id="editFieldNote"></div>
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-secondary" onclick="closePopup('editFieldPopup')">Cancel</button>
+            <button class="popup-btn btn-primary" onclick="saveEditField()">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- Password Popup -->
+<div id="passwordPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>Change Password</h3>
+            <span class="close-popup" onclick="closePopup('passwordPopup')">&times;</span>
+        </div>
+        <div class="popup-body">
+            <div class="popup-field">
+                <label>Teacher ID</label>
+                <input type="text" id="passwordTeacherId" placeholder="Enter Teacher ID">
+            </div>
+            <div class="popup-field">
+                <label>New Password</label>
+                <input type="password" id="newPassword" placeholder="Min 6 characters">
+            </div>
+            <div class="popup-field">
+                <label>Confirm Password</label>
+                <input type="password" id="confirmPassword" placeholder="Re-enter password">
+            </div>
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-secondary" onclick="closePopup('passwordPopup')">Cancel</button>
+            <button class="popup-btn btn-primary" onclick="changePassword()">Change</button>
+        </div>
+    </div>
+</div>
+
+<!-- Username Popup -->
+<div id="usernamePopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>Change Username</h3>
+            <span class="close-popup" onclick="closePopup('usernamePopup')">&times;</span>
+        </div>
+        <div class="popup-body">
+            <div class="popup-field">
+                <label>Teacher ID</label>
+                <input type="text" id="usernameTeacherId" placeholder="Enter Teacher ID">
+            </div>
+            <div class="popup-field">
+                <label>Email</label>
+                <input type="email" id="usernameEmail" placeholder="Enter registered email">
+            </div>
+            <div class="popup-field">
+                <label>New Username</label>
+                <input type="text" id="newUsername" placeholder="Min 4 characters">
+            </div>
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-secondary" onclick="closePopup('usernamePopup')">Cancel</button>
+            <button class="popup-btn btn-primary" onclick="changeUsername()">Change</button>
+        </div>
+    </div>
+</div>
+
+<!-- View Password Popup -->
+<div id="viewPasswordPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>View Password</h3>
+            <span class="close-popup" onclick="closePopup('viewPasswordPopup')">&times;</span>
+        </div>
+        <div class="popup-body">
+            <div class="popup-field">
+                <label>Teacher ID</label>
+                <input type="text" id="viewPasswordId" placeholder="Enter Teacher ID">
+            </div>
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-secondary" onclick="closePopup('viewPasswordPopup')">Cancel</button>
+            <button class="popup-btn btn-primary" onclick="viewPassword()">View</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Popup -->
+<div id="deletePopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>Delete Account</h3>
+            <span class="close-popup" onclick="closePopup('deletePopup')">&times;</span>
+        </div>
+        <div class="popup-body">
+            <div class="popup-field">
+                <label>Reason for deletion</label>
+                <select id="deleteReason">
+                    <option value="">Select reason...</option>
+                    <option value="leaving">Leaving school</option>
+                    <option value="retirement">Retirement</option>
+                    <option value="personal">Personal reasons</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="popup-field">
+                <label>Specific reason (optional)</label>
+                <input type="text" id="deleteReasonText" placeholder="Enter reason">
+            </div>
+            <div class="popup-field">
+                <label>Password</label>
+                <input type="password" id="deletePassword" placeholder="Enter your password">
+            </div>
+            <div class="popup-note" style="color: #dc3545;">
+                <i class="fas fa-exclamation-triangle"></i> This action cannot be undone!
+            </div>
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-secondary" onclick="closePopup('deletePopup')">Cancel</button>
+            <button class="popup-btn btn-danger" onclick="deleteAccount()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Popup -->
+<div id="successPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h3>Success</h3>
+            <span class="close-popup" onclick="closePopup('successPopup')">&times;</span>
+        </div>
+        <div class="popup-body" style="text-align: center;">
+            <i class="fas fa-check-circle" style="font-size: 50px; color: #28a745; margin: 20px 0;"></i>
+            <p id="successMessage">Action completed successfully!</p>
+        </div>
+        <div class="popup-actions">
+            <button class="popup-btn btn-primary" onclick="closePopup('successPopup')">OK</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+// Firebase Config
+const firebaseConfig = {
+    apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    authDomain: "apni-duniya-b53d7.firebaseapp.com",
+    databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId: "apni-duniya-b53d7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Global variables
+let teacherData = null;
+let teacherId = null;
+let allStudents = [];
+let changeCounts = { photo:0, name:0, subject:0, mobile:0, email:0, experience:0, about:0 };
+let currentEditField = null;
+
+const MAX_LIMITS = { photo:50, name:10, subject:5, mobile:3, email:5, experience:1, about:Infinity };
+
+// DOM Elements
+const loadingScreen = document.getElementById('loadingScreen');
+const mainHeader = document.getElementById('mainHeader');
+const mainContent = document.getElementById('mainContent');
+const currentDate = document.getElementById('currentDate');
+const teacherName = document.getElementById('teacherName');
+const teacherAbout = document.getElementById('teacherAbout');
+const profileName = document.getElementById('profileName');
+const profileAvatar = document.getElementById('profileAvatar');
+const teacherIdDisplay = document.getElementById('teacherIdDisplay');
+const avatarImg = document.getElementById('avatarImg');
+const avatarIcon = document.getElementById('avatarIcon');
+const photoLoading = document.getElementById('photoLoading');
+
+// Check login
+const isLoggedIn = sessionStorage.getItem('loggedIn') === 'true';
+teacherId = sessionStorage.getItem('currentTeacherId') || new URLSearchParams(window.location.search).get('id');
+
+if (!isLoggedIn || !teacherId) {
+    window.location.href = 'teacher-login.html';
+} else {
+    loadTeacherData();
+    loadAllStudents();
+    
+    // Hide loading after 2 seconds
+    setTimeout(() => {
+        loadingScreen.style.display = 'none';
+    }, 2000);
+}
+
+// Photo loading functions
+window.hidePhotoLoading = function() {
+    photoLoading.style.display = 'none';
+    avatarIcon.style.display = 'none';
+    avatarImg.style.display = 'block';
+};
+
+window.showAvatarFallback = function() {
+    photoLoading.style.display = 'none';
+    avatarImg.style.display = 'none';
+    avatarIcon.style.display = 'flex';
+};
+
+// Update date
+function updateDate() {
+    const now = new Date();
+    const options = { day:'numeric', month:'short', year:'numeric' };
+    currentDate.textContent = now.toLocaleDateString('en-IN', options);
+}
+updateDate();
+setInterval(updateDate, 60000);
+
+// Format date
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return 'N/A';
+        return date.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    } catch {
+        return 'N/A';
+    }
+}
+
+// Mask Teacher ID
+function maskTeacherId(id) {
+    if (!id) return '••••••••';
+    if (id.length <= 4) return '••••••••';
+    return id.substring(0, 2) + '••••' + id.substring(id.length-2);
+}
+
+// Load teacher data
+async function loadTeacherData() {
+    try {
+        const teacherRef = ref(db, `teachers/${teacherId}`);
+        const snapshot = await get(teacherRef);
+        
+        if (!snapshot.exists()) {
+            throw new Error('Teacher not found');
+        }
+        
+        teacherData = snapshot.val();
+        changeCounts = teacherData.changeCounts || changeCounts;
+        
+        // Update basic info
+        teacherName.textContent = teacherData.name || 'Teacher';
+        teacherAbout.textContent = teacherData.about || 'No bio added yet';
+        profileName.textContent = teacherData.name || 'Teacher';
+        teacherIdDisplay.textContent = maskTeacherId(teacherData.teacherId);
+        
+        // Update avatar with loading
+        if (teacherData.photoURL) {
+            photoLoading.style.display = 'flex';
+            avatarIcon.style.display = 'none';
+            avatarImg.src = teacherData.photoURL;
+        }
+        
+        // Update all sections
+        updatePersonalInfo();
+        updateProfessionalInfo();
+        updateStats();
+        updateActivityInfo();
+        updateDeviceInfo();
+        
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Load all students
+async function loadAllStudents() {
+    try {
+        const studentsRef = ref(db, 'students');
+        const snapshot = await get(studentsRef);
+        
+        allStudents = [];
+        if (snapshot.exists()) {
+            snapshot.forEach(child => {
+                allStudents.push({
+                    id: child.key,
+                    ...child.val()
+                });
+            });
+        }
+        
+        // Update stats
+        updateStats();
+        
+    } catch (error) {
+        console.error('Error loading students:', error);
+    }
+}
+
+// Update personal info
+function updatePersonalInfo() {
+    const html = `
+        <div class="info-row" onclick="showEditFieldPopup('name')">
+            <span class="info-label"><i class="fas fa-user"></i> Name</span>
+            <span class="info-value">${teacherData.name || 'N/A'} <span class="change-count">${changeCounts.name||0}/${MAX_LIMITS.name}</span></span>
+        </div>
+        <div class="info-row" onclick="showInfoPopup('dob', '${teacherData.dob || ''}')">
+            <span class="info-label"><i class="fas fa-calendar"></i> DOB</span>
+            <span class="info-value">${formatDate(teacherData.dob) || 'N/A'}</span>
+        </div>
+        <div class="info-row" onclick="showInfoPopup('gender', '${teacherData.gender || ''}')">
+            <span class="info-label"><i class="fas fa-venus-mars"></i> Gender</span>
+            <span class="info-value">${teacherData.gender ? teacherData.gender.charAt(0).toUpperCase() + teacherData.gender.slice(1) : 'N/A'}</span>
+        </div>
+        <div class="info-row" onclick="showEditFieldPopup('mobile')">
+            <span class="info-label"><i class="fas fa-phone"></i> Mobile</span>
+            <span class="info-value">${teacherData.mobile || 'N/A'} <span class="change-count">${changeCounts.mobile||0}/${MAX_LIMITS.mobile}</span></span>
+        </div>
+        <div class="info-row" onclick="showEditFieldPopup('email')">
+            <span class="info-label"><i class="fas fa-envelope"></i> Email</span>
+            <span class="info-value">${teacherData.email || 'N/A'} <span class="change-count">${changeCounts.email||0}/${MAX_LIMITS.email}</span></span>
+        </div>
+    `;
+    document.getElementById('personalInfo').innerHTML = html;
+}
+
+// Update professional info
+function updateProfessionalInfo() {
+    const html = `
+        <div class="info-row" onclick="showInfoPopup('qualification', '${teacherData.qualification || ''}')">
+            <span class="info-label"><i class="fas fa-graduation-cap"></i> Qualification</span>
+            <span class="info-value">${teacherData.qualification || 'N/A'}</span>
+        </div>
+        <div class="info-row" onclick="showEditFieldPopup('subject')">
+            <span class="info-label"><i class="fas fa-flask"></i> Subject</span>
+            <span class="info-value">${teacherData.subject || 'N/A'} <span class="change-count">${changeCounts.subject||0}/${MAX_LIMITS.subject}</span></span>
+        </div>
+        <div class="info-row" onclick="showEditFieldPopup('experience')">
+            <span class="info-label"><i class="fas fa-briefcase"></i> Experience</span>
+            <span class="info-value">${teacherData.experience || '0'} yrs <span class="change-count">${changeCounts.experience||0}/${MAX_LIMITS.experience}</span></span>
+        </div>
+        <div class="info-row" onclick="showInfoPopup('previous', '${teacherData.previousSchool || ''}')">
+            <span class="info-label"><i class="fas fa-school"></i> Previous</span>
+            <span class="info-value">${teacherData.previousSchool || 'N/A'}</span>
+        </div>
+        <div class="info-row" onclick="showEditFieldPopup('about')">
+            <span class="info-label"><i class="fas fa-quote-right"></i> About</span>
+            <span class="info-value">${(teacherData.about || 'N/A').substring(0,20)}${(teacherData.about||'').length>20?'...':''}</span>
+        </div>
+    `;
+    document.getElementById('professionalInfo').innerHTML = html;
+}
+
+// Update stats
+function updateStats() {
+    const html = `
+        <div class="stat-card" onclick="showStatPopup('experience')">
+            <div class="stat-label"><i class="fas fa-chalkboard"></i> Experience</div>
+            <div class="stat-value">${teacherData.experience || '0'}</div>
+            <div class="stat-note">${changeCounts.experience||0}/${MAX_LIMITS.experience}</div>
+        </div>
+        <div class="stat-card" onclick="showStatPopup('subject')">
+            <div class="stat-label"><i class="fas fa-book"></i> Subject</div>
+            <div class="stat-value">${teacherData.subject || 'N/A'}</div>
+            <div class="stat-note">${changeCounts.subject||0}/${MAX_LIMITS.subject}</div>
+        </div>
+        <div class="stat-card" onclick="showAllStudentsPopup()">
+            <div class="stat-label"><i class="fas fa-users"></i> Students</div>
+            <div class="stat-value">${allStudents.length}</div>
+            <div class="stat-note">Total registered</div>
+        </div>
+        <div class="stat-card" onclick="showStatPopup('devices')">
+            <div class="stat-label"><i class="fas fa-mobile-alt"></i> Devices</div>
+            <div class="stat-value">1</div>
+            <div class="stat-note">Active device</div>
+        </div>
+    `;
+    document.getElementById('statsGrid').innerHTML = html;
+}
+
+// Update activity info
+function updateActivityInfo() {
+    const lastLogin = teacherData.lastLogin || teacherData.createdAt || new Date().toISOString();
+    const html = `
+        <div class="info-row" onclick="showActivityDetailPopup('lastlogin')">
+            <span class="info-label"><i class="fas fa-clock"></i> Last Login</span>
+            <span class="info-value">${formatDate(lastLogin)}</span>
+        </div>
+        <div class="info-row" onclick="showActivityDetailPopup('devices')">
+            <span class="info-label"><i class="fas fa-mobile-alt"></i> Active Devices</span>
+            <span class="info-value">1 device</span>
+        </div>
+        <div class="info-row" onclick="showActivityDetailPopup('created')">
+            <span class="info-label"><i class="fas fa-calendar-plus"></i> Joined</span>
+            <span class="info-value">${formatDate(teacherData.createdAt)}</span>
+        </div>
+    `;
+    document.getElementById('activityInfo').innerHTML = html;
+}
+
+// Update device info
+function updateDeviceInfo() {
+    const html = `
+        <div class="device-row" onclick="showDeviceDetailPopup('id')">
+            <div class="device-icon"><i class="fas fa-microchip"></i></div>
+            <div class="device-label">Device ID</div>
+            <div class="device-value">${teacherData.deviceId ? teacherData.deviceId.substring(0,8)+'...' : 'N/A'}</div>
+        </div>
+        <div class="device-row" onclick="showDeviceDetailPopup('model')">
+            <div class="device-icon"><i class="fas fa-mobile-alt"></i></div>
+            <div class="device-label">Model</div>
+            <div class="device-value">${teacherData.deviceModel || 'N/A'}</div>
+        </div>
+        <div class="device-row" onclick="showDeviceDetailPopup('date')">
+            <div class="device-icon"><i class="fas fa-calendar"></i></div>
+            <div class="device-label">Registered</div>
+            <div class="device-value">${formatDate(teacherData.createdAt)}</div>
+        </div>
+    `;
+    document.getElementById('deviceInfo').innerHTML = html;
+}
+
+// ===== POPUP FUNCTIONS =====
+window.closePopup = (id) => document.getElementById(id).style.display = 'none';
+
+// Exit
+document.getElementById('exitBtn').addEventListener('click', () => {
+    document.getElementById('exitPopup').style.display = 'flex';
+});
+
+window.confirmExit = () => {
+    sessionStorage.clear();
+    window.location.href = 'teacher-login.html';
+};
+
+// Profile Popup
+window.showProfilePopup = () => {
+    document.getElementById('popupName').textContent = teacherData.name || 'N/A';
+    document.getElementById('popupTeacherId').textContent = maskTeacherId(teacherData.teacherId);
+    document.getElementById('popupAbout').textContent = teacherData.about || 'No bio added yet';
+    
+    if (teacherData.photoURL) {
+        document.getElementById('popupAvatarImg').src = teacherData.photoURL;
+        document.getElementById('popupAvatarImg').style.display = 'block';
+        document.getElementById('popupAvatarIcon').style.display = 'none';
+    } else {
+        document.getElementById('popupAvatarImg').style.display = 'none';
+        document.getElementById('popupAvatarIcon').style.display = 'flex';
+    }
+    
+    document.getElementById('profilePopup').style.display = 'flex';
+};
+
+// All Students Popup
+window.showAllStudentsPopup = () => {
+    document.getElementById('studentCountPopup').textContent = allStudents.length;
+    
+    if (allStudents.length === 0) {
+        document.getElementById('allStudentsList').innerHTML = '<div style="padding:30px; text-align:center; color:#666;">No students registered yet</div>';
+    } else {
+        let html = '';
+        allStudents.forEach(student => {
+            html += `
+                <div class="student-list-item" onclick="showStudentDetailsPopup('${student.id}')">
+                    <div class="student-list-avatar">
+                        ${student.photoURL ? 
+                            `<img src="${student.photoURL}" alt="${student.name}">` : 
+                            `<i class="fas fa-user-graduate"></i>`
+                        }
+                    </div>
+                    <div class="student-list-info">
+                        <div class="student-list-name">${student.name || 'Unknown'}</div>
+                        <div class="student-list-class">Class ${student.class || 'N/A'}</div>
+                    </div>
+                </div>
+            `;
+        });
+        document.getElementById('allStudentsList').innerHTML = html;
+    }
+    document.getElementById('allStudentsPopup').style.display = 'flex';
+};
+
+// Student Details Popup
+window.showStudentDetailsPopup = (studentId) => {
+    const student = allStudents.find(s => s.id === studentId);
+    if (!student) return;
+    
+    document.getElementById('studentDetailsBody').innerHTML = `
+        <div style="text-align:center; margin-bottom:20px;">
+            <div style="width: 90px; height: 90px; border-radius: 50%; background: #f0f0f0; margin: 0 auto; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                ${student.photoURL ? 
+                    `<img src="${student.photoURL}" style="width:100%; height:100%; object-fit:cover;">` : 
+                    `<i class="fas fa-user-graduate" style="font-size:40px; color:#0a2a66;"></i>`
+                }
+            </div>
+        </div>
+        <div class="popup-field">
+            <label>Full Name</label>
+            <div style="font-weight:600;">${student.name || 'N/A'}</div>
+        </div>
+        <div class="popup-field">
+            <label>Class</label>
+            <div>${student.class || 'N/A'}</div>
+        </div>
+        <div class="popup-field">
+            <label>Father's Name</label>
+            <div>${student.fatherName || 'N/A'}</div>
+        </div>
+        <div class="popup-field">
+            <label>Mother's Name</label>
+            <div>${student.motherName || 'N/A'}</div>
+        </div>
+        <div class="popup-field">
+            <label>Date of Birth</label>
+            <div>${formatDate(student.dob) || 'N/A'}</div>
+        </div>
+        <div class="popup-field">
+            <label>Address</label>
+            <div>${student.address || 'N/A'}</div>
+        </div>
+        <div class="popup-field">
+            <label>About</label>
+            <div>${student.about || 'No bio added'}</div>
+        </div>
+    `;
+    
+    // Close students list popup first
+    document.getElementById('allStudentsPopup').style.display = 'none';
+    
+    // Then open details popup
+    document.getElementById('studentDetailsPopup').style.display = 'flex';
+};
+
+// Activity Detail Popup
+window.showActivityDetailPopup = (type) => {
+    let title = '', content = '';
+    
+    if (type === 'lastlogin') {
+        title = 'Last Login';
+        content = `Last login: ${formatDate(teacherData.lastLogin || teacherData.createdAt)}`;
+    } else if (type === 'devices') {
+        title = 'Active Devices';
+        content = `This account is active on 1 device.<br>Device: ${teacherData.deviceModel || 'Unknown'}`;
+    } else {
+        title = 'Account Created';
+        content = `Joined on: ${formatDate(teacherData.createdAt)}`;
+    }
+    
+    document.getElementById('sectionPopupTitle').textContent = title;
+    document.getElementById('sectionPopupBody').innerHTML = `<p>${content}</p>`;
+    document.getElementById('sectionPopup').style.display = 'flex';
+};
+
+// Device Detail Popup
+window.showDeviceDetailPopup = (type) => {
+    let title = '', content = '';
+    
+    if (type === 'id') {
+        title = 'Device ID';
+        content = `Full Device ID: ${teacherData.deviceId || 'N/A'}`;
+    } else if (type === 'model') {
+        title = 'Device Model';
+        content = `Model: ${teacherData.deviceModel || 'N/A'}`;
+    } else {
+        title = 'Registration Date';
+        content = `Registered on: ${formatDate(teacherData.createdAt)}`;
+    }
+    
+    document.getElementById('sectionPopupTitle').textContent = title;
+    document.getElementById('sectionPopupBody').innerHTML = `<p>${content}</p>`;
+    document.getElementById('sectionPopup').style.display = 'flex';
+};
+
+window.showSectionPopup = (section) => {
+    const titles = { personal:'Personal Info', professional:'Professional', activity:'Activity', device:'Device' };
+    document.getElementById('sectionPopupTitle').textContent = titles[section] || 'Details';
+    document.getElementById('sectionPopupBody').innerHTML = '<p style="text-align:center; color:#666;">More details coming soon...</p>';
+    document.getElementById('sectionPopup').style.display = 'flex';
+};
+
+window.showInfoPopup = (field, value) => {
+    const fieldNames = { name:'Name', dob:'Date of Birth', gender:'Gender', mobile:'Mobile', email:'Email', qualification:'Qualification', subject:'Subject', experience:'Experience', previous:'Previous School', about:'About' };
+    document.getElementById('sectionPopupTitle').textContent = fieldNames[field] || 'Information';
+    document.getElementById('sectionPopupBody').innerHTML = `
+        <div style="padding:15px; background:#f9f9f9; border-radius:8px;">
+            <div style="font-size:13px; color:#666; margin-bottom:5px;">${fieldNames[field] || field}</div>
+            <div style="font-size:16px; font-weight:600; color:#333;">${value || 'N/A'}</div>
+        </div>
+    `;
+    document.getElementById('sectionPopup').style.display = 'flex';
+};
+
+window.showStatPopup = (stat) => {
+    let content = '';
+    if (stat === 'experience') {
+        content = `Experience: ${teacherData.experience||0} years<br>Changed: ${changeCounts.experience||0}/${MAX_LIMITS.experience}`;
+    } else if (stat === 'subject') {
+        content = `Subject: ${teacherData.subject||'N/A'}<br>Changed: ${changeCounts.subject||0}/${MAX_LIMITS.subject}`;
+    } else if (stat === 'devices') {
+        content = 'Active on 1 device';
+    }
+    document.getElementById('sectionPopupTitle').textContent = 'Statistics';
+    document.getElementById('sectionPopupBody').innerHTML = `<p>${content}</p>`;
+    document.getElementById('sectionPopup').style.display = 'flex';
+};
+
+window.showActivityPopup = () => {
+    document.getElementById('sectionPopupTitle').textContent = 'Activity Details';
+    document.getElementById('sectionPopupBody').innerHTML = `
+        <p>Last Login: ${formatDate(teacherData.lastLogin || teacherData.createdAt)}</p>
+        <p>Active Devices: 1</p>
+        <p>Account Created: ${formatDate(teacherData.createdAt)}</p>
+    `;
+    document.getElementById('sectionPopup').style.display = 'flex';
+};
+
+window.showDevicePopup = () => {
+    document.getElementById('sectionPopupTitle').textContent = 'Device Details';
+    document.getElementById('sectionPopupBody').innerHTML = `
+        <p>Device ID: ${teacherData.deviceId || 'N/A'}</p>
+        <p>Model: ${teacherData.deviceModel || 'N/A'}</p>
+        <p>Registered: ${formatDate(teacherData.createdAt)}</p>
+    `;
+    document.getElementById('sectionPopup').style.display = 'flex';
+};
+
+window.showEditOptions = () => {
+    document.getElementById('editOptionsPopup').style.display = 'flex';
+};
+
+window.showEditFieldPopup = (field) => {
+    const limits = {
+        photo: { max:50, label:'Photo' },
+        name: { max:10, label:'Full Name' },
+        subject: { max:5, label:'Subject' },
+        mobile: { max:3, label:'Mobile Number' },
+        email: { max:5, label:'Email' },
+        experience: { max:1, label:'Experience (years)' },
+        about: { max:'∞', label:'About' }
+    };
+    
+    const limit = limits[field];
+    const used = changeCounts[field] || 0;
+    
+    if (used >= MAX_LIMITS[field] && MAX_LIMITS[field] !== Infinity) {
+        alert(`Maximum ${limit.max} changes reached for ${limit.label}`);
+        return;
+    }
+    
+    currentEditField = field;
+    document.getElementById('editFieldTitle').textContent = `Edit ${limit.label}`;
+    document.getElementById('editFieldLabel').textContent = `New ${limit.label}`;
+    document.getElementById('editFieldInput').value = teacherData[field] || '';
+    document.getElementById('editFieldNote').textContent = `Changes: ${used}/${limit.max === Infinity ? '∞' : limit.max}`;
+    
+    closePopup('editOptionsPopup');
+    document.getElementById('editFieldPopup').style.display = 'flex';
+};
+
+window.saveEditField = async () => {
+    const newValue = document.getElementById('editFieldInput').value.trim();
+    if (!newValue) {
+        alert('Please enter a value');
+        return;
+    }
+    
+    if (changeCounts[currentEditField] >= MAX_LIMITS[currentEditField] && MAX_LIMITS[currentEditField] !== Infinity) {
+        alert('Maximum changes reached');
+        return;
+    }
+    
+    changeCounts[currentEditField] = (changeCounts[currentEditField] || 0) + 1;
+    
+    try {
+        await update(ref(db, `teachers/${teacherId}`), {
+            [currentEditField]: newValue,
+            [`changeCounts.${currentEditField}`]: changeCounts[currentEditField]
+        });
+        
+        teacherData[currentEditField] = newValue;
+        
+        // Refresh displays
+        updatePersonalInfo();
+        updateProfessionalInfo();
+        updateStats();
+        profileName.textContent = teacherData.name;
+        teacherName.textContent = teacherData.name;
+        teacherAbout.textContent = teacherData.about || 'No bio added yet';
+        
+        closePopup('editFieldPopup');
+        showSuccessMessage('Updated successfully!');
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error saving. Try again.');
+    }
+};
+
+window.showChangePasswordPopup = () => {
+    closePopup('editOptionsPopup');
+    document.getElementById('passwordTeacherId').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmPassword').value = '';
+    document.getElementById('passwordPopup').style.display = 'flex';
+};
+
+window.changePassword = async () => {
+    const teacherIdInput = document.getElementById('passwordTeacherId').value.trim();
+    const newPass = document.getElementById('newPassword').value;
+    const confirmPass = document.getElementById('confirmPassword').value;
+    
+    if (teacherIdInput !== teacherData.teacherId) {
+        alert('Teacher ID does not match!');
+        return;
+    }
+    
+    if (newPass.length < 6) {
+        alert('Password must be at least 6 characters');
+        return;
+    }
+    
+    if (newPass !== confirmPass) {
+        alert('Passwords do not match');
+        return;
+    }
+    
+    try {
+        await update(ref(db, `teachers/${teacherId}`), { password: newPass });
+        closePopup('passwordPopup');
+        showSuccessMessage('Password changed successfully!');
+    } catch (error) {
+        alert('Error changing password');
+    }
+};
+
+window.showChangeUsernamePopup = () => {
+    closePopup('editOptionsPopup');
+    document.getElementById('usernameTeacherId').value = '';
+    document.getElementById('usernameEmail').value = '';
+    document.getElementById('newUsername').value = '';
+    document.getElementById('usernamePopup').style.display = 'flex';
+};
+
+window.changeUsername = async () => {
+    const teacherIdInput = document.getElementById('usernameTeacherId').value.trim();
+    const emailInput = document.getElementById('usernameEmail').value.trim();
+    const newUsername = document.getElementById('newUsername').value.trim();
+    
+    if (teacherIdInput !== teacherData.teacherId) {
+        alert('Teacher ID does not match!');
+        return;
+    }
+    
+    if (emailInput !== teacherData.email) {
+        alert('Email does not match!');
+        return;
+    }
+    
+    if (newUsername.length < 4) {
+        alert('Username must be at least 4 characters');
+        return;
+    }
+    
+    try {
+        await update(ref(db, `teachers/${teacherId}`), { username: newUsername });
+        closePopup('usernamePopup');
+        showSuccessMessage('Username changed successfully!');
+    } catch (error) {
+        alert('Error changing username');
+    }
+};
+
+window.showViewPasswordPopup = () => {
+    closePopup('editOptionsPopup');
+    document.getElementById('viewPasswordId').value = '';
+    document.getElementById('viewPasswordPopup').style.display = 'flex';
+};
+
+window.viewPassword = () => {
+    const inputId = document.getElementById('viewPasswordId').value.trim();
+    if (inputId !== teacherData.teacherId) {
+        alert('Teacher ID does not match!');
+        return;
+    }
+    alert(`Your password is: ${teacherData.password}`);
+    closePopup('viewPasswordPopup');
+};
+
+window.showDeletePopup = () => {
+    document.getElementById('deleteReason').value = '';
+    document.getElementById('deleteReasonText').value = '';
+    document.getElementById('deletePassword').value = '';
+    document.getElementById('deletePopup').style.display = 'flex';
+};
+
+window.deleteAccount = async () => {
+    const reason = document.getElementById('deleteReason').value;
+    const reasonText = document.getElementById('deleteReasonText').value;
+    const password = document.getElementById('deletePassword').value;
+    
+    if (!reason) {
+        alert('Please select a reason');
+        return;
+    }
+    
+    if (password !== teacherData.password) {
+        alert('Incorrect password!');
+        return;
+    }
+    
+    if (!confirm('Are you sure? This cannot be undone!')) {
+        return;
+    }
+    
+    try {
+        await update(ref(db, `teachers/${teacherId}`), {
+            status: 'deleted',
+            deleteReason: reason,
+            deleteReasonText: reasonText,
+            deletedAt: new Date().toISOString()
+        });
+        
+        closePopup('deletePopup');
+        showSuccessMessage('Account deleted. Redirecting to signup...');
+        
+        setTimeout(() => {
+            sessionStorage.clear();
+            window.location.href = 'teacher-signup.html';
+        }, 2000);
+        
+    } catch (error) {
+        alert('Error deleting account');
+    }
+};
+
+function showSuccessMessage(msg) {
+    document.getElementById('successMessage').textContent = msg;
+    document.getElementById('successPopup').style.display = 'flex';
+    setTimeout(() => closePopup('successPopup'), 2000);
+}
+
+// Close popups on outside click
+window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('popup')) {
+        e.target.style.display = 'none';
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Bihar Board 12 · एडमिन पैनल</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 12px;
+        }
+        
+        .admin-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 28px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+        
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .header h1 i {
+            color: #667eea;
+            font-size: 1.3rem;
+        }
+        
+        .stats-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        /* Quick Stats */
+        .quick-stats {
+            display: flex;
+            gap: 12px;
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 12px;
+        }
+        
+        .stat-item {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        
+        /* Selection Section */
+        .selection-section {
+            background: white;
+            border-radius: 28px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .section-title i {
+            color: #667eea;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e9eef2;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            background: white;
+            margin-bottom: 8px;
+        }
+        
+        select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        
+        /* 3 Category Tabs */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .category-tab {
+            flex: 1;
+            background: white;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        
+        .category-tab i {
+            font-size: 1.1rem;
+            color: #94a3b8;
+        }
+        
+        .category-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .category-tab.active i {
+            color: white;
+        }
+        
+        /* Category Content */
+        .category-content {
+            display: none;
+        }
+        
+        .category-content.active {
+            display: block;
+        }
+        
+        /* Upload Section */
+        .upload-section {
+            background: white;
+            border-radius: 28px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        
+        .upload-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 30px;
+        }
+        
+        .upload-tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            background: transparent;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+        
+        .upload-tab.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .upload-content {
+            display: none;
+        }
+        
+        .upload-content.active {
+            display: block;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e9eef2;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            background: white;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 24px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .btn-small {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            background: #f1f5f9;
+            color: #475569;
+        }
+        
+        /* JSON Upload Area */
+        .json-upload-area {
+            border: 2px dashed #e9eef2;
+            border-radius: 20px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        
+        .json-upload-area i {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin-bottom: 6px;
+        }
+        
+        .json-upload-area p {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        
+        .json-textarea {
+            font-family: monospace;
+            font-size: 0.8rem;
+            min-height: 120px;
+            margin-bottom: 12px;
+        }
+        
+        /* View Section */
+        .view-section {
+            background: white;
+            border-radius: 28px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        
+        .stream-filter {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+            scrollbar-width: none;
+        }
+        
+        .stream-filter::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .filter-chip {
+            padding: 8px 16px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .filter-chip.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        /* Subject Cards */
+        .subject-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .subject-card:hover {
+            transform: translateX(2px);
+        }
+        
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .subject-icon {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+        }
+        
+        .subject-name {
+            font-weight: 600;
+            color: #1e293b;
+            flex: 1;
+        }
+        
+        .subject-arrow {
+            color: #94a3b8;
+            transition: transform 0.3s;
+        }
+        
+        .subject-card.expanded .subject-arrow {
+            transform: rotate(90deg);
+        }
+        
+        /* Chapter Grid (Hidden by default) */
+        .chapter-grid {
+            display: none;
+            margin-top: 16px;
+        }
+        
+        .subject-card.expanded .chapter-grid {
+            display: block;
+        }
+        
+        .chapter-item {
+            background: white;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #e9eef2;
+        }
+        
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .chapter-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1e293b;
+        }
+        
+        .question-count {
+            background: #667eea;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+        
+        .questions-list {
+            margin-top: 8px;
+        }
+        
+        .question-bubble {
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .question-text {
+            color: #334155;
+            font-size: 0.85rem;
+            flex: 1;
+        }
+        
+        .question-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-icon {
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .edit-icon {
+            color: #667eea;
+        }
+        
+        .edit-icon:hover {
+            background: #e0e7ff;
+        }
+        
+        .delete-icon {
+            color: #ef4444;
+        }
+        
+        .delete-icon:hover {
+            background: #fee2e2;
+        }
+        
+        /* Dialog Styles */
+        .dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .dialog-box {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 32px;
+            padding: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.3s ease;
+        }
+        
+        .dialog-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .dialog-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+        
+        .dialog-icon.warning {
+            background: #f59e0b;
+        }
+        
+        .dialog-icon.error {
+            background: #ef4444;
+        }
+        
+        .dialog-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .dialog-content {
+            margin-bottom: 24px;
+            color: #475569;
+            line-height: 1.5;
+        }
+        
+        .dialog-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .dialog-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .dialog-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .dialog-btn.secondary {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        
+        .dialog-btn.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .dialog-btn.secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        /* Edit Form in Dialog */
+        .edit-form-group {
+            margin-bottom: 16px;
+        }
+        
+        .edit-form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+        
+        .edit-form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #e9eef2;
+            border-radius: 16px;
+            font-size: 0.9rem;
+        }
+        
+        .edit-options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Backup Section */
+        .backup-section {
+            background: white;
+            border-radius: 28px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+        
+        .backup-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .backup-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .backup-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin: 0 auto 12px;
+        }
+        
+        .backup-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .backup-desc {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header with Stats -->
+        <div class="header">
+            <div class="header-top">
+                <h1>
+                    <i class="fas fa-graduation-cap"></i>
+                    Bihar Board 12
+                </h1>
+                <span class="stats-badge" id="totalQuestions">0</span>
+            </div>
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="statSubjects">0</div>
+                    <div class="stat-label">विषय</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statChapters">0</div>
+                    <div class="stat-label">अध्याय</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statQues">0</div>
+                    <div class="stat-label">प्रश्न</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stream, Subject, Chapter Selection -->
+        <div class="selection-section">
+            <div class="section-title">
+                <i class="fas fa-filter"></i>
+                स्ट्रीम, विषय और अध्याय चुनें
+            </div>
+            <select id="streamSelect" onchange="loadSubjects()">
+                <option value="">-- स्ट्रीम चुनें --</option>
+                <option value="language">भाषा विषय</option>
+                <option value="arts">कला संकाय</option>
+                <option value="science">विज्ञान संकाय</option>
+                <option value="commerce">वाणिज्य संकाय</option>
+                <option value="extra">अतिरिक्त विषय</option>
+            </select>
+            <select id="subjectSelect" onchange="loadChapters()">
+                <option value="">-- पहले स्ट्रीम चुनें --</option>
+            </select>
+            <select id="chapterSelect">
+                <option value="">-- पहले विषय चुनें --</option>
+            </select>
+        </div>
+
+        <!-- 3 Category Tabs -->
+        <div class="category-tabs">
+            <button class="category-tab active" onclick="switchCategory('upload')">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>अपलोड</span>
+            </button>
+            <button class="category-tab" onclick="switchCategory('view')">
+                <i class="fas fa-eye"></i>
+                <span>देखें</span>
+            </button>
+            <button class="category-tab" onclick="switchCategory('backup')">
+                <i class="fas fa-database"></i>
+                <span>बैकअप</span>
+            </button>
+        </div>
+
+        <!-- UPLOAD CATEGORY -->
+        <div id="uploadCategory" class="category-content active">
+            <div class="upload-section">
+                <!-- Upload Tabs (Normal / JSON) -->
+                <div class="upload-tabs">
+                    <button class="upload-tab active" onclick="switchUploadTab('normal')">सामान्य</button>
+                    <button class="upload-tab" onclick="switchUploadTab('json')">JSON फाइल</button>
+                </div>
+
+                <!-- Normal Upload (Form) -->
+                <div id="normalUpload" class="upload-content active">
+                    <div class="form-group">
+                        <label>प्रश्न</label>
+                        <input type="text" id="questionText" placeholder="प्रश्न लिखें">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>विकल्प</label>
+                        <div class="options-grid">
+                            <input type="text" id="opt0" placeholder="विकल्प 1">
+                            <input type="text" id="opt1" placeholder="विकल्प 2">
+                            <input type="text" id="opt2" placeholder="विकल्प 3">
+                            <input type="text" id="opt3" placeholder="विकल्प 4">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>सही उत्तर</label>
+                        <input type="text" id="correctAnswer" placeholder="सही उत्तर">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="addQuestion()">
+                        <i class="fas fa-save"></i> प्रश्न सहेजें
+                    </button>
+                </div>
+
+                <!-- JSON Upload -->
+                <div id="jsonUpload" class="upload-content">
+                    <!-- File Upload Area -->
+                    <div class="json-upload-area" onclick="document.getElementById('jsonFile').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>JSON फाइल अपलोड करें</p>
+                        <p style="font-size: 0.7rem;">या क्लिक करें</p>
+                        <input type="file" id="jsonFile" accept=".json" style="display: none;" onchange="handleFileSelect()">
+                    </div>
+                    <div id="fileName" style="font-size:0.75rem; text-align:center; margin-bottom:8px;">कोई फाइल नहीं</div>
+
+                    <textarea id="jsonInput" class="json-textarea" rows="4" placeholder="या यहाँ JSON पेस्ट करें..."></textarea>
+                    
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-small" onclick="validateJSON()" style="flex:1;">
+                            <i class="fas fa-check"></i> जांचें
+                        </button>
+                        <button class="btn btn-small" onclick="uploadJSON()" style="flex:1; background:#667eea; color:white;">
+                            <i class="fas fa-upload"></i> अपलोड
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW CATEGORY -->
+        <div id="viewCategory" class="category-content">
+            <div class="view-section">
+                <!-- Stream Filter Chips -->
+                <div class="stream-filter">
+                    <button class="filter-chip active" onclick="filterStream('')">सभी</button>
+                    <button class="filter-chip" onclick="filterStream('language')">भाषा</button>
+                    <button class="filter-chip" onclick="filterStream('arts')">कला</button>
+                    <button class="filter-chip" onclick="filterStream('science')">विज्ञान</button>
+                    <button class="filter-chip" onclick="filterStream('commerce')">वाणिज्य</button>
+                    <button class="filter-chip" onclick="filterStream('extra')">अतिरिक्त</button>
+                </div>
+
+                <!-- Questions Display -->
+                <div id="questionsDisplay">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- BACKUP CATEGORY -->
+        <div id="backupCategory" class="category-content">
+            <div class="backup-section">
+                <div class="backup-grid">
+                    <!-- Download Backup -->
+                    <div class="backup-card">
+                        <div class="backup-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="backup-title">बैकअप डाउनलोड</div>
+                        <div class="backup-desc">सारा डेटा JSON फाइल में</div>
+                        <button class="btn btn-small" onclick="downloadBackup()" style="width:100%;">
+                            <i class="fas fa-download"></i> डाउनलोड
+                        </button>
+                    </div>
+
+                    <!-- Restore Backup -->
+                    <div class="backup-card">
+                        <div class="backup-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div class="backup-title">बैकअप रिस्टोर</div>
+                        <div class="backup-desc">JSON फाइल से डेटा लोड</div>
+                        <button class="btn btn-small" onclick="document.getElementById('restoreFile').click()" style="width:100%;">
+                            <i class="fas fa-undo"></i> रिस्टोर
+                        </button>
+                        <input type="file" id="restoreFile" accept=".json" style="display:none;" onchange="restoreBackup()">
+                    </div>
+
+                    <!-- Reset to Default -->
+                    <div class="backup-card">
+                        <div class="backup-icon" style="background: #f59e0b;">
+                            <i class="fas fa-undo-alt"></i>
+                        </div>
+                        <div class="backup-title">डिफ़ॉल्ट रीसेट</div>
+                        <div class="backup-desc">मूल डेटा पर वापस</div>
+                        <button class="btn btn-small" onclick="resetToDefault()" style="width:100%;">
+                            <i class="fas fa-history"></i> रीसेट
+                        </button>
+                    </div>
+
+                    <!-- Clear All -->
+                    <div class="backup-card">
+                        <div class="backup-icon" style="background: #ef4444;">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                        <div class="backup-title">सब हटाएँ</div>
+                        <div class="backup-desc">सारे प्रश्न डिलीट करें</div>
+                        <button class="btn btn-small" onclick="clearAllQuestions()" style="width:100%;">
+                            <i class="fas fa-trash"></i> हटाएँ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dialog Container -->
+    <div id="dialogContainer"></div>
+
+    <script>
+        const STORAGE_KEY = 'bihar_board_12_complete';
+
+        // Complete Data
+        const DEFAULT_DATA = {
+            hindi_gadya: { name: "हिंदी गद्य", icon: "fa-book", stream: "language", chapters: {} },
+            hindi_padya: { name: "हिंदी पद्य", icon: "fa-feather", stream: "language", chapters: {} },
+            english_prose: { name: "ENGLISH PROSE", icon: "fa-language", stream: "language", chapters: {} },
+            english_poetry: { name: "ENGLISH POETRY", icon: "fa-feather-alt", stream: "language", chapters: {} },
+            urdu: { name: "उर्दू", icon: "fa-pen-fancy", stream: "language", chapters: {} },
+            sanskrit: { name: "संस्कृत", icon: "fa-om", stream: "language", chapters: {} },
+            history: { name: "इतिहास", icon: "fa-landmark", stream: "arts", chapters: {} },
+            geography: { name: "भूगोल", icon: "fa-earth", stream: "arts", chapters: {} },
+            political_science: { name: "राजनीति", icon: "fa-gavel", stream: "arts", chapters: {} },
+            economics_arts: { name: "अर्थशास्त्र", icon: "fa-chart-line", stream: "arts", chapters: {} },
+            sociology: { name: "समाजशास्त्र", icon: "fa-users", stream: "arts", chapters: {} },
+            psychology: { name: "मनोविज्ञान", icon: "fa-brain", stream: "arts", chapters: {} },
+            physics: { name: "भौतिकी", icon: "fa-atom", stream: "science", chapters: {} },
+            chemistry: { name: "रसायन", icon: "fa-flask", stream: "science", chapters: {} },
+            biology: { name: "जीव विज्ञान", icon: "fa-dna", stream: "science", chapters: {} },
+            mathematics: { name: "गणित", icon: "fa-calculator", stream: "science", chapters: {} },
+            computer_science: { name: "कंप्यूटर", icon: "fa-laptop", stream: "science", chapters: {} },
+            accountancy: { name: "लेखाशास्त्र", icon: "fa-file-invoice", stream: "commerce", chapters: {} },
+            business_studies: { name: "व्यवसाय", icon: "fa-briefcase", stream: "commerce", chapters: {} },
+            economics_commerce: { name: "अर्थशास्त्र", icon: "fa-chart-pie", stream: "commerce", chapters: {} },
+            entrepreneurship: { name: "उद्यमिता", icon: "fa-rocket", stream: "commerce", chapters: {} },
+            physical_education: { name: "शारीरिक", icon: "fa-running", stream: "extra", chapters: {} },
+            home_science: { name: "गृह विज्ञान", icon: "fa-home", stream: "extra", chapters: {} },
+            music: { name: "संगीत", icon: "fa-music", stream: "extra", chapters: {} },
+            fine_arts: { name: "ललित कला", icon: "fa-paint-brush", stream: "extra", chapters: {} },
+            agriculture: { name: "कृषि", icon: "fa-seedling", stream: "extra", chapters: {} }
+        };
+
+        let currentStream = '';
+        let currentEditData = null;
+
+        // Load/Save functions
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : DEFAULT_DATA;
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            updateStats();
+            if (document.getElementById('viewCategory').classList.contains('active')) {
+                displayQuestions();
+            }
+        }
+
+        // Professional Dialog
+        function showDialog(options) {
+            const {
+                title,
+                message,
+                icon = 'info',
+                confirmText = 'हाँ',
+                cancelText = 'नहीं',
+                onConfirm,
+                onCancel,
+                showCancel = true,
+                type = 'info'
+            } = options;
+
+            let iconClass = 'fa-info-circle';
+            let iconBg = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            
+            if (type === 'warning') {
+                iconClass = 'fa-exclamation-triangle';
+                iconBg = '#f59e0b';
+            } else if (type === 'error') {
+                iconClass = 'fa-times-circle';
+                iconBg = '#ef4444';
+            } else if (type === 'success') {
+                iconClass = 'fa-check-circle';
+                iconBg = '#10b981';
+            }
+
+            const dialogHtml = `
+                <div class="dialog-overlay" id="dialogOverlay">
+                    <div class="dialog-box">
+                        <div class="dialog-header">
+                            <div class="dialog-icon" style="background: ${iconBg}">
+                                <i class="fas ${iconClass}"></i>
+                            </div>
+                            <div class="dialog-title">${title}</div>
+                        </div>
+                        <div class="dialog-content">
+                            ${message}
+                        </div>
+                        <div class="dialog-actions">
+                            ${showCancel ? `<button class="dialog-btn secondary" id="dialogCancel">${cancelText}</button>` : ''}
+                            <button class="dialog-btn primary" id="dialogConfirm">${confirmText}</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('dialogContainer').innerHTML = dialogHtml;
+
+            document.getElementById('dialogConfirm').addEventListener('click', () => {
+                document.getElementById('dialogContainer').innerHTML = '';
+                if (onConfirm) onConfirm();
+            });
+
+            if (showCancel) {
+                document.getElementById('dialogCancel').addEventListener('click', () => {
+                    document.getElementById('dialogContainer').innerHTML = '';
+                    if (onCancel) onCancel();
+                });
+            }
+        }
+
+        // Edit Dialog
+        function showEditDialog(subKey, chapKey, questionIndex, questionData) {
+            currentEditData = { subKey, chapKey, questionIndex, questionData };
+            
+            const dialogHtml = `
+                <div class="dialog-overlay" id="dialogOverlay">
+                    <div class="dialog-box">
+                        <div class="dialog-header">
+                            <div class="dialog-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="dialog-title">प्रश्न संपादित करें</div>
+                        </div>
+                        <div class="dialog-content">
+                            <div class="edit-form-group">
+                                <label>प्रश्न</label>
+                                <input type="text" id="editQuestion" value="${questionData.question.replace(/"/g, '&quot;')}">
+                            </div>
+                            <div class="edit-form-group">
+                                <label>विकल्प</label>
+                                <div class="edit-options-grid">
+                                    <input type="text" id="editOpt0" value="${questionData.options[0].replace(/"/g, '&quot;')}">
+                                    <input type="text" id="editOpt1" value="${questionData.options[1].replace(/"/g, '&quot;')}">
+                                    <input type="text" id="editOpt2" value="${questionData.options[2].replace(/"/g, '&quot;')}">
+                                    <input type="text" id="editOpt3" value="${questionData.options[3].replace(/"/g, '&quot;')}">
+                                </div>
+                            </div>
+                            <div class="edit-form-group">
+                                <label>सही उत्तर</label>
+                                <input type="text" id="editAnswer" value="${questionData.answer.replace(/"/g, '&quot;')}">
+                            </div>
+                        </div>
+                        <div class="dialog-actions">
+                            <button class="dialog-btn secondary" id="dialogCancel">रद्द करें</button>
+                            <button class="dialog-btn primary" id="dialogConfirm">अपडेट करें</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('dialogContainer').innerHTML = dialogHtml;
+
+            document.getElementById('dialogConfirm').addEventListener('click', () => {
+                const updatedQuestion = {
+                    question: document.getElementById('editQuestion').value.trim(),
+                    options: [
+                        document.getElementById('editOpt0').value.trim(),
+                        document.getElementById('editOpt1').value.trim(),
+                        document.getElementById('editOpt2').value.trim(),
+                        document.getElementById('editOpt3').value.trim()
+                    ],
+                    answer: document.getElementById('editAnswer').value.trim()
+                };
+
+                // Validate
+                if (!updatedQuestion.question || updatedQuestion.options.some(o => !o) || !updatedQuestion.answer) {
+                    showDialog({
+                        title: 'त्रुटि',
+                        message: 'सभी फ़ील्ड भरें',
+                        type: 'error',
+                        showCancel: false,
+                        confirmText: 'ठीक है'
+                    });
+                    return;
+                }
+
+                if (!updatedQuestion.options.includes(updatedQuestion.answer)) {
+                    showDialog({
+                        title: 'त्रुटि',
+                        message: 'सही उत्तर विकल्पों में से होना चाहिए',
+                        type: 'error',
+                        showCancel: false,
+                        confirmText: 'ठीक है'
+                    });
+                    return;
+                }
+
+                const data = loadData();
+                data[subKey].chapters[chapKey].questions[questionIndex] = updatedQuestion;
+                saveData(data);
+                
+                document.getElementById('dialogContainer').innerHTML = '';
+                displayQuestions();
+                
+                showDialog({
+                    title: 'सफलता',
+                    message: 'प्रश्न अपडेट हो गया',
+                    type: 'success',
+                    showCancel: false,
+                    confirmText: 'ठीक है'
+                });
+            });
+
+            document.getElementById('dialogCancel').addEventListener('click', () => {
+                document.getElementById('dialogContainer').innerHTML = '';
+            });
+        }
+
+        function updateStats() {
+            const data = loadData();
+            let subs = 0, chaps = 0, ques = 0;
+            Object.values(data).forEach(s => {
+                subs++;
+                Object.values(s.chapters || {}).forEach(c => {
+                    chaps++;
+                    ques += (c.questions || []).length;
+                });
+            });
+            document.getElementById('statSubjects').innerText = subs;
+            document.getElementById('statChapters').innerText = chaps;
+            document.getElementById('statQues').innerText = ques;
+            document.getElementById('totalQuestions').innerText = ques + ' प्रश्न';
+        }
+
+        // Switch between 3 main categories
+        function switchCategory(cat) {
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.category-content').forEach(c => c.classList.remove('active'));
+            
+            if (cat === 'upload') {
+                document.querySelectorAll('.category-tab')[0].classList.add('active');
+                document.getElementById('uploadCategory').classList.add('active');
+            } else if (cat === 'view') {
+                document.querySelectorAll('.category-tab')[1].classList.add('active');
+                document.getElementById('viewCategory').classList.add('active');
+                displayQuestions();
+            } else {
+                document.querySelectorAll('.category-tab')[2].classList.add('active');
+                document.getElementById('backupCategory').classList.add('active');
+            }
+        }
+
+        // Switch between normal and JSON upload tabs
+        function switchUploadTab(tab) {
+            document.querySelectorAll('.upload-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.upload-content').forEach(c => c.classList.remove('active'));
+            
+            if (tab === 'normal') {
+                document.querySelectorAll('.upload-tab')[0].classList.add('active');
+                document.getElementById('normalUpload').classList.add('active');
+            } else {
+                document.querySelectorAll('.upload-tab')[1].classList.add('active');
+                document.getElementById('jsonUpload').classList.add('active');
+            }
+        }
+
+        // Load subjects based on stream
+        function loadSubjects() {
+            const stream = document.getElementById('streamSelect').value;
+            const data = loadData();
+            const subSelect = document.getElementById('subjectSelect');
+            
+            subSelect.innerHTML = '<option value="">-- विषय चुनें --</option>';
+            document.getElementById('chapterSelect').innerHTML = '<option value="">-- पहले विषय चुनें --</option>';
+            
+            if (!stream) return;
+
+            Object.entries(data).forEach(([key, sub]) => {
+                if (sub.stream === stream) {
+                    const opt = document.createElement('option');
+                    opt.value = key;
+                    opt.text = sub.name;
+                    subSelect.appendChild(opt);
+                }
+            });
+        }
+
+        function loadChapters() {
+            const subKey = document.getElementById('subjectSelect').value;
+            const data = loadData();
+            const chapSelect = document.getElementById('chapterSelect');
+            
+            chapSelect.innerHTML = '<option value="">-- अध्याय चुनें --</option>';
+            if (!subKey || !data[subKey]) return;
+
+            Object.entries(data[subKey].chapters || {}).forEach(([key, chap]) => {
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.text = chap.name;
+                chapSelect.appendChild(opt);
+            });
+        }
+
+        // Add question via form
+        function addQuestion() {
+            const subKey = document.getElementById('subjectSelect').value;
+            const chapKey = document.getElementById('chapterSelect').value;
+            const q = document.getElementById('questionText').value.trim();
+            const o0 = document.getElementById('opt0').value.trim();
+            const o1 = document.getElementById('opt1').value.trim();
+            const o2 = document.getElementById('opt2').value.trim();
+            const o3 = document.getElementById('opt3').value.trim();
+            const ans = document.getElementById('correctAnswer').value.trim();
+
+            if (!subKey || !chapKey) {
+                showDialog({
+                    title: 'त्रुटि',
+                    message: 'कृपया पहले अध्याय चुनें',
+                    type: 'error',
+                    showCancel: false,
+                    confirmText: 'ठीक है'
+                });
+                return;
+            }
+
+            if (!q || !o0 || !o1 || !o2 || !o3 || !ans) {
+                showDialog({
+                    title: 'त्रुटि',
+                    message: 'सभी फ़ील्ड भरें',
+                    type: 'error',
+                    showCancel: false,
+                    confirmText: 'ठीक है'
+                });
+                return;
+            }
+
+            const data = loadData();
+            if (!data[subKey].chapters[chapKey]) {
+                data[subKey].chapters[chapKey] = {
+                    name: document.getElementById('chapterSelect').selectedOptions[0].text,
+                    questions: []
+                };
+            }
+
+            data[subKey].chapters[chapKey].questions.push({
+                question: q,
+                options: [o0, o1, o2, o3],
+                answer: ans
+            });
+
+            saveData(data);
+            
+            document.getElementById('questionText').value = '';
+            document.getElementById('opt0').value = '';
+            document.getElementById('opt1').value = '';
+            document.getElementById('opt2').value = '';
+            document.getElementById('opt3').value = '';
+            document.getElementById('correctAnswer').value = '';
+
+            showDialog({
+                title: 'सफलता',
+                message: 'प्रश्न सहेज लिया गया',
+                type: 'success',
+                showCancel: false,
+                confirmText: 'ठीक है'
+            });
+        }
+
+        // JSON functions
+        function handleFileSelect() {
+            const file = document.getElementById('jsonFile').files[0];
+            if (!file) return;
+            document.getElementById('fileName').innerText = file.name;
+            const reader = new FileReader();
+            reader.onload = e => document.getElementById('jsonInput').value = e.target.result;
+            reader.readAsText(file);
+        }
+
+        function validateJSON() {
+            try {
+                JSON.parse(document.getElementById('jsonInput').value);
+                showDialog({
+                    title: 'सफलता',
+                    message: 'JSON सही है',
+                    type: 'success',
+                    showCancel: false,
+                    confirmText: 'ठीक है'
+                });
+            } catch(e) {
+                showDialog({
+                    title: 'त्रुटि',
+                    message: 'गलती: ' + e.message,
+                    type: 'error',
+                    showCancel: false,
+                    confirmText: 'ठीक है'
+                });
+            }
+        }
+
+        function uploadJSON() {
+            const subKey = document.getElementById('subjectSelect').value;
+            const chapKey = document.getElementById('chapterSelect').value;
+            const json = document.getElementById('jsonInput').value.trim();
+
+            if (!subKey || !chapKey) {
+                showDialog({
+                    title: 'त्रुटि',
+                    message: 'पहले अध्याय चुनें',
+                    type: 'error',
+                    showCancel: false,
+                    confirmText: 'ठीक है'
+                });
+                return;
+            }
+
+            if (!json) {
+                showDialog({
+                    title: 'त्रुटि',
+                    message: 'JSON खाली है',
+                    type: 'error',
+                    showCancel: false,
+                    confirmText: 'ठीक है'
+                });
+                return;
+            }
+
+            try {
+                const questions = JSON.parse(json);
+                if (!Array.isArray(questions)) throw new Error('Array होना चाहिए');
+
+                const data = loadData();
+                if (!data[subKey].chapters[chapKey]) {
+                    data[subKey].chapters[chapKey] = {
+                        name: document.getElementById('chapterSelect').selectedOptions[0].text,
+                        questions: []
+                    };
+                }
+
+                data[subKey].chapters[chapKey].questions.push(...questions);
+                saveData(data);
+                
+                document.getElementById('jsonInput').value = '';
+                document.getElementById('jsonFile').value = '';
+                document.getElementById('fileName').innerText = 'कोई फाइल नहीं';
+
+                showDialog({
+                    title: 'सफलता',
+                    message: questions.length + ' प्रश्न अपलोड हो गए',
+                    type: 'success',
+                    showCancel: false,
+                    confirmText: 'ठीक है'
+                });
+
+            } catch(e) {
+                showDialog({
+                    title: 'त्रुटि',
+                    message: 'गलती: ' + e.message,
+                    type: 'error',
+                    showCancel: false,
+                    confirmText: 'ठीक है'
+                });
+            }
+        }
+
+        // Filter stream in view
+        function filterStream(stream) {
+            currentStream = stream;
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            displayQuestions();
+        }
+
+        // Toggle subject expansion
+        function toggleSubject(element) {
+            element.classList.toggle('expanded');
+        }
+
+        // Display questions in view category
+        function displayQuestions() {
+            const data = loadData();
+            let html = '';
+
+            Object.entries(data).forEach(([subKey, sub]) => {
+                if (!currentStream || sub.stream === currentStream) {
+                    const chapters = sub.chapters || {};
+                    let chaptersHtml = '';
+
+                    Object.entries(chapters).forEach(([chapKey, chap]) => {
+                        if (chap.questions && chap.questions.length > 0) {
+                            let questionsHtml = '';
+                            chap.questions.forEach((q, idx) => {
+                                questionsHtml += `
+                                    <div class="question-bubble">
+                                        <span class="question-text">${q.question.substring(0,40)}${q.question.length > 40 ? '...' : ''}</span>
+                                        <div class="question-actions">
+                                            <i class="fas fa-edit action-icon edit-icon" onclick="event.stopPropagation(); showEditDialog('${subKey}', '${chapKey}', ${idx}, ${JSON.stringify(q).replace(/"/g, '&quot;')})"></i>
+                                            <i class="fas fa-trash action-icon delete-icon" onclick="event.stopPropagation(); confirmDelete('${subKey}', '${chapKey}', ${idx})"></i>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+
+                            chaptersHtml += `
+                                <div class="chapter-item">
+                                    <div class="chapter-header">
+    <span class="chapter-title">${chap.name}</span>
+
+    <div style="display:flex; gap:6px; align-items:center;">
+        <span class="question-count">${chap.questions.length}</span>
+
+        <i class="fas fa-trash action-icon delete-icon"
+        title="All Delete"
+        onclick="event.stopPropagation(); confirmDeleteAll('${subKey}','${chapKey}')"></i>
+    </div>
+</div>
+                                    <div class="questions-list">
+                                        ${questionsHtml}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+
+                    if (chaptersHtml) {
+                        html += `
+                            <div class="subject-card" onclick="toggleSubject(this)">
+                                <div class="subject-header">
+                                    <div class="subject-icon"><i class="fas ${sub.icon}"></i></div>
+                                    <span class="subject-name">${sub.name}</span>
+                                    <i class="fas fa-chevron-right subject-arrow"></i>
+                                </div>
+                                <div class="chapter-grid">
+                                    ${chaptersHtml}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            });
+
+            document.getElementById('questionsDisplay').innerHTML = html || '<p style="text-align:center; color:#94a3b8; padding:20px;">कोई प्रश्न नहीं</p>';
+        }
+
+        // Confirm delete
+        function confirmDelete(subKey, chapKey, idx) {
+            showDialog({
+                title: 'पुष्टि करें',
+                message: 'क्या आप इस प्रश्न को हटाना चाहते हैं?',
+                type: 'warning',
+                confirmText: 'हाँ, हटाएँ',
+                cancelText: 'रद्द करें',
+                onConfirm: () => {
+                    const data = loadData();
+                    data[subKey].chapters[chapKey].questions.splice(idx, 1);
+                    saveData(data);
+                    displayQuestions();
+                    showDialog({
+                        title: 'सफलता',
+                        message: 'प्रश्न हटा दिया गया',
+                        type: 'success',
+                        showCancel: false,
+                        confirmText: 'ठीक है'
+                    });
+                }
+            });
+        }
+
+        // Backup functions
+        function downloadBackup() {
+            const data = loadData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'backup_' + new Date().toISOString().slice(0,10) + '.json';
+            a.click();
+            
+            showDialog({
+                title: 'सफलता',
+                message: 'बैकअप डाउनलोड शुरू हो गया',
+                type: 'success',
+                showCancel: false,
+                confirmText: 'ठीक है'
+            });
+        }
+
+        function restoreBackup() {
+            const file = document.getElementById('restoreFile').files[0];
+            if (!file) return;
+            
+            showDialog({
+                title: 'पुष्टि करें',
+                message: 'बैकअप रिस्टोर करने से मौजूदा डेटा ओवरराइट हो जाएगा। जारी रखें?',
+                type: 'warning',
+                confirmText: 'हाँ, रिस्टोर करें',
+                cancelText: 'रद्द करें',
+                onConfirm: () => {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            saveData(data);
+                            showDialog({
+                                title: 'सफलता',
+                                message: 'बैकअप रिस्टोर हो गया',
+                                type: 'success',
+                                showCancel: false,
+                                confirmText: 'ठीक है'
+                            });
+                        } catch(e) {
+                            showDialog({
+                                title: 'त्रुटि',
+                                message: 'गलती: ' + e.message,
+                                type: 'error',
+                                showCancel: false,
+                                confirmText: 'ठीक है'
+                            });
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            });
+        }
+
+        function resetToDefault() {
+            showDialog({
+                title: 'चेतावनी',
+                message: 'डिफ़ॉल्ट डेटा पर रीसेट करने से सारे प्रश्न हट जाएंगे। क्या आप सुनिश्चित हैं?',
+                type: 'warning',
+                confirmText: 'हाँ, रीसेट करें',
+                cancelText: 'रद्द करें',
+                onConfirm: () => {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_DATA));
+                    updateStats();
+                    if (document.getElementById('viewCategory').classList.contains('active')) displayQuestions();
+                    showDialog({
+                        title: 'सफलता',
+                        message: 'डिफ़ॉल्ट डेटा रिस्टोर हो गया',
+                        type: 'success',
+                        showCancel: false,
+                        confirmText: 'ठीक है'
+                    });
+                }
+            });
+        }
+
+        function clearAllQuestions() {
+            showDialog({
+                title: 'चेतावनी',
+                message: 'सारे प्रश्न हट जाएंगे! क्या आप सुनिश्चित हैं?',
+                type: 'warning',
+                confirmText: 'हाँ, सब हटाएँ',
+                cancelText: 'रद्द करें',
+                onConfirm: () => {
+                    const data = loadData();
+                    Object.keys(data).forEach(k => data[k].chapters = {});
+                    saveData(data);
+                    showDialog({
+                        title: 'सफलता',
+                        message: 'सारे प्रश्न हटा दिए गए',
+                        type: 'success',
+                        showCancel: false,
+                        confirmText: 'ठीक है'
+                    });
+                }
+            });
+        }
+
+        // Initialize
+        window.onload = function() {
+            updateStats();
+            displayQuestions();
+        };
+        // Delete All Questions of Chapter
+function confirmDeleteAll(subKey, chapKey) {
+showDialog({
+title: 'चेतावनी',
+message: 'इस अध्याय के सारे प्रश्न हट जाएंगे! क्या आप सुनिश्चित हैं?',
+type: 'warning',
+confirmText: 'हाँ, सब हटाएँ',
+cancelText: 'रद्द करें',
+onConfirm: () => {
+const data = loadData();
+
+if (data[subKey] && data[subKey].chapters[chapKey]) {
+data[subKey].chapters[chapKey].questions = [];
+}
+
+saveData(data);
+displayQuestions();
+
+showDialog({
+title: 'सफलता',
+message: 'इस अध्याय के सारे प्रश्न हटा दिए गए',
+type: 'success',
+showCancel: false,
+confirmText: 'ठीक है'
+});
+}
+});
+}
+    </script>
+</body>
+</html>

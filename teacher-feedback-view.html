@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Feedback Records · MMPS</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    body {
+        background: #f5f9ff;
+        min-height: 100vh;
+        padding: 20px 16px;
+    }
+    .main-wrapper {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+        margin-bottom: 24px;
+    }
+    .header h1 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #0b2a4a;
+        letter-spacing: -0.3px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .header p {
+        color: #4f6f8f;
+        font-size: 0.85rem;
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* ===== LOADING OVERLAY ===== */
+    .loading-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+    }
+    .loading-overlay.active {
+        display: flex;
+    }
+    .loading-box {
+        background: white;
+        padding: 26px 28px;
+        border-radius: 32px;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(0,20,50,0.1);
+        border: 1px solid #eef4fc;
+        animation: gentlePulse 1.5s ease infinite;
+    }
+    .loading-box i {
+        font-size: 2.5rem;
+        color: #0b2a4a;
+        margin-bottom: 12px;
+        opacity: 0.7;
+    }
+    .loading-box p {
+        color: #1e3a5f;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    @keyframes gentlePulse {
+        0% { transform: scale(1); opacity: 0.9; }
+        50% { transform: scale(1.01); opacity: 1; }
+        100% { transform: scale(1); opacity: 0.9; }
+    }
+
+    /* ===== TEACHER SCROLL ===== */
+    .section-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        color: #0b2a4a;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    .teacher-scroll {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 4px 0 16px;
+        margin-bottom: 20px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .teacher-scroll::-webkit-scrollbar {
+        display: none;
+    }
+    .teacher-card {
+        min-width: 100px;
+        background: white;
+        padding: 12px 6px 10px;
+        border-radius: 24px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+    }
+    .teacher-card.active {
+        border-color: #0b2a4a;
+        background: #f0f7ff;
+        transform: translateY(-2px);
+    }
+    .teacher-card img {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 6px;
+        border: 3px solid white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .teacher-card .name {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #0b2a4a;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 4px;
+    }
+    .teacher-card .avg {
+        font-size: 0.65rem;
+        color: #f8b84a;
+        font-weight: 600;
+    }
+
+    /* ===== FEEDBACK CARD ===== */
+    .feedback-card {
+        background: white;
+        border-radius: 26px;
+        padding: 18px;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        border: 1px solid #edf2f9;
+        animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .student-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    .student-row img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+    }
+    .student-info {
+        flex: 1;
+    }
+    .student-name {
+        font-weight: 700;
+        color: #0b2a4a;
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+    }
+    .student-id {
+        font-size: 0.65rem;
+        color: #4f6f8f;
+    }
+    .rating-stars {
+        color: #f8b84a;
+        font-size: 0.9rem;
+        margin: 8px 0 6px;
+        letter-spacing: 2px;
+    }
+    .feedback-text {
+        color: #2a4058;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        background: #f8fafd;
+        padding: 10px 12px;
+        border-radius: 18px;
+        margin: 8px 0 6px;
+    }
+    .meta-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.7rem;
+        color: #6b839c;
+        margin-top: 8px;
+    }
+    .meta-info i {
+        font-size: 0.65rem;
+        opacity: 0.7;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        background: white;
+        border-radius: 28px;
+        color: #4f6f8f;
+    }
+    .empty-state i {
+        font-size: 3rem;
+        opacity: 0.4;
+        margin-bottom: 12px;
+    }
+    .empty-state p {
+        font-size: 0.9rem;
+    }
+
+    /* ===== STATS CARD ===== */
+    .stats-card {
+        background: linear-gradient(145deg, #0b2a4a, #123e66);
+        border-radius: 24px;
+        padding: 16px 18px;
+        margin-bottom: 20px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+    }
+    .stat-item {
+        text-align: center;
+    }
+    .stat-value {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+    .stat-label {
+        font-size: 0.7rem;
+        opacity: 0.8;
+    }
+
+    /* ===== AUTO-SCROLL HINT ===== */
+    .scroll-hint {
+        text-align: right;
+        font-size: 0.7rem;
+        color: #4f6f8f;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 4px;
+    }
+</style>
+</head>
+<body>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="pageLoader">
+    <div class="loading-box">
+        <i class="fa-regular fa-hourglass-half"></i>
+        <p>Loading feedback records...</p>
+    </div>
+</div>
+
+<div class="main-wrapper">
+
+    <div class="header">
+        <h1><i class="fa-regular fa-message"></i> Feedback Records</h1>
+        <p><i class="fa-regular fa-circle-check" style="color:#0b2a4a;"></i> M.M Public School · Mundeshwari</p>
+    </div>
+
+    <!-- STATS CARD (dynamic) -->
+    <div id="statsCard" class="stats-card" style="display: none;">
+        <div class="stat-item">
+            <div class="stat-value" id="totalFeedbacks">0</div>
+            <div class="stat-label">total</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="avgRating">0.0</div>
+            <div class="stat-label">avg rating</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="totalTeachers">0</div>
+            <div class="stat-label">teachers</div>
+        </div>
+    </div>
+
+    <!-- TEACHER SCROLL -->
+    <div class="section-label">
+        <i class="fa-regular fa-chalkboard-user"></i> Select teacher
+    </div>
+    <div class="scroll-hint">
+        <i class="fa-regular fa-arrow-right"></i> auto-scroll
+    </div>
+    <div class="teacher-scroll" id="teacherScroll"></div>
+
+    <!-- FEEDBACK CONTAINER -->
+    <div id="feedbackContainer"></div>
+
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+        databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+        projectId: "apni-duniya-b53d7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const teacherScroll = document.getElementById("teacherScroll");
+    const feedbackContainer = document.getElementById("feedbackContainer");
+    const pageLoader = document.getElementById("pageLoader");
+    const statsCard = document.getElementById("statsCard");
+    const totalFeedbacksEl = document.getElementById("totalFeedbacks");
+    const avgRatingEl = document.getElementById("avgRating");
+    const totalTeachersEl = document.getElementById("totalTeachers");
+
+    let teachers = [];
+    let allFeedbacks = {};
+    let autoScrollInterval;
+
+    // ===== LOADER =====
+    function showLoader(show) {
+        if (show) pageLoader.classList.add("active");
+        else pageLoader.classList.remove("active");
+    }
+
+    // ===== LOAD ALL DATA =====
+    async function loadAllData() {
+        showLoader(true);
+
+        try {
+            // Load teachers
+            const teacherSnap = await get(ref(db, "teachers"));
+            teachers = [];
+            teacherSnap.forEach(child => {
+                teachers.push({
+                    id: child.key,
+                    ...child.val()
+                });
+            });
+            totalTeachersEl.innerText = teachers.length;
+
+            // Load all feedbacks
+            const feedbackSnap = await get(ref(db, "teacherRatings"));
+            allFeedbacks = {};
+            let totalFeedbackCount = 0;
+            let totalRatingSum = 0;
+
+            if (feedbackSnap.exists()) {
+                feedbackSnap.forEach(teacherFeedback => {
+                    const teacherId = teacherFeedback.key;
+                    allFeedbacks[teacherId] = [];
+                    teacherFeedback.forEach(feedback => {
+                        allFeedbacks[teacherId].push({
+                            id: feedback.key,
+                            ...feedback.val()
+                        });
+                        totalFeedbackCount++;
+                        totalRatingSum += feedback.val().rating || 0;
+                    });
+                });
+            }
+
+            totalFeedbacksEl.innerText = totalFeedbackCount;
+            const avg = totalFeedbackCount > 0 ? (totalRatingSum / totalFeedbackCount).toFixed(1) : "0.0";
+            avgRatingEl.innerText = avg;
+
+            if (teachers.length > 0) statsCard.style.display = "flex";
+            else statsCard.style.display = "none";
+
+            renderTeacherScroll();
+
+        } catch (error) {
+            console.error("Error loading data:", error);
+            feedbackContainer.innerHTML = `<div class="empty-state"><i class="fa-regular fa-circle-exclamation"></i><p>Failed to load data</p></div>`;
+        } finally {
+            showLoader(false);
+        }
+    }
+
+    // ===== RENDER TEACHER SCROLL =====
+    function renderTeacherScroll() {
+        teacherScroll.innerHTML = "";
+
+        teachers.forEach(teacher => {
+            const photo = teacher.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(teacher.name)}&background=0b2a4a&color=fff&size=56`;
+            const feedbacks = allFeedbacks[teacher.id] || [];
+            const avg = feedbacks.length > 0 
+                ? (feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length).toFixed(1)
+                : "0.0";
+
+            teacherScroll.innerHTML += `
+                <div class="teacher-card" data-id="${teacher.id}">
+                    <img src="${photo}" alt="${teacher.name}" loading="lazy">
+                    <div class="name">${teacher.name}</div>
+                    <div class="avg">★ ${avg}</div>
+                </div>
+            `;
+        });
+
+        // Add click handlers
+        document.querySelectorAll(".teacher-card").forEach(card => {
+            card.addEventListener("click", () => {
+                document.querySelectorAll(".teacher-card").forEach(c => c.classList.remove("active"));
+                card.classList.add("active");
+                loadFeedback(card.dataset.id);
+            });
+        });
+
+        // Auto-select first teacher
+        if (teachers.length > 0) {
+            const firstCard = document.querySelector(".teacher-card");
+            firstCard.classList.add("active");
+            loadFeedback(firstCard.dataset.id);
+        }
+
+        // Auto-scroll
+        if (autoScrollInterval) clearInterval(autoScrollInterval);
+        autoScrollInterval = setInterval(() => {
+            teacherScroll.scrollLeft += 120;
+            if (teacherScroll.scrollLeft >= teacherScroll.scrollWidth - teacherScroll.clientWidth) {
+                teacherScroll.scrollLeft = 0;
+            }
+        }, 3000);
+    }
+
+    // ===== LOAD FEEDBACK FOR SELECTED TEACHER =====
+    async function loadFeedback(teacherId) {
+        showLoader(true);
+
+        try {
+            const teacher = teachers.find(t => t.id === teacherId);
+            const feedbacks = allFeedbacks[teacherId] || [];
+
+            if (!feedbacks.length) {
+                feedbackContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-regular fa-message"></i>
+                        <p>No feedback yet for ${teacher?.name || 'this teacher'}</p>
+                    </div>
+                `;
+                showLoader(false);
+                return;
+            }
+
+            // Sort by date (newest first)
+            feedbacks.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            let html = '';
+            feedbacks.forEach(f => {
+                const date = new Date(f.date).toLocaleString('en-IN', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const studentPhoto = f.studentPhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(f.studentName)}&background=4f6f8f&color=fff&size=48`;
+                const stars = '★'.repeat(f.rating) + '☆'.repeat(5 - f.rating);
+
+                html += `
+                    <div class="feedback-card">
+                        <div class="student-row">
+                            <img src="${studentPhoto}" alt="${f.studentName}" loading="lazy">
+                            <div class="student-info">
+                                <div class="student-name">${f.studentName}</div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="rating-stars">${stars}</div>
+                        
+                        ${f.comment ? `<div class="feedback-text">${f.comment}</div>` : ''}
+                        
+                        <div class="meta-info">
+                            <i class="fa-regular fa-calendar"></i> ${date}
+                        </div>
+                    </div>
+                `;
+            });
+
+            feedbackContainer.innerHTML = html;
+
+        } catch (error) {
+            console.error("Error loading feedback:", error);
+            feedbackContainer.innerHTML = `<div class="empty-state"><i class="fa-regular fa-circle-exclamation"></i><p>Error loading feedback</p></div>`;
+        } finally {
+            showLoader(false);
+        }
+    }
+
+    // ===== INIT =====
+    loadAllData();
+
+    // Cleanup interval on page unload
+    window.addEventListener('beforeunload', () => {
+        if (autoScrollInterval) clearInterval(autoScrollInterval);
+    });
+
+</script>
+</body>
+</html>

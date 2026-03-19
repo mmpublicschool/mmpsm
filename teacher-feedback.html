@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Teacher Feedback · MMPS</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    body {
+        background: #f4f7fc;
+        min-height: 100vh;
+        padding: 20px 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .main-wrapper {
+        max-width: 500px;
+        width: 100%;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    /* ===== LOADING OVERLAY (FULL PAGE) ===== */
+    .loading-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+    }
+    .loading-overlay.active {
+        display: flex;
+    }
+    .loading-box {
+        background: white;
+        padding: 28px 30px;
+        border-radius: 32px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0,20,50,0.15);
+        animation: gentlePulse 1.5s ease infinite;
+        border: 1px solid #eef4fc;
+    }
+    .loading-box i {
+        font-size: 2.8rem;
+        color: #0b2a4a;
+        margin-bottom: 12px;
+        opacity: 0.8;
+    }
+    .loading-box p {
+        color: #1e3a5f;
+        font-weight: 500;
+        font-size: 0.95rem;
+        letter-spacing: 0.2px;
+    }
+    @keyframes gentlePulse {
+        0% { transform: scale(1); opacity: 0.9; }
+        50% { transform: scale(1.02); opacity: 1; }
+        100% { transform: scale(1); opacity: 0.9; }
+    }
+
+    /* ===== HEADER ===== */
+    .app-header {
+        margin-bottom: 24px;
+    }
+    .app-header h1 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #0b2a4a;
+        letter-spacing: -0.3px;
+    }
+    .app-header p {
+        color: #4f6f8f;
+        font-size: 0.85rem;
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* ===== CARDS ===== */
+    .glass-card {
+        background: white;
+        border-radius: 28px;
+        padding: 22px 20px;
+        box-shadow: 0 10px 30px rgba(0,20,50,0.08);
+        border: 1px solid #eef2f9;
+        margin-bottom: 20px;
+    }
+    .glass-card h3 {
+        color: #0b2a4a;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* ===== FORM ELEMENTS ===== */
+    select, input {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 24px;
+        border: 2px solid #e2e9f2;
+        background: white;
+        font-size: 0.9rem;
+        margin-bottom: 14px;
+        outline: none;
+        transition: 0.15s;
+    }
+    select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230b2a4a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        background-size: 16px;
+    }
+    select:focus, input:focus {
+        border-color: #0b2a4a;
+        background-color: #fbfdff;
+    }
+
+    /* ===== PROFILE PREVIEW ===== */
+    .profile-card {
+        background: #f0f7ff;
+        border-radius: 24px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin: 10px 0 16px;
+        border: 1px solid #dae8fa;
+    }
+    .profile-card img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .profile-info .student-name {
+        font-weight: 700;
+        color: #0b2a4a;
+        font-size: 1rem;
+        margin-bottom: 4px;
+    }
+    .profile-info .student-tag {
+        background: rgba(255,255,255,0.8);
+        padding: 4px 10px;
+        border-radius: 30px;
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: #0b2a4a;
+        display: inline-block;
+    }
+
+    /* ===== BUTTON ===== */
+    .btn-primary {
+        background: #0b2a4a;
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 15px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .btn-primary:hover {
+        background: #123e66;
+    }
+
+    /* ===== FEEDBACK CARD ===== */
+    .feedback-card {
+        background: white;
+        border-radius: 26px;
+        padding: 20px 18px;
+        margin-bottom: 18px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+        border: 1px solid #edf2f9;
+    }
+    .teacher-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 16px;
+    }
+    .teacher-img-wrapper {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #f0f3f8;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    .teacher-img-wrapper.loading::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, #f0f0f0 25%, #fafafa 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.2s ease infinite;
+        border-radius: 50%;
+    }
+    .teacher-img-wrapper.loading::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 28px;
+        height: 28px;
+        border: 2px solid rgba(11,42,74,0.1);
+        border-top-color: #0b2a4a;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+    .teacher-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .teacher-info .teacher-name {
+        font-weight: 700;
+        color: #0b2a4a;
+        font-size: 1rem;
+        margin-bottom: 2px;
+    }
+    .teacher-info .teacher-subject {
+        font-size: 0.75rem;
+        color: #4f6f8f;
+    }
+    @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+    @keyframes spin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* ===== STARS ===== */
+    .stars {
+        display: flex;
+        gap: 6px;
+        margin: 12px 0 10px;
+        justify-content: center;
+    }
+    .star {
+        font-size: 1.8rem;
+        color: #d8e0ec;
+        cursor: pointer;
+        transition: 0.1s;
+    }
+    .star.active {
+        color: #f8b84a;
+    }
+
+    /* ===== TEXTAREA ===== */
+    textarea {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 22px;
+        border: 2px solid #e2e9f2;
+        font-size: 0.85rem;
+        resize: vertical;
+        min-height: 80px;
+        margin: 10px 0 14px;
+        outline: none;
+        background: #fbfdff;
+    }
+    textarea:focus {
+        border-color: #0b2a4a;
+    }
+
+    /* ===== SUBMIT BUTTON (small) ===== */
+    .submit-feedback {
+        background: #0b2a4a;
+        color: white;
+        border: none;
+        padding: 13px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        width: 100%;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .submit-feedback:hover {
+        background: #123e66;
+    }
+
+    /* ===== PROFESSIONAL DIALOG ===== */
+    .dialog-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1500;
+    }
+    .dialog-overlay.active {
+        display: flex;
+    }
+    .dialog-card {
+        background: white;
+        width: 280px;
+        padding: 24px 20px;
+        border-radius: 28px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        animation: dialogPop 0.2s ease;
+    }
+    .dialog-card i {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+    }
+    .dialog-card .success-icon { color: #28a745; }
+    .dialog-card .error-icon { color: #dc3545; }
+    .dialog-card .info-icon { color: #0b2a4a; }
+    .dialog-card h4 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #0b2a4a;
+        margin-bottom: 6px;
+    }
+    .dialog-card p {
+        color: #4a5e75;
+        font-size: 0.85rem;
+        margin-bottom: 18px;
+        line-height: 1.4;
+    }
+    .dialog-card button {
+        background: #0b2a4a;
+        color: white;
+        border: none;
+        padding: 10px 28px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        min-width: 100px;
+    }
+    @keyframes dialogPop {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    .hidden { display: none !important; }
+    .avg-badge {
+        background: #f0f7ff;
+        padding: 6px 14px;
+        border-radius: 40px;
+        font-size: 0.75rem;
+        color: #0b2a4a;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid #dae8fa;
+    }
+</style>
+</head>
+<body>
+
+<!-- FULL PAGE LOADING (no spinner, just gentle pulse) -->
+<div class="loading-overlay" id="pageLoader">
+    <div class="loading-box">
+        <i class="fa-regular fa-hourglass-half"></i>
+        <p>Please wait...</p>
+    </div>
+</div>
+
+<!-- PROFESSIONAL DIALOG -->
+<div class="dialog-overlay" id="dialogOverlay">
+    <div class="dialog-card" id="dialogCard">
+        <i class="fa-regular fa-circle-check" id="dialogIcon"></i>
+        <h4 id="dialogTitle">Success</h4>
+        <p id="dialogMessage">Operation completed</p>
+        <button id="dialogBtn">OK</button>
+    </div>
+</div>
+
+<div class="main-wrapper">
+
+    <div class="app-header">
+        <h1>Teacher Feedback</h1>
+        <p><i class="fa-regular fa-circle-check" style="color:#0b2a4a;"></i> secure · session 2026</p>
+    </div>
+
+    <!-- LOGIN CARD -->
+    <div id="loginSection" class="glass-card">
+        <h3><i class="fa-regular fa-id-card"></i> Select School ID</h3>
+        <select id="studentSelect">
+            <option value="">— choose your ID —</option>
+        </select>
+
+        <div id="loginFields" class="hidden">
+            <input type="text" id="username" placeholder="username">
+            <input type="password" id="password" placeholder="password">
+            <div id="profilePreview" class="hidden"></div>
+            <button class="btn-primary" onclick="verifyLogin()">
+                <i class="fa-regular fa-arrow-right-to-bracket"></i> Login
+            </button>
+        </div>
+    </div>
+
+    <!-- FEEDBACK SECTION -->
+    <div id="feedbackSection" class="hidden">
+        <div class="glass-card" style="padding: 16px 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin-bottom: 0; font-size: 1.2rem;"><i class="fa-regular fa-star"></i> Teachers</h3>
+                <span class="avg-badge"><i class="fa-regular fa-chart-line"></i> avg ratings</span>
+            </div>
+        </div>
+        <div id="container"></div>
+    </div>
+
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getDatabase, ref, get, push, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+        databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+        projectId: "apni-duniya-b53d7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let currentStudent = null;
+
+    // ===== DIALOG CONTROLS =====
+    function showDialog(type, title, message) {
+        const overlay = document.getElementById('dialogOverlay');
+        const icon = document.getElementById('dialogIcon');
+        const titleEl = document.getElementById('dialogTitle');
+        const msgEl = document.getElementById('dialogMessage');
+        
+        icon.className = '';
+        if (type === 'success') {
+            icon.classList.add('fa-regular', 'fa-circle-check', 'success-icon');
+        } else if (type === 'error') {
+            icon.classList.add('fa-regular', 'fa-circle-exclamation', 'error-icon');
+        } else {
+            icon.classList.add('fa-regular', 'fa-info-circle', 'info-icon');
+        }
+        
+        titleEl.innerText = title;
+        msgEl.innerText = message;
+        overlay.classList.add('active');
+    }
+
+    document.getElementById('dialogBtn').addEventListener('click', () => {
+        document.getElementById('dialogOverlay').classList.remove('active');
+    });
+
+    document.getElementById('dialogOverlay').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('dialogOverlay')) {
+            document.getElementById('dialogOverlay').classList.remove('active');
+        }
+    });
+
+    // ===== PAGE LOADER =====
+    function showLoader(show) {
+        const loader = document.getElementById('pageLoader');
+        if (show) loader.classList.add('active');
+        else loader.classList.remove('active');
+    }
+
+    // ===== LOAD STUDENT IDs =====
+    showLoader(true);
+    const studentSnap = await get(ref(db, "students"));
+    const select = document.getElementById("studentSelect");
+
+    studentSnap.forEach(child => {
+        select.innerHTML += `<option value="${child.key}">${child.key}</option>`;
+    });
+    showLoader(false);
+
+    // ===== ON STUDENT SELECT =====
+    select.addEventListener("change", async () => {
+        const studentId = select.value;
+        if (!studentId) return;
+
+        const saved = localStorage.getItem("loggedStudent");
+        if (saved === studentId) {
+            showLoader(true);
+            const data = (await get(ref(db, "students/" + studentId))).val();
+            currentStudent = {
+                id: studentId,
+                name: data.name,
+                photo: data.photoURL || ""
+            };
+            showLoader(false);
+            showPreview(data.name, data.photoURL, true);
+            setTimeout(openFeedback, 800);
+            return;
+        }
+
+        document.getElementById("loginFields").classList.remove("hidden");
+    });
+
+    // ===== SHOW PROFILE PREVIEW =====
+    function showPreview(name, photo, auto = false) {
+        const preview = document.getElementById("profilePreview");
+        preview.classList.remove("hidden");
+        preview.innerHTML = `
+            <div class="profile-card">
+                <img src="${photo || 'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=0b2a4a&color=fff&size=60'}" alt="student">
+                <div class="profile-info">
+                    <div class="student-name">${name}</div>
+                    <span class="student-tag"><i class="fa-regular fa-circle-check"></i> verified</span>
+                </div>
+            </div>
+        `;
+    }
+
+    // ===== VERIFY LOGIN =====
+    window.verifyLogin = async function () {
+        const studentId = select.value;
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        if (!username || !password) {
+            showDialog('error', 'Error', 'Please enter username and password');
+            return;
+        }
+
+        showLoader(true);
+        const data = (await get(ref(db, "students/" + studentId))).val();
+        showLoader(false);
+
+        if (data && data.username === username && data.password === password) {
+            currentStudent = {
+                id: studentId,
+                name: data.name,
+                photo: data.photoURL || ""
+            };
+            showPreview(data.name, data.photoURL);
+            localStorage.setItem("loggedStudent", studentId);
+            showDialog('success', 'Welcome', `Login successful, ${data.name}`);
+            setTimeout(openFeedback, 1000);
+        } else {
+            showDialog('error', 'Access Denied', 'Invalid username or password');
+        }
+    };
+
+    // ===== OPEN FEEDBACK =====
+    function openFeedback() {
+        document.getElementById("loginSection").classList.add("hidden");
+        document.getElementById("feedbackSection").classList.remove("hidden");
+        loadTeachers();
+    }
+
+    // ===== LOAD TEACHERS =====
+    async function loadTeachers() {
+        showLoader(true);
+        const teacherSnap = await get(ref(db, "teachers"));
+        const container = document.getElementById("container");
+        container.innerHTML = "";
+
+        if (!teacherSnap.exists()) {
+            container.innerHTML = '<div style="text-align:center;padding:40px;color:#4f6f8f;"><i class="fa-regular fa-face-frown"></i><p>No teachers found</p></div>';
+            showLoader(false);
+            return;
+        }
+
+        teacherSnap.forEach(child => {
+            const t = child.val();
+            const teacherId = child.key;
+            const photoUrl = t.photoURL || 'https://ui-avatars.com/api/?name='+encodeURIComponent(t.name)+'&background=1f4a8a&color=fff&size=56';
+
+            container.innerHTML += `
+                <div class="feedback-card" data-id="${teacherId}">
+                    <div class="teacher-row">
+                        <div class="teacher-img-wrapper loading" id="img-${teacherId}">
+                            <img src="${photoUrl}" alt="teacher" 
+                                 onload="this.parentElement.classList.remove('loading')" 
+                                 onerror="this.parentElement.classList.remove('loading');this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=1f4a8a&color=fff&size=56'"
+                                 loading="lazy">
+                        </div>
+                        <div class="teacher-info">
+                            <div class="teacher-name">${t.name}</div>
+                            <div class="teacher-subject">${t.subject || 'Teaching Staff'}</div>
+                        </div>
+                    </div>
+
+                    <div class="stars" data-rating="0">
+                        <i class="fa-regular fa-star star" data-value="1"></i>
+                        <i class="fa-regular fa-star star" data-value="2"></i>
+                        <i class="fa-regular fa-star star" data-value="3"></i>
+                        <i class="fa-regular fa-star star" data-value="4"></i>
+                        <i class="fa-regular fa-star star" data-value="5"></i>
+                    </div>
+
+                    <textarea placeholder="Write feedback (optional)"></textarea>
+                    <button class="submit-feedback" onclick="submitRating('${teacherId}')">Submit feedback</button>
+                </div>
+            `;
+        });
+
+        initStars();
+        showLoader(false);
+    }
+
+    // ===== STAR RATING =====
+    function initStars() {
+        document.querySelectorAll(".stars").forEach(group => {
+            group.querySelectorAll(".star").forEach(star => {
+                star.onclick = () => {
+                    let val = parseInt(star.dataset.value);
+                    group.dataset.rating = val;
+                    group.querySelectorAll(".star").forEach(s => {
+                        if (parseInt(s.dataset.value) <= val) {
+                            s.classList.remove("fa-regular");
+                            s.classList.add("fa-solid", "active");
+                        } else {
+                            s.classList.remove("fa-solid", "active");
+                            s.classList.add("fa-regular");
+                        }
+                    });
+                };
+            });
+        });
+    }
+
+    // ===== SUBMIT RATING =====
+    window.submitRating = async function (teacherId) {
+        const card = document.querySelector(`.feedback-card[data-id="${teacherId}"]`);
+        const rating = parseInt(card.querySelector(".stars").dataset.rating);
+
+        if (!rating) {
+            showDialog('error', 'Rating required', 'Please select 1-5 stars');
+            return;
+        }
+
+        const comment = card.querySelector("textarea").value.trim();
+
+        showLoader(true);
+        try {
+            await push(ref(db, "teacherRatings/" + teacherId), {
+                rating: rating,
+                comment: comment || "",
+                studentName: currentStudent.name,
+                studentPhoto: currentStudent.photo,
+                studentId: currentStudent.id,
+                date: new Date().toISOString()
+            });
+
+            const teacherRef = ref(db, "teachers/" + teacherId);
+            const teacherData = (await get(teacherRef)).val();
+
+            let total = teacherData.totalReviews || 0;
+            let avg = teacherData.averageRating || 0;
+            let newTotal = total + 1;
+            let newAvg = ((avg * total) + rating) / newTotal;
+
+            await update(teacherRef, {
+                totalReviews: newTotal,
+                averageRating: parseFloat(newAvg.toFixed(2))
+            });
+
+            showDialog('success', 'Thank you!', 'Your feedback has been recorded');
+
+            // Reset
+            card.querySelector(".stars").dataset.rating = 0;
+            card.querySelectorAll(".star").forEach(s => {
+                s.classList.remove("fa-solid", "active");
+                s.classList.add("fa-regular");
+            });
+            card.querySelector("textarea").value = "";
+
+        } catch (error) {
+            showDialog('error', 'Error', 'Failed to submit feedback');
+        } finally {
+            showLoader(false);
+        }
+    };
+
+</script>
+</body>
+</html>

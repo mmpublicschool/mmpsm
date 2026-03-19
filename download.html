@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>M.M Public School | Download History</title>
+
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-left i {
+    color: #ffd700;
+    font-size: 20px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: 0.2s;
+}
+
+.header-left i:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.header-title {
+    font-size: 20px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-title i {
+    color: #ffd700;
+}
+
+.header-right {
+    width: 40px;
+}
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+    padding: 16px 16px 8px 16px;
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-title i {
+    color: #ff9800;
+    font-size: 20px;
+}
+
+/* ===== DOWNLOADS LIST ===== */
+.downloads-section {
+    padding: 0 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+/* ===== DOWNLOAD CARD ===== */
+.download-card {
+    background: white;
+    border-radius: 24px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: 0.2s;
+    position: relative;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.download-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(10,42,102,0.1);
+    border-color: #0a2a66;
+}
+
+.download-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: #fee8e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #dc2626;
+    flex-shrink: 0;
+}
+
+.download-info {
+    flex: 1;
+}
+
+.download-name {
+    font-size: 15px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+
+.download-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #666;
+}
+
+.meta-item i {
+    color: #0a2a66;
+    font-size: 11px;
+}
+
+.class-badge {
+    background: #e6ecff;
+    color: #0a2a66;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 30px;
+    display: inline-block;
+}
+
+.count-badge {
+    background: #ff9800;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.count-badge i {
+    font-size: 9px;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.view-btn, .delete-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.view-btn {
+    background: #0a2a66;
+    color: white;
+    border: 1px solid #0a2a66;
+}
+
+.view-btn:hover {
+    background: #1e4b8f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(10,42,102,0.2);
+}
+
+.delete-btn {
+    background: white;
+    color: #dc2626;
+    border: 1px solid #dc2626;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220,38,38,0.2);
+}
+
+.view-btn i, .delete-btn i {
+    font-size: 12px;
+}
+
+/* ===== NEW BADGE ===== */
+.new-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ff4444;
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 30px;
+    box-shadow: 0 2px 8px rgba(255,68,68,0.3);
+    z-index: 10;
+}
+
+/* ===== PDF VIEWER ===== */
+#pdfViewer {
+    position: fixed;
+    inset: 0;
+    background: #1a1a1a;
+    display: none;
+    z-index: 9999;
+    flex-direction: column;
+}
+
+#pdfHeader {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#pdfHeader span {
+    font-weight: 800;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#pdfHeader span i {
+    font-size: 18px;
+}
+
+#pdfActions {
+    display: flex;
+    gap: 8px;
+}
+
+.pdf-action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    border: none;
+    color: white;
+    font-size: 16px;
+}
+
+.pdf-action-btn:hover {
+    background: rgba(255,255,255,0.25);
+    transform: scale(1.1);
+}
+
+#pdfFrame {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: white;
+}
+
+/* ===== PDF OPTIONS MENU ===== */
+.pdf-options {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border-radius: 50px;
+    padding: 10px 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: none;
+    gap: 16px;
+    z-index: 10001;
+    animation: slideUp 0.2s ease;
+}
+
+.pdf-option-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    min-width: 50px;
+}
+
+.pdf-option-item i {
+    font-size: 20px;
+    color: #0a2a66;
+}
+
+.pdf-option-item span {
+    font-size: 10px;
+    font-weight: 700;
+    color: #333;
+}
+
+.pdf-option-item:hover i {
+    transform: scale(1.1);
+    color: #ff9800;
+}
+
+/* ===== DELETE DIALOG ===== */
+.dialog {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002;
+    padding: 16px;
+}
+
+.dialog-box {
+    background: white;
+    padding: 32px;
+    border-radius: 32px;
+    width: 90%;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    animation: dialogPop 0.3s ease;
+}
+
+@keyframes dialogPop {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.dialog-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.dialog-title {
+    font-weight: 800;
+    font-size: 22px;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+.dialog-text {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.dialog-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.dialog-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.dialog-btn.cancel {
+    background: #f0f0f0;
+    color: #495057;
+}
+
+.dialog-btn.cancel:hover {
+    background: #e0e0e0;
+}
+
+.dialog-btn.delete {
+    background: #dc2626;
+    color: white;
+}
+
+.dialog-btn.delete:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220,38,38,0.3);
+}
+
+/* ===== LOADING SCREEN ===== */
+#loadingScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    z-index: 99999;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255,255,255,0.2);
+    border-top: 4px solid #ffd700;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loadingCount {
+    font-size: 28px;
+    font-weight: 800;
+    color: #ffd700;
+    margin-bottom: 4px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin: 16px;
+}
+
+.empty-state i {
+    font-size: 50px;
+    color: #0a2a66;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 6px;
+}
+
+.empty-state p {
+    font-size: 13px;
+    color: #666;
+}
+
+.browse-link {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 24px;
+    background: #0a2a66;
+    color: white;
+    text-decoration: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.browse-link:hover {
+    background: #1e4b8f;
+    transform: translateY(-2px);
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== PDF OPTIONS MENU ===== -->
+<div id="pdfOptions" class="pdf-options">
+    <div class="pdf-option-item" onclick="downloadCurrentPdf()">
+        <i class="fa-regular fa-circle-down"></i>
+        <span>Download</span>
+    </div>
+    <div class="pdf-option-item" onclick="shareCurrentPdf()">
+        <i class="fa-regular fa-share-from-square"></i>
+        <span>Share</span>
+    </div>
+    <div class="pdf-option-item" onclick="printCurrentPdf()">
+        <i class="fa-solid fa-print"></i>
+        <span>Print</span>
+    </div>
+    <div class="pdf-option-item" onclick="closePdfOptions()">
+        <i class="fa-solid fa-xmark"></i>
+        <span>Close</span>
+    </div>
+</div>
+
+<!-- ===== DELETE DIALOG ===== -->
+<div id="deleteDialog" class="dialog">
+    <div class="dialog-box">
+        <div class="dialog-icon">🗑️</div>
+        <div class="dialog-title">Delete Item?</div>
+        <div class="dialog-text">
+            Are you sure you want to delete this item from your download history?<br>
+            This action cannot be undone.
+        </div>
+        <div class="dialog-actions">
+            <button class="dialog-btn cancel" id="cancelDelete">Cancel</button>
+            <button class="dialog-btn delete" id="confirmDelete">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <div class="header-left">
+        <i class="fa-solid fa-arrow-left" onclick="window.location.href='notes.html'"></i>
+        <div class="header-title">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            DOWNLOAD HISTORY
+        </div>
+    </div>
+    <div class="header-right"></div>
+</div>
+
+<!-- SECTION TITLE -->
+<div class="section-title">
+    <i class="fa-regular fa-clock"></i>
+    Your Downloads
+</div>
+
+<!-- DOWNLOADS LIST -->
+<div class="downloads-section" id="downloadsList"></div>
+
+<!-- ===== PDF VIEWER ===== -->
+<div id="pdfViewer">
+    <div id="pdfHeader">
+        <span><i class="fa-regular fa-file-pdf"></i> <span id="pdfName">PDF Viewer</span></span>
+        <div id="pdfActions">
+            <div class="pdf-action-btn" onclick="showPdfOptions()">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </div>
+            <div class="pdf-action-btn" onclick="closePdf()">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+        </div>
+    </div>
+    <iframe id="pdfFrame"></iframe>
+</div>
+
+<!-- ===== LOADING SCREEN ===== -->
+<div id="loadingScreen">
+    <div class="loading-spinner"></div>
+    <span id="loadingCount">0</span>%
+    <span style="font-size:13px; margin-top:6px;">Downloading...</span>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+    apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+// DOM Elements
+const downloadsList = document.getElementById("downloadsList");
+const loading = document.getElementById("loadingScreen");
+const loadingCount = document.getElementById("loadingCount");
+const pdfViewer = document.getElementById("pdfViewer");
+const pdfFrame = document.getElementById("pdfFrame");
+const pdfName = document.getElementById("pdfName");
+const pdfOptions = document.getElementById("pdfOptions");
+const deleteDialog = document.getElementById("deleteDialog");
+const cancelDelete = document.getElementById("cancelDelete");
+const confirmDelete = document.getElementById("confirmDelete");
+
+let currentPdfLink = "";
+let currentPdfTitle = "";
+let currentDeleteId = "";
+
+/* ===== PDF OPTIONS ===== */
+window.showPdfOptions = () => {
+    pdfOptions.style.display = "flex";
+};
+
+window.closePdfOptions = () => {
+    pdfOptions.style.display = "none";
+};
+
+window.downloadCurrentPdf = () => {
+    if (currentPdfLink) {
+        window.downloadFile(currentPdfTitle, currentPdfLink);
+        pdfOptions.style.display = "none";
+    }
+};
+
+window.shareCurrentPdf = () => {
+    if (navigator.share) {
+        navigator.share({
+            title: currentPdfTitle,
+            text: 'Check out this PDF from M.M Public School',
+            url: currentPdfLink,
+        });
+    } else {
+        navigator.clipboard.writeText(currentPdfLink);
+        alert("📋 Link copied to clipboard!");
+    }
+    pdfOptions.style.display = "none";
+};
+
+window.printCurrentPdf = () => {
+    const printWindow = window.open(currentPdfLink);
+    if (printWindow) {
+        printWindow.onload = () => {
+            printWindow.print();
+        };
+    }
+    pdfOptions.style.display = "none";
+};
+
+/* ===== VIEW PDF ===== */
+window.openPdf = (link, name) => {
+    currentPdfLink = link;
+    currentPdfTitle = name;
+    pdfName.innerText = name || "PDF Viewer";
+    pdfViewer.style.display = "flex";
+    pdfFrame.src = link;
+    pdfOptions.style.display = "none";
+};
+
+window.closePdf = () => {
+    pdfViewer.style.display = "none";
+    pdfFrame.src = "";
+    pdfOptions.style.display = "none";
+};
+
+/* ===== DELETE FUNCTION ===== */
+window.openDeleteDialog = (id) => {
+    currentDeleteId = id;
+    deleteDialog.style.display = "flex";
+};
+
+cancelDelete.onclick = () => {
+    deleteDialog.style.display = "none";
+    currentDeleteId = "";
+};
+
+confirmDelete.onclick = async () => {
+    if (currentDeleteId) {
+        await remove(ref(db, "downloads/" + currentDeleteId));
+        deleteDialog.style.display = "none";
+        currentDeleteId = "";
+        loadDownloads(); // Reload the list
+    }
+};
+
+// Close dialog on outside click
+deleteDialog.addEventListener('click', (e) => {
+    if (e.target === deleteDialog) {
+        deleteDialog.style.display = "none";
+        currentDeleteId = "";
+    }
+});
+
+/* ===== DOWNLOAD FILE ===== */
+window.downloadFile = async (name, link) => {
+    loading.style.display = "flex";
+    let num = 0;
+
+    const timer = setInterval(() => {
+        num++;
+        loadingCount.innerText = num;
+        if (num >= 100) {
+            clearInterval(timer);
+            loading.style.display = "none";
+
+            const a = document.createElement("a");
+            a.href = link;
+            a.download = name + ".pdf";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+    }, 15);
+};
+
+/* ===== FORMAT TIME ===== */
+function formatTime(ts) {
+    if (!ts) return "N/A";
+    const date = new Date(ts);
+    const now = new Date();
+    const diff = Math.floor((now - date) / (1000 * 60));
+    
+    if (diff < 1) return "Just now";
+    if (diff < 60) return diff + " min ago";
+    if (diff < 120) return "1 hour ago";
+    if (diff < 1440) return Math.floor(diff / 60) + " hours ago";
+    
+    const days = Math.floor(diff / 1440);
+    if (days === 1) return "Yesterday";
+    if (days < 7) return days + " days ago";
+    
+    return date.toLocaleDateString('en-IN', { 
+        day: 'numeric', 
+        month: 'short',
+        year: 'numeric'
+    });
+}
+
+/* ===== LOAD DOWNLOADS ===== */
+function loadDownloads() {
+    downloadsList.innerHTML = `
+        <div style="text-align:center; padding:40px; color:#0a2a66;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size:30px;"></i>
+            <p style="margin-top:12px;">Loading...</p>
+        </div>
+    `;
+
+    onValue(ref(db, "downloads"), snap => {
+        downloadsList.innerHTML = "";
+
+        if (!snap.exists()) {
+            downloadsList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fa-regular fa-folder-open"></i>
+                    <h3>No Downloads Yet</h3>
+                    <p>You haven't downloaded any PDF notes yet.</p>
+                    <a href="notes.html" class="browse-link">Browse Notes</a>
+                </div>
+            `;
+            return;
+        }
+
+        let downloads = [];
+
+        snap.forEach(c => {
+            const d = c.val();
+            downloads.push({
+                id: c.key,
+                ...d
+            });
+        });
+
+        // Sort by time (newest first)
+        downloads.sort((a, b) => (b.time || 0) - (a.time || 0));
+
+        downloads.forEach(d => {
+            const isNew = (Date.now() - (d.time || 0)) < 7 * 24 * 60 * 60 * 1000; // 7 days
+            const timeStr = formatTime(d.time);
+            
+            downloadsList.innerHTML += `
+                <div class="download-card" style="position:relative;">
+                    ${isNew ? '<span class="new-badge">New</span>' : ''}
+                    
+                    <div class="download-icon">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    
+                    <div class="download-info">
+                        <div class="download-name">${d.name || 'Unknown PDF'}</div>
+                        
+                        <div class="download-meta">
+                            <span class="meta-item">
+                                <i class="fa-regular fa-clock"></i> ${timeStr}
+                            </span>
+                            <span class="class-badge">
+                                <i class="fa-solid fa-graduation-cap"></i> Class ${d.class || 'N/A'}
+                            </span>
+                            <span class="count-badge">
+                                <i class="fa-solid fa-arrow-down"></i> ${d.count || 0}
+                            </span>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="view-btn" onclick="openPdf('${d.link}','${d.name.replace(/'/g, "\\'")}')">
+                                <i class="fa-regular fa-eye"></i> View
+                            </button>
+                            <button class="delete-btn" onclick="openDeleteDialog('${d.id}')">
+                                <i class="fa-regular fa-trash-can"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }, { onlyOnce: true });
+}
+
+// Click outside to close pdf options
+document.addEventListener('click', (e) => {
+    if (!pdfOptions.contains(e.target) && !e.target.closest('.pdf-action-btn')) {
+        pdfOptions.style.display = "none";
+    }
+});
+
+// Initial load
+loadDownloads();
+</script>
+
+</body>
+</html>

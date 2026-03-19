@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Faculty - M.M Public School</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{background:#f5f7fc;}
+.header{
+background:#062055;
+color:white;
+padding:25px 15px;
+text-align:center;
+border-bottom:3px solid #ffd966;
+}
+.header h1{font-size:24px;font-weight:600;}
+.header h1 i{color:#ffd966;margin-right:8px;}
+.header p{font-size:13px;opacity:.9;margin-top:5px;}
+.teacher-container{
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:20px;
+}
+.teacher-card{
+background:white;
+border-radius:20px;
+padding:25px 20px;
+text-align:center;
+box-shadow:0 5px 20px rgba(0,0,0,0.05);
+border:1px solid #eee;
+transition:all 0.2s;
+}
+.teacher-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(6,32,85,0.1);}
+.teacher-photo{
+width:130px;height:130px;margin:0 auto 15px;
+border-radius:50%;overflow:hidden;
+border:3px solid #062055;
+cursor:pointer;
+transition:transform 0.2s;
+}
+.teacher-photo:hover{transform:scale(1.02);}
+.teacher-photo img{width:100%;height:100%;object-fit:cover;}
+.teacher-name{font-size:18px;font-weight:700;color:#062055;margin-bottom:10px;}
+.teacher-detail{
+display:flex;align-items:center;justify-content:center;gap:6px;
+background:#f0f5ff;padding:6px 15px;border-radius:30px;width:fit-content;margin:0 auto 8px;
+font-size:13px;
+}
+.teacher-detail i{color:#062055;width:16px;}
+.teacher-detail span{color:#1e3a6b;}
+.teacher-detail strong{color:#062055;margin-left:3px;}
+.teacher-about{
+font-size:13px;color:#4a5a72;background:#f8fafd;padding:12px;border-radius:15px;
+margin-top:12px;border-left:3px solid #ffd966;text-align:left;
+}
+.loading{text-align:center;padding:40px;color:#062055;}
+.modal{
+display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.95);z-index:1000;align-items:center;justify-content:center;
+opacity:0;transition:opacity 0.2s;
+}
+.modal.active{display:flex;opacity:1;}
+.modal-content{max-width:90%;max-height:90%;position:relative;}
+.modal-image{max-width:100%;max-height:80vh;border-radius:12px;border:3px solid white;}
+.modal-actions{
+position:absolute;bottom:-60px;left:50%;transform:translateX(-50%);
+display:flex;gap:20px;background:white;padding:12px 30px;border-radius:50px;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
+}
+.modal-btn{
+width:45px;height:45px;border-radius:50%;border:none;
+font-size:20px;cursor:pointer;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.1);
+transition:all 0.2s;
+}
+.modal-btn.download{color:#28a745;border:1px solid #28a745;}
+.modal-btn.download:hover{background:#28a745;color:white;}
+.modal-btn.close{color:#dc3545;border:1px solid #dc3545;}
+.modal-btn.close:hover{background:#dc3545;color:white;}
+@media(max-width:600px){
+.teacher-container{padding:10px;}
+.teacher-card{padding:20px 15px;}
+.modal-actions{bottom:-55px;padding:10px 20px;gap:15px;}
+.modal-btn{width:40px;height:40px;font-size:18px;}
+}
+</style>
+</head>
+<body>
+<div class="header">
+<h1><i class="fa fa-chalkboard-teacher"></i> Our Faculty Members</h1>
+<p>Meet Our Experienced Teachers</p>
+</div>
+<div id="teacherList" class="teacher-container">
+<div class="loading"><i class="fa fa-spinner fa-spin"></i> Loading Faculty...</div>
+</div>
+
+<div id="photoModal" class="modal">
+<div class="modal-content">
+<img id="modalFullImage" class="modal-image" src="" alt="Teacher Photo">
+<div class="modal-actions">
+<button class="modal-btn download" id="downloadBtn" title="Download"><i class="fa fa-download"></i></button>
+<button class="modal-btn close" id="closeModalBtn" title="Close"><i class="fa fa-times"></i></button>
+</div>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const teacherList=document.getElementById("teacherList");
+const modal=document.getElementById("photoModal");
+const modalImage=document.getElementById("modalFullImage");
+const downloadBtn=document.getElementById("downloadBtn");
+const closeBtn=document.getElementById("closeModalBtn");
+
+let currentImageUrl="";
+
+window.openPhotoModal=function(imageUrl, teacherName){
+currentImageUrl=imageUrl;
+modalImage.src=imageUrl;
+modalImage.alt=teacherName+"'s photo";
+modal.classList.add("active");
+document.body.style.overflow="hidden";
+};
+
+function closeModal(){
+modal.classList.remove("active");
+document.body.style.overflow="auto";
+}
+
+downloadBtn.addEventListener("click", async function(){
+if(!currentImageUrl) return;
+try{
+const response=await fetch(currentImageUrl);
+const blob=await response.blob();
+const url=window.URL.createObjectURL(blob);
+const link=document.createElement("a");
+link.href=url;
+link.download="teacher-photo.jpg";
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+window.URL.revokeObjectURL(url);
+}catch(e){alert("Download failed");}
+});
+
+closeBtn.addEventListener("click", closeModal);
+modal.addEventListener("click",e=>{if(e.target===modal) closeModal();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape" && modal.classList.contains("active")) closeModal();});
+
+onValue(ref(db,"teachers"),(snapshot)=>{
+teacherList.innerHTML="";
+if(!snapshot.exists()){teacherList.innerHTML="<div class='loading'>No teachers found</div>";return;}
+snapshot.forEach(child=>{
+const t=child.val();
+let imageUrl=t.photo||t.photoURL||`https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=062055&color=fff&size=300`;
+const card=document.createElement("div");
+card.className="teacher-card";
+card.innerHTML=`
+<div class="teacher-photo" onclick='openPhotoModal("${imageUrl.replace(/'/g, "\\'")}", "${t.name.replace(/'/g, "\\'")}")'>
+<img src="${imageUrl}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=062055&color=fff&size=300'">
+</div>
+<div class="teacher-name">${t.name}</div>
+<div class="teacher-detail"><i class="fa fa-book-open"></i><span>Subject:</span><strong>${t.subject||"Faculty Member"}</strong></div>
+<div class="teacher-detail"><i class="fa fa-clock"></i><span>Experience:</span><strong>${t.experience||"Experienced Teacher"}</strong></div>
+<div class="teacher-about"><i class="fa fa-quote-left" style="color:#ffd966;margin-right:5px;"></i>${t.about||"Dedicated and passionate educator committed to student success and academic excellence."}</div>
+`;
+teacherList.appendChild(card);
+});
+});
+</script>
+</body>
+</html>

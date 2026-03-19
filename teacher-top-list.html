@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Top Teachers · M.M Public School</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #eef3ff, #f9fbff);
+    padding: 20px 16px 40px;
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.header i {
+    color: #f8b84a;
+    font-size: 2rem;
+}
+
+.sub-header {
+    text-align: center;
+    color: #4a5f7d;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+    background: white;
+    padding: 8px 20px;
+    border-radius: 60px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+/* ===== PODIUM ===== */
+.podium {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 40px;
+    padding: 0 10px;
+}
+
+.podium-card {
+    background: white;
+    flex: 1;
+    max-width: 110px;
+    border-radius: 24px 24px 0 0;
+    text-align: center;
+    padding: 20px 8px 15px;
+    box-shadow: 0 15px 30px rgba(10,42,102,0.15);
+    transition: transform 0.3s ease;
+    position: relative;
+    border-bottom: 4px solid transparent;
+}
+
+.podium-card:hover {
+    transform: translateY(-5px);
+}
+
+.first {
+    height: 220px;
+    border-bottom-color: #f8b84a;
+    background: linear-gradient(to top, #fff7e6, white);
+}
+
+.second {
+    height: 190px;
+    border-bottom-color: #a0a0a0;
+    background: linear-gradient(to top, #f5f5f5, white);
+}
+
+.third {
+    height: 170px;
+    border-bottom-color: #cd7f32;
+    background: linear-gradient(to top, #fdf3e9, white);
+}
+
+.podium-rank {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.first .podium-rank {
+    background: #f8b84a;
+}
+
+.second .podium-rank {
+    background: #a0a0a0;
+}
+
+.third .podium-rank {
+    background: #cd7f32;
+}
+
+.podium img {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 8px;
+    border: 3px solid #0a2a66;
+    box-shadow: 0 4px 10px rgba(10,42,102,0.2);
+    background: #e8f0fe;
+}
+
+.podium-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0a2a66;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 4px;
+}
+
+.podium-rating {
+    font-size: 0.85rem;
+    color: #f8b84a;
+    font-weight: 600;
+    background: #fff7e6;
+    padding: 4px 8px;
+    border-radius: 30px;
+    display: inline-block;
+}
+
+.podium-reviews {
+    font-size: 0.7rem;
+    color: #4a5f7d;
+    margin-top: 4px;
+}
+
+/* ===== FILTER BAR ===== */
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 40px;
+    background: white;
+    color: #0a2a66;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.filter-btn.active {
+    background: #0a2a66;
+    color: white;
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(10,42,102,0.1);
+}
+
+/* ===== LIST ===== */
+.list-card {
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.08);
+    transition: all 0.2s;
+    border: 1px solid rgba(10,42,102,0.05);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.list-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(10,42,102,0.12);
+}
+
+.rank {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0a2a66;
+    width: 45px;
+    height: 45px;
+    background: #e8f0fe;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rank.top3 {
+    background: #f8b84a;
+    color: white;
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #0a2a66;
+    flex-shrink: 0;
+    background: #e8f0fe;
+    box-shadow: 0 4px 8px rgba(10,42,102,0.1);
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.info {
+    flex: 1;
+}
+
+.name {
+    font-weight: 700;
+    color: #0a2a66;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+}
+
+.subject {
+    font-size: 0.8rem;
+    color: #4a5f7d;
+    background: #e8f0fe;
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 30px;
+    margin-bottom: 6px;
+}
+
+.stars {
+    color: #f8b84a;
+    margin: 5px 0 3px;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+}
+
+.stars i.filled {
+    color: #f8b84a;
+}
+
+.stars i.empty {
+    color: #d0dceb;
+}
+
+.rating-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+}
+
+.avg {
+    font-weight: 600;
+    color: #0a2a66;
+    background: #e8f0fe;
+    padding: 3px 10px;
+    border-radius: 30px;
+}
+
+.reviews {
+    color: #4a5f7d;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.reviews i {
+    color: #f8b84a;
+    font-size: 0.8rem;
+}
+
+/* ===== LOADING & EMPTY STATES ===== */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 15px;
+}
+
+.loading i {
+    font-size: 2.5rem;
+    color: #0a2a66;
+}
+
+.loading p {
+    color: #4a5f7d;
+    font-size: 1.1rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: #4a5f7d;
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: #f8b84a;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* ===== STATS CARD ===== */
+.stats-card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 25px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #0a2a66;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #4a5f7d;
+}
+
+/* ===== REFRESH BUTTON ===== */
+.refresh-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #0a2a66;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(10,42,102,0.3);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 100;
+}
+
+.refresh-btn:hover {
+    transform: scale(1.1);
+}
+
+.refresh-btn:active {
+    transform: scale(0.95);
+}
+
+.refresh-btn i {
+    transition: transform 0.5s;
+}
+
+.refresh-btn:hover i {
+    transform: rotate(180deg);
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <i class="fas fa-trophy"></i>
+    Top Teachers
+</div>
+
+<div class="sub-header">
+    <i class="fas fa-star" style="color: #f8b84a;"></i> 
+    Based on student ratings
+</div>
+
+<div class="stats-card" id="statsCard" style="display: none;">
+    <div class="stat-item">
+        <span class="stat-value" id="totalTeachers">0</span>
+        <span class="stat-label">Teachers</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-value" id="totalRatings">0</span>
+        <span class="stat-label">Total Ratings</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-value" id="avgOverall">0.0</span>
+        <span class="stat-label">Overall Avg</span>
+    </div>
+</div>
+
+<div class="filter-bar" id="filterBar" style="display: none;">
+    <button class="filter-btn active" data-filter="all">All Teachers</button>
+    <button class="filter-btn" data-filter="top5">Top 5</button>
+    <button class="filter-btn" data-filter="mostRated">Most Rated</button>
+</div>
+
+<div id="podium" class="podium"></div>
+<div id="list"></div>
+
+<button class="refresh-btn" id="refreshBtn">
+    <i class="fas fa-sync-alt"></i>
+</button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    authDomain: "apni-duniya-b53d7.firebaseapp.com",
+    databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId: "apni-duniya-b53d7",
+    storageBucket: "apni-duniya-b53d7.appspot.com"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const podiumDiv = document.getElementById("podium");
+const listDiv = document.getElementById("list");
+const refreshBtn = document.getElementById("refreshBtn");
+const statsCard = document.getElementById("statsCard");
+const filterBar = document.getElementById("filterBar");
+const totalTeachersSpan = document.getElementById("totalTeachers");
+const totalRatingsSpan = document.getElementById("totalRatings");
+const avgOverallSpan = document.getElementById("avgOverall");
+
+let teachersData = [];
+let currentFilter = "all";
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        displayTeachers(teachersData);
+    });
+});
+
+// Refresh button
+refreshBtn.addEventListener('click', () => {
+    refreshBtn.style.pointerEvents = 'none';
+    refreshBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>';
+    loadTop().finally(() => {
+        setTimeout(() => {
+            refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i>';
+            refreshBtn.style.pointerEvents = 'auto';
+        }, 1000);
+    });
+});
+
+// Star display function
+function getStarDisplay(avg) {
+    const fullStars = Math.round(avg);
+    let stars = '';
+    for (let i = 0; i < 5; i++) {
+        if (i < fullStars) {
+            stars += '<i class="fas fa-star filled"></i>';
+        } else {
+            stars += '<i class="far fa-star empty"></i>';
+        }
+    }
+    return stars;
+}
+
+async function loadTop() {
+    try {
+        // Show loading
+        listDiv.innerHTML = `
+            <div class="loading">
+                <i class="fas fa-spinner fa-pulse"></i>
+                <p>Loading teachers...</p>
+            </div>
+        `;
+        podiumDiv.innerHTML = '';
+
+        // Get data
+        console.log("Fetching teachers...");
+        const teacherSnap = await get(ref(db, "teachers"));
+        
+        if (!teacherSnap.exists()) {
+            listDiv.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h3>No Teachers Found</h3>
+                    <p>No teachers have been added yet.</p>
+                </div>
+            `;
+            statsCard.style.display = 'none';
+            filterBar.style.display = 'none';
+            return;
+        }
+
+        console.log("Fetching ratings...");
+        const ratingSnap = await get(ref(db, "teacherRatings"));
+        
+        let teachers = [];
+        let totalRatingsCount = 0;
+        let totalRatingSum = 0;
+
+        // Process each teacher
+        teacherSnap.forEach(child => {
+            const teacherId = child.key;
+            const t = child.val();
+            
+            // Get ratings for this teacher
+            let teacherRatings = [];
+            let teacherRatingSum = 0;
+            
+            if (ratingSnap.exists() && ratingSnap.val()[teacherId]) {
+                const ratingsObj = ratingSnap.val()[teacherId];
+                teacherRatings = Object.values(ratingsObj);
+                
+                // Calculate sum
+                teacherRatings.forEach(r => {
+                    if (r && r.rating) {
+                        teacherRatingSum += r.rating;
+                    }
+                });
+            }
+            
+            const reviewCount = teacherRatings.length;
+            const avgRating = reviewCount > 0 ? (teacherRatingSum / reviewCount) : 0;
+            
+            // Update totals
+            totalRatingsCount += reviewCount;
+            totalRatingSum += teacherRatingSum;
+
+            teachers.push({
+                id: teacherId,
+                name: t.name || "Unknown Teacher",
+                subject: t.subject || "Teacher",
+                photo: t.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name || 'Teacher')}&background=0a2a66&color=fff&size=200`,
+                avg: parseFloat(avgRating.toFixed(1)),
+                avgRaw: avgRating,
+                reviews: reviewCount
+            });
+        });
+
+        console.log("Teachers processed:", teachers.length);
+
+        // Calculate overall average
+        const overallAvg = totalRatingsCount > 0 
+            ? (totalRatingSum / totalRatingsCount).toFixed(1)
+            : "0.0";
+
+        // Update stats
+        totalTeachersSpan.textContent = teachers.length;
+        totalRatingsSpan.textContent = totalRatingsCount;
+        avgOverallSpan.textContent = overallAvg;
+        statsCard.style.display = 'grid';
+        filterBar.style.display = 'flex';
+
+        // Sort by average rating (highest first)
+        teachers.sort((a, b) => {
+            if (b.avgRaw === a.avgRaw) {
+                return b.reviews - a.reviews; // If same rating, more reviews first
+            }
+            return b.avgRaw - a.avgRaw;
+        });
+
+        teachersData = teachers;
+        displayTeachers(teachers);
+
+    } catch (error) {
+        console.error("Error loading data:", error);
+        listDiv.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle" style="color: #b02a37;"></i>
+                <h3>Error Loading Data</h3>
+                <p>${error.message}</p>
+                <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 25px; background: #0a2a66; color: white; border: none; border-radius: 30px; cursor: pointer;">
+                    <i class="fas fa-redo"></i> Retry
+                </button>
+            </div>
+        `;
+        statsCard.style.display = 'none';
+        filterBar.style.display = 'none';
+    }
+}
+
+function displayTeachers(teachers) {
+    // Filter based on current filter
+    let filteredTeachers = [...teachers];
+    if (currentFilter === 'top5') {
+        filteredTeachers = teachers.slice(0, 5);
+    } else if (currentFilter === 'mostRated') {
+        filteredTeachers = [...teachers].sort((a, b) => b.reviews - a.reviews);
+    }
+
+    // Show podium only for 'all' filter and only top 3
+    if (currentFilter === 'all') {
+        podiumDiv.innerHTML = "";
+        const top3 = teachers.slice(0, 3);
+        
+        top3.forEach((t, index) => {
+            let className = "";
+            if (index === 0) className = "first";
+            if (index === 1) className = "second";
+            if (index === 2) className = "third";
+            
+            podiumDiv.innerHTML += `
+                <div class="podium-card ${className}">
+                    <div class="podium-rank">${index + 1}</div>
+                    <img src="${t.photo}" alt="${t.name}" onerror="this.src='https://ui-avatars.com/api/?name=${t.name}&background=0a2a66&color=fff'">
+                    <div class="podium-name">${t.name}</div>
+                    <div class="podium-rating">${t.avg} ⭐</div>
+                    <div class="podium-reviews">${t.reviews} reviews</div>
+                </div>
+            `;
+        });
+    } else {
+        podiumDiv.innerHTML = ""; // Hide podium for other filters
+    }
+
+    // List (all teachers except top 3 for 'all' filter)
+    listDiv.innerHTML = "";
+    
+    if (filteredTeachers.length === 0) {
+        listDiv.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-star"></i>
+                <h3>No Teachers Found</h3>
+                <p>No teachers match the current filter.</p>
+            </div>
+        `;
+        return;
+    }
+
+    // For 'all' filter, start from rank 4 (skip top 3)
+    if (currentFilter === 'all') {
+        const remainingTeachers = teachers.slice(3); // Start from index 3 (4th teacher)
+        
+        if (remainingTeachers.length === 0) {
+            listDiv.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-star"></i>
+                    <h3>That's All!</h3>
+                    <p>Only top 3 teachers are available.</p>
+                </div>
+            `;
+            return;
+        }
+
+        remainingTeachers.forEach((t, idx) => {
+            const rank = idx + 4; // Start rank from 4
+            const starDisplay = getStarDisplay(t.avg);
+            
+            listDiv.innerHTML += `
+                <div class="list-card">
+                    <div class="rank">#${rank}</div>
+                    <div class="avatar">
+                        <img src="${t.photo}" alt="${t.name}" onerror="this.src='https://ui-avatars.com/api/?name=${t.name}&background=0a2a66&color=fff'">
+                    </div>
+                    <div class="info">
+                        <div class="name">${t.name}</div>
+                        <div class="subject">${t.subject}</div>
+                        <div class="stars">${starDisplay}</div>
+                        <div class="rating-info">
+                            <span class="avg">${t.avg}</span>
+                            <span class="reviews">
+                                <i class="fas fa-user"></i> ${t.reviews} ${t.reviews === 1 ? 'review' : 'reviews'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        // For other filters, show all with ranks starting from 1
+        filteredTeachers.forEach((t, index) => {
+            const rank = index + 1;
+            const starDisplay = getStarDisplay(t.avg);
+            const isTop3 = index < 3;
+            
+            listDiv.innerHTML += `
+                <div class="list-card">
+                    <div class="rank ${isTop3 ? 'top3' : ''}">#${rank}</div>
+                    <div class="avatar">
+                        <img src="${t.photo}" alt="${t.name}" onerror="this.src='https://ui-avatars.com/api/?name=${t.name}&background=0a2a66&color=fff'">
+                    </div>
+                    <div class="info">
+                        <div class="name">${t.name}</div>
+                        <div class="subject">${t.subject}</div>
+                        <div class="stars">${starDisplay}</div>
+                        <div class="rating-info">
+                            <span class="avg">${t.avg}</span>
+                            <span class="reviews">
+                                <i class="fas fa-user"></i> ${t.reviews} ${t.reviews === 1 ? 'review' : 'reviews'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+}
+
+// Initial load
+loadTop();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coming Soon</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(-45deg,#0a2a66,#1e4b8f,#163c7c,#0a2a66);
+background-size:400% 400%;
+animation:bgMove 10s ease infinite;
+overflow:hidden;
+color:white;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* Floating circles */
+.circle{
+position:absolute;
+border-radius:50%;
+background:rgba(255,255,255,0.08);
+animation:float 8s infinite ease-in-out;
+}
+
+.circle:nth-child(1){
+width:180px;height:180px;
+top:10%;left:10%;
+}
+
+.circle:nth-child(2){
+width:120px;height:120px;
+bottom:15%;right:15%;
+animation-delay:2s;
+}
+
+.circle:nth-child(3){
+width:90px;height:90px;
+bottom:30%;left:20%;
+animation-delay:4s;
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-25px);}
+}
+
+/* Glass Card */
+.container{
+position:relative;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(18px);
+padding:45px 30px;
+border-radius:35px;
+width:90%;
+max-width:380px;
+text-align:center;
+box-shadow:0 30px 70px rgba(0,0,0,0.4);
+animation:fadeIn .8s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(40px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+.icon{
+font-size:70px;
+margin-bottom:20px;
+color:#ffd700;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.2);}
+100%{transform:scale(1);}
+}
+
+h1{
+font-size:28px;
+font-weight:900;
+margin-bottom:12px;
+letter-spacing:1px;
+}
+
+.subtitle{
+font-size:14px;
+opacity:0.9;
+margin-bottom:20px;
+}
+
+.message{
+font-size:14px;
+opacity:0.85;
+line-height:1.6;
+margin-bottom:30px;
+}
+
+/* Button */
+.btn{
+display:inline-block;
+padding:14px 32px;
+border-radius:50px;
+background:white;
+color:#0a2a66;
+font-weight:800;
+text-decoration:none;
+transition:.3s;
+}
+
+.btn:hover{
+transform:translateY(-4px);
+box-shadow:0 15px 30px rgba(255,255,255,0.5);
+}
+</style>
+</head>
+
+<body>
+
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+
+<div class="container">
+
+<div class="icon">
+<i class="fa-solid fa-rocket"></i>
+</div>
+
+<h1>Coming Soon</h1>
+
+<div class="subtitle">
+We Are Working On It 🚀
+</div>
+
+<div class="message">
+This feature is currently under development.
+It will be launched very soon.
+Stay connected with M.M Public School.
+</div>
+
+<a href="index.html" class="btn">
+Back To Home
+</a>
+
+</div>
+
+</body>
+</html>

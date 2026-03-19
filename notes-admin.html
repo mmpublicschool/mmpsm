@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>M.M Public School | Notes Admin Panel</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+    padding-bottom: 20px;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 18px 20px;
+    font-size: 22px;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.header i {
+    font-size: 24px;
+    color: #ffd700;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+/* ===== ADMIN BADGE ===== */
+.admin-badge {
+    background: white;
+    border-radius: 50px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 8px 20px rgba(10,42,102,0.1);
+    border: 1px solid rgba(10,42,102,0.1);
+}
+
+.admin-badge i {
+    font-size: 28px;
+    color: #0a2a66;
+    background: #e6ecff;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.admin-badge-text h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 4px;
+}
+
+.admin-badge-text p {
+    font-size: 13px;
+    color: #666;
+}
+
+/* ===== CARD ===== */
+.card {
+    background: white;
+    border-radius: 28px;
+    padding: 22px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    border: 1px solid rgba(10,42,102,0.1);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e6ecff;
+}
+
+.card-title i {
+    color: #ff9800;
+    font-size: 20px;
+}
+
+/* ===== FORM ===== */
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    font-weight: 700;
+    font-size: 14px;
+    color: #444;
+    display: block;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+label i {
+    color: #0a2a66;
+    width: 18px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 2px solid #e0e7ff;
+    font-size: 14px;
+    background: #f8fafd;
+    outline: none;
+    transition: 0.2s;
+    font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #0a2a66;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(10,42,102,0.1);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ===== UPLOAD BUTTON ===== */
+.upload-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 8px 25px rgba(10,42,102,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.upload-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(10,42,102,0.4);
+}
+
+/* ===== NOTES LIST ===== */
+.notes-list {
+    margin-top: 10px;
+}
+
+.note-item {
+    background: #f8fafd;
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e7ff;
+    position: relative;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.note-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.note-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e6ecff, #d6e0ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #0a2a66;
+}
+
+.note-info {
+    flex: 1;
+}
+
+.note-title {
+    font-weight: 800;
+    color: #0a2a66;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.note-class {
+    display: inline-block;
+    background: #0a2a66;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 30px;
+}
+
+.note-link {
+    background: #f0f4fa;
+    padding: 10px 12px;
+    border-radius: 12px;
+    margin: 12px 0;
+    font-size: 13px;
+    color: #0a2a66;
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.note-time {
+    font-size: 11px;
+    color: #ff9800;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.note-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.edit-btn, .delete-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, #ffd700, #ffb300);
+    color: #0a2a66;
+}
+
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255,193,7,0.3);
+}
+
+.delete-btn {
+    background: #dc2626;
+    color: white;
+}
+
+.delete-btn:hover {
+    transform: translateY(-2px);
+    background: #b91c1c;
+    box-shadow: 0 8px 20px rgba(220,38,38,0.3);
+}
+
+/* ===== DIALOG ===== */
+.dialog {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 16px;
+}
+
+.dialog-box {
+    background: white;
+    padding: 28px;
+    border-radius: 32px;
+    width: 90%;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.dialog-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.dialog-title {
+    font-weight: 800;
+    font-size: 20px;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+.dialog-text {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.dialog-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.dialog-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.dialog-btn.cancel {
+    background: #f0f0f0;
+    color: #495057;
+}
+
+.dialog-btn.cancel:hover {
+    background: #e0e0e0;
+}
+
+.dialog-btn.confirm {
+    background: #0a2a66;
+    color: white;
+}
+
+.dialog-btn.confirm:hover {
+    background: #1e4b8f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(10,42,102,0.3);
+}
+
+.dialog-btn.delete {
+    background: #dc2626;
+    color: white;
+}
+
+.dialog-btn.delete:hover {
+    background: #b91c1c;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8fafd;
+    border-radius: 20px;
+}
+
+.empty-state i {
+    font-size: 50px;
+    color: #0a2a66;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    color: #666;
+    font-size: 14px;
+}
+
+/* ===== BACK BUTTON ===== */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0a2a66;
+    text-decoration: none;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding: 10px 16px;
+    background: white;
+    border-radius: 40px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.back-btn i {
+    font-size: 14px;
+}
+
+.back-btn:hover {
+    background: #f0f4fa;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <i class="fa-solid fa-shield-halved"></i>
+    NOTES ADMIN PANEL
+    <i class="fa-solid fa-shield-halved"></i>
+</div>
+
+<div class="container">
+
+    <!-- Back Button -->
+    <a href="notes.html" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i> Back to Notes
+    </a>
+
+    <!-- Admin Badge -->
+    <div class="admin-badge">
+        <i class="fa-solid fa-user-shield"></i>
+        <div class="admin-badge-text">
+            <h3>Administrator Access</h3>
+            <p>Upload, edit and manage study notes</p>
+        </div>
+    </div>
+
+    <!-- Upload Form -->
+    <div class="card">
+        <div class="card-title">
+            <i class="fa-regular fa-pen-to-square"></i>
+            Upload New Notes
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-regular fa-heading"></i> Notes Title</label>
+            <input type="text" id="noteTitle" placeholder="e.g., Mathematics Chapter 1" maxlength="100">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-regular fa-file-lines"></i> Description</label>
+            <textarea id="noteDesc" placeholder="Brief description of the notes..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-regular fa-link"></i> PDF Link</label>
+            <input type="url" id="noteLink" placeholder="https://example.com/notes.pdf">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-regular fa-graduation-cap"></i> Class</label>
+            <select id="noteClass">
+                <option value="6">Class 6</option>
+                <option value="7">Class 7</option>
+                <option value="8">Class 8</option>
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+            </select>
+        </div>
+
+        <button id="uploadBtn" class="upload-btn">
+            <i class="fa-regular fa-cloud-arrow-up"></i> Upload Notes
+        </button>
+    </div>
+
+    <!-- Notes List -->
+    <div class="card">
+        <div class="card-title">
+            <i class="fa-regular fa-list"></i>
+            Manage Notes
+        </div>
+        <div id="notesList" class="notes-list">
+            <div class="empty-state">
+                <i class="fa-regular fa-folder-open"></i>
+                <p>Loading notes...</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== DELETE CONFIRM DIALOG ===== -->
+<div id="deleteDialog" class="dialog">
+    <div class="dialog-box">
+        <div class="dialog-icon">⚠️</div>
+        <div class="dialog-title">Delete Notes?</div>
+        <div class="dialog-text">This notes will be permanently removed. This action cannot be undone.</div>
+        <div class="dialog-actions">
+            <button class="dialog-btn cancel" id="cancelDelete">Cancel</button>
+            <button class="dialog-btn delete" id="confirmDelete">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SUCCESS DIALOG ===== -->
+<div id="successDialog" class="dialog">
+    <div class="dialog-box">
+        <div class="dialog-icon">✅</div>
+        <div class="dialog-title">Success!</div>
+        <div class="dialog-text" id="successMessage">Notes uploaded successfully.</div>
+        <div class="dialog-actions">
+            <button class="dialog-btn confirm" id="okSuccess">OK</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove, update, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId: "apni-duniya-b53d7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// DOM Elements
+const noteTitle = document.getElementById('noteTitle');
+const noteDesc = document.getElementById('noteDesc');
+const noteLink = document.getElementById('noteLink');
+const noteClass = document.getElementById('noteClass');
+const uploadBtn = document.getElementById('uploadBtn');
+const notesList = document.getElementById('notesList');
+const deleteDialog = document.getElementById('deleteDialog');
+const cancelDelete = document.getElementById('cancelDelete');
+const confirmDelete = document.getElementById('confirmDelete');
+const successDialog = document.getElementById('successDialog');
+const successMessage = document.getElementById('successMessage');
+const okSuccess = document.getElementById('okSuccess');
+
+let deleteId = null;
+let deleteClass = null;
+
+// Format time
+function formatTime(timestamp) {
+    if (!timestamp) return 'N/A';
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = Math.floor((now - date) / (1000 * 60));
+    
+    if (diff < 1) return 'Just now';
+    if (diff < 60) return diff + ' min ago';
+    if (diff < 120) return '1 hour ago';
+    if (diff < 1440) return Math.floor(diff / 60) + ' hours ago';
+    
+    const days = Math.floor(diff / 1440);
+    if (days === 1) return 'Yesterday';
+    if (days < 7) return days + ' days ago';
+    
+    return date.toLocaleString('en-IN', { 
+        day: 'numeric', 
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+// Show success dialog
+function showSuccess(message) {
+    successMessage.innerText = message;
+    successDialog.style.display = 'flex';
+}
+
+okSuccess.onclick = () => {
+    successDialog.style.display = 'none';
+};
+
+// Upload notes
+uploadBtn.onclick = async () => {
+    const title = noteTitle.value.trim();
+    const desc = noteDesc.value.trim();
+    const link = noteLink.value.trim();
+    const className = noteClass.value;
+
+    if (!title || !desc || !link) {
+        showSuccess('❌ Please fill all fields');
+        return;
+    }
+
+    // Validate URL
+    try {
+        new URL(link);
+    } catch {
+        showSuccess('❌ Please enter a valid URL');
+        return;
+    }
+
+    const time = Date.now();
+
+    // Save to notes database
+    await push(ref(db, 'notes'), {
+        name: title,
+        desc: desc,
+        link: link,
+        class: className,
+        time: time
+    });
+
+    // Save to notifications
+    await push(ref(db, 'notes_notifications'), {
+        title: title,
+        desc: desc,
+        class: className,
+        time: time
+    });
+
+    // Clear form
+    noteTitle.value = '';
+    noteDesc.value = '';
+    noteLink.value = '';
+
+    showSuccess('✅ Notes uploaded successfully');
+};
+
+// Load notes
+onValue(ref(db, 'notes'), (snap) => {
+    notesList.innerHTML = '';
+
+    if (!snap.exists()) {
+        notesList.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-regular fa-folder-open"></i>
+                <p>No notes uploaded yet</p>
+            </div>
+        `;
+        return;
+    }
+
+    let notes = [];
+    snap.forEach(child => {
+        notes.push({
+            id: child.key,
+            ...child.val()
+        });
+    });
+
+    // Sort by time (newest first)
+    notes.sort((a, b) => (b.time || 0) - (a.time || 0));
+
+    notes.forEach(note => {
+        const timeStr = formatTime(note.time);
+        
+        notesList.innerHTML += `
+            <div class="note-item" data-id="${note.id}" data-class="${note.class}">
+                <div class="note-header">
+                    <div class="note-icon">
+                        <i class="fa-regular fa-file-pdf"></i>
+                    </div>
+                    <div class="note-info">
+                        <div class="note-title">${note.name || 'Untitled'}</div>
+                        <span class="note-class">Class ${note.class || 'N/A'}</span>
+                    </div>
+                </div>
+                
+                <div class="note-desc" style="margin-bottom:10px; color:#444; font-size:13px;">
+                    ${note.desc || ''}
+                </div>
+                
+                <div class="note-link">
+                    <i class="fa-regular fa-link"></i>
+                    ${note.link || 'No link'}
+                </div>
+                
+                <div class="note-time">
+                    <i class="fa-regular fa-clock"></i> ${timeStr}
+                </div>
+                
+                <div class="note-actions">
+                    <button class="edit-btn" onclick="editNote('${note.id}', '${note.class}', '${note.name.replace(/'/g, "\\'")}', '${note.desc.replace(/'/g, "\\'")}', '${note.link.replace(/'/g, "\\'")}')">
+                        <i class="fa-regular fa-pen-to-square"></i> Edit
+                    </button>
+                    <button class="delete-btn" onclick="deleteNote('${note.id}', '${note.class}')">
+                        <i class="fa-regular fa-trash-can"></i> Delete
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+});
+
+// Delete functions
+window.deleteNote = (id, className) => {
+    deleteId = id;
+    deleteClass = className;
+    deleteDialog.style.display = 'flex';
+};
+
+cancelDelete.onclick = () => {
+    deleteDialog.style.display = 'none';
+    deleteId = null;
+    deleteClass = null;
+};
+
+confirmDelete.onclick = async () => {
+    if (deleteId && deleteClass) {
+        await remove(ref(db, `notes/${deleteId}`));
+        deleteDialog.style.display = 'none';
+        showSuccess('✅ Notes deleted successfully');
+        deleteId = null;
+        deleteClass = null;
+    }
+};
+
+// Edit function
+window.editNote = (id, className, title, desc, link) => {
+    noteTitle.value = title;
+    noteDesc.value = desc;
+    noteLink.value = link;
+    noteClass.value = className;
+    
+    // Change upload button to update mode
+    uploadBtn.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Update Notes';
+    
+    // Save original function and override
+    const originalClick = uploadBtn.onclick;
+    uploadBtn.onclick = async () => {
+        const newTitle = noteTitle.value.trim();
+        const newDesc = noteDesc.value.trim();
+        const newLink = noteLink.value.trim();
+        const newClass = noteClass.value;
+
+        if (!newTitle || !newDesc || !newLink) {
+            showSuccess('❌ Please fill all fields');
+            return;
+        }
+
+        await update(ref(db, `notes/${id}`), {
+            name: newTitle,
+            desc: newDesc,
+            link: newLink,
+            class: newClass,
+            time: Date.now(),
+            edited: true
+        });
+
+        showSuccess('✅ Notes updated successfully');
+        
+        // Reset form and button
+        noteTitle.value = '';
+        noteDesc.value = '';
+        noteLink.value = '';
+        noteClass.value = '6';
+        uploadBtn.innerHTML = '<i class="fa-regular fa-cloud-arrow-up"></i> Upload Notes';
+        uploadBtn.onclick = originalClick;
+    };
+};
+
+// Close dialogs on outside click
+deleteDialog.addEventListener('click', (e) => {
+    if (e.target === deleteDialog) {
+        deleteDialog.style.display = 'none';
+        deleteId = null;
+        deleteClass = null;
+    }
+});
+
+successDialog.addEventListener('click', (e) => {
+    if (e.target === successDialog) {
+        successDialog.style.display = 'none';
+    }
+});
+</script>
+
+</body>
+</html>

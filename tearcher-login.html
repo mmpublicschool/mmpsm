@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Login</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(-45deg,#0a2a66,#1e4b8f,#163c7c,#0a2a66);
+background-size:400% 400%;
+animation:bgMove 10s ease infinite;
+color:white;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.container{
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(18px);
+padding:45px 30px;
+border-radius:35px;
+width:90%;
+max-width:380px;
+text-align:center;
+box-shadow:0 30px 70px rgba(0,0,0,0.4);
+animation:fadeIn .8s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(40px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+.icon{
+font-size:55px;
+margin-bottom:15px;
+color:#ffd700;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.15);}
+100%{transform:scale(1);}
+}
+
+h2{
+margin-bottom:20px;
+font-weight:800;
+letter-spacing:1px;
+}
+
+.input-box{
+margin-bottom:18px;
+}
+
+.input-box input{
+width:100%;
+padding:14px 18px;
+border-radius:40px;
+border:none;
+outline:none;
+font-size:14px;
+}
+
+.login-btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:40px;
+background:white;
+color:#0a2a66;
+font-weight:800;
+cursor:pointer;
+transition:.3s;
+}
+
+.login-btn:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 25px rgba(255,255,255,0.4);
+}
+
+.message{
+margin-top:18px;
+font-size:14px;
+font-weight:600;
+min-height:22px;
+}
+
+.success{
+color:#90ffb5;
+}
+
+.error{
+color:#ffd6d6;
+}
+
+.loading{
+margin-top:10px;
+font-size:13px;
+opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="icon">
+<i class="fa-solid fa-chalkboard-user"></i>
+</div>
+
+<h2>Teacher Login</h2>
+
+<div class="input-box">
+<input type="text" id="username" placeholder="Enter Username">
+</div>
+
+<div class="input-box">
+<input type="password" id="password" placeholder="Enter Password">
+</div>
+
+<button class="login-btn" onclick="loginTeacher()">
+Login
+</button>
+
+<div class="loading" id="loading"></div>
+<div class="message" id="message"></div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+databaseURL:"https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId:"apni-duniya-b53d7"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+window.loginTeacher = async function(){
+
+const username=document.getElementById("username").value.trim();
+const password=document.getElementById("password").value.trim();
+const msg=document.getElementById("message");
+const loading=document.getElementById("loading");
+
+msg.innerText="";
+loading.innerText="Checking credentials...";
+
+if(!username || !password){
+loading.innerText="";
+msg.className="message error";
+msg.innerText="Please enter username and password";
+return;
+}
+
+const snap=await get(ref(db,"teachers"));
+
+loading.innerText="";
+
+if(!snap.exists()){
+msg.className="message error";
+msg.innerText="No teachers found";
+return;
+}
+
+let found=false;
+
+snap.forEach(child=>{
+const teacher=child.val();
+
+if(teacher.username===username && teacher.password===password){
+found=true;
+
+msg.className="message success";
+msg.innerText="Login Successful ✅\nWelcome " + teacher.name;
+
+localStorage.setItem("teacherId",child.key);
+}
+});
+
+if(!found){
+msg.className="message error";
+msg.innerText="Invalid username or password";
+}
+
+};
+
+</script>
+
+</body>
+</html>

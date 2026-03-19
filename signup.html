@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<!-- ✅ BASIC SEO -->
+<title>M.M Public School Mundeshwari | Student Signup</title>
+<meta name="description" content="M.M Public School Mundeshwari Official Signup Portal. Register for Online Admission, Student Portal Access.">
+<meta name="keywords" content="MM Public School Mundeshwari, MMPSM, School Signup, Online Admission Bihar">
+<meta name="author" content="M.M Public School Mundeshwari">
+<meta name="robots" content="index, follow">
+
+<!-- ✅ SOCIAL + GOOGLE LOGO -->
+<meta property="og:title" content="M.M Public School Mundeshwari">
+<meta property="og:description" content="Official School Signup Portal">
+<meta property="og:image" content="https://mmpublicschool.github.io/mmpsm/logo.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mmpsm.wuaze.com/">
+
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- ✅ GOOGLE SCHOOL STRUCTURED DATA -->
+<script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@type":"School",
+"name":"M.M Public School Mundeshwari",
+"url":"https://mmpsm.wuaze.com/",
+"logo":"https://mmpublicschool.github.io/mmpsm/logo.png",
+"description":"Official Website of M.M Public School Mundeshwari"
+}
+</script>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.header {
+    background: #0a2a66;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* MAIN CONTAINER */
+.container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+/* WELCOME POPUP */
+.welcome-popup {
+    background: #fff;
+    border-radius: 32px;
+    padding: 32px 24px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.welcome-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    background: #e8f0fe;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    border-radius: 50%;
+    margin: 0 auto 24px;
+}
+
+.welcome-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0a2a66;
+    margin-bottom: 12px;
+}
+
+.welcome-text {
+    color: #4a5568;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+    padding: 0 12px;
+}
+
+.signup-btn {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: #fff;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 10px 20px -5px #0a2a66a0;
+}
+
+.signup-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -5px #0a2a66c0;
+}
+
+/* SIGNUP FORM */
+.signup-container {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    display: none;
+}
+
+.card {
+    background: #fff;
+    padding: 24px;
+    border-radius: 28px;
+    box-shadow: 0 20px 35px -8px rgba(0,0,0,0.15);
+    margin-bottom: 16px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.step-title {
+    color: #0a2a66;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #eef2f6;
+}
+
+.note {
+    background: #e8f0fe;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 13px;
+    color: #0a2a66;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border-left: 4px solid #0a2a66;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2d3748;
+    display: block;
+    margin-bottom: 6px;
+}
+
+input, select {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    border-radius: 14px;
+    border: 1.5px solid #e2e8f0;
+    background: #f8fafd;
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+input:focus, select:focus {
+    border-color: #0a2a66;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px #0a2a6620;
+}
+
+/* BUTTONS */
+.btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 8px 16px -4px #0a2a6680;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -4px #0a2a66a0;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    box-shadow: 0 8px 16px -4px #4a556880;
+}
+
+/* PROFILE IMAGE UPLOAD */
+.profile-upload-container {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.profile-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #eef2f6;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    border: 3px solid #0a2a66;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.profile-preview:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.profile-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-preview i {
+    font-size: 40px;
+    color: #0a2a66;
+}
+
+.upload-btn {
+    background: #fff;
+    color: #0a2a66;
+    border: 2px solid #0a2a66;
+    padding: 12px 24px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    margin-bottom: 16px;
+}
+
+.upload-btn:hover {
+    background: #0a2a66;
+    color: #fff;
+}
+
+.upload-btn i {
+    font-size: 16px;
+}
+
+/* OTP SECTION */
+.otp-section {
+    background: #f8fafd;
+    padding: 20px;
+    border-radius: 18px;
+    margin: 16px 0;
+    border: 1.5px dashed #0a2a66;
+}
+
+.otp-input {
+    width: 100%;
+    padding: 16px;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 8px;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    background: #fff;
+    margin: 16px 0;
+}
+
+.email-info {
+    background: #e8f0fe;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 16px 0;
+    font-weight: 600;
+    color: #0a2a66;
+}
+
+/* PREVIEW GRID */
+.preview-grid {
+    background: #f8fafd;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.preview-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.preview-row:last-child {
+    border-bottom: none;
+}
+
+.preview-label {
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.preview-value {
+    font-weight: 700;
+    color: #0a2a66;
+}
+
+/* POPUP */
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.popup-card {
+    background: #fff;
+    padding: 32px;
+    border-radius: 32px;
+    width: 90%;
+    max-width: 340px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.2s ease;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.popup-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.popup-title {
+    font-weight: 800;
+    font-size: 20px;
+    color: #0a2a66;
+    margin-bottom: 12px;
+}
+
+.popup-msg {
+    color: #4a5568;
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    white-space: pre-line;
+}
+
+.popup-id {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1e4b8f;
+    background: #e8f0fe;
+    padding: 10px;
+    border-radius: 16px;
+    letter-spacing: 1px;
+    margin-top: 8px;
+}
+
+/* LOADING */
+.loading {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(3px);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9998;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #ffffff30;
+    border-top: 4px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* CLASS SELECT */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 18px;
+}
+
+/* Image upload progress */
+.upload-progress {
+    font-size: 14px;
+    color: #0a2a66;
+    margin-top: 8px;
+}
+</style>
+</head>
+<body>
+
+<header class="header">M.M PUBLIC SCHOOL MUNDESHWARI</header>
+
+<div class="container">
+    <!-- WELCOME POPUP -->
+    <div id="welcomePopup" class="welcome-popup">
+        <div class="welcome-icon">🏫</div>
+        <h1 class="welcome-title">Student Signup</h1>
+        <p class="welcome-text">
+            Register for M.M Public School<br>
+            Get your School ID & Access Portal<br>
+            Fill details exactly as Aadhaar Card
+        </p>
+        <button id="showSignupBtn" class="signup-btn">Signup Now →</button>
+    </div>
+
+    <!-- SIGNUP FORMS -->
+    <div id="signupContainer" class="signup-container">
+        <!-- STEP 1: Basic Details -->
+        <div id="step1" class="card">
+            <div class="step-title">📝 Step 1: Student Details</div>
+            <div class="note">Fill exactly as Aadhaar Card</div>
+            
+            <label>Full Name *</label>
+            <input id="nameInput" type="text" placeholder="Enter full name" maxlength="50">
+            
+            <label>Date of Birth *</label>
+            <input id="dobInput" type="date">
+            
+            <label>Mobile Number *</label>
+            <input id="mobileInput" type="tel" placeholder="10 digit mobile number" maxlength="10">
+            
+            <label>Aadhaar Number *</label>
+            <input id="aadhaarInput" type="tel" placeholder="12 digit Aadhaar number" maxlength="12">
+            
+            <label>Select Class *</label>
+            <select id="classSelect">
+                <option value="">-- Select Class --</option>
+                <option value="Nursery">Nursery</option>
+                <option value="LKG">LKG</option>
+                <option value="UKG">UKG</option>
+                <option value="1">Class 1</option>
+                <option value="2">Class 2</option>
+                <option value="3">Class 3</option>
+                <option value="4">Class 4</option>
+                <option value="5">Class 5</option>
+                <option value="6">Class 6</option>
+                <option value="7">Class 7</option>
+                <option value="8">Class 8</option>
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+            </select>
+            
+            <label>Father's Name *</label>
+            <input id="fatherInput" type="text" placeholder="Enter father's name">
+            
+            <label>Mother's Name *</label>
+            <input id="motherInput" type="text" placeholder="Enter mother's name">
+            
+            <button id="next1Btn" class="btn">Next → Preview</button>
+        </div>
+
+        <!-- STEP 2: Preview & Verify -->
+        <div id="step2" class="card" style="display: none;">
+            <div class="step-title">👀 Step 2: Verify Details</div>
+            <div class="preview-grid" id="previewDetails"></div>
+            <button id="confirmPreviewBtn" class="btn">Confirm & Continue</button>
+            <button id="editPreviewBtn" class="btn btn-secondary" style="margin-top: 12px;">← Edit Details</button>
+        </div>
+
+        <!-- STEP 3: Email Verification -->
+        <div id="step3" class="card" style="display: none;">
+            <div class="step-title">📧 Step 3: Email Verification</div>
+            
+            <label>Mobile Number</label>
+            <input id="mobile2Input" type="tel" placeholder="10 digit mobile number" readonly>
+            
+            <label>Email Address *</label>
+            <input id="emailInput" type="email" placeholder="example@gmail.com">
+            
+            <div class="otp-section">
+                <div style="text-align: center; margin-bottom: 16px; font-weight: 600;">
+                    <i class="fas fa-shield-alt" style="color: #0a2a66; margin-right: 8px;"></i>
+                    Demo Verification
+                </div>
+                <div class="email-info">
+                    Click "Verify Email" to continue (Demo Mode)
+                </div>
+            </div>
+            
+            <button id="verifyEmailBtn" class="btn">Verify Email →</button>
+        </div>
+
+        <!-- STEP 4: Profile Creation -->
+        <div id="step4" class="card" style="display: none;">
+            <div class="step-title">🎨 Step 4: Create Profile</div>
+            
+            <!-- Profile Image Upload -->
+            <div class="profile-upload-container">
+                <div class="profile-preview" id="profilePreview" onclick="document.getElementById('imageUpload').click()">
+                    <i class="fas fa-camera" id="cameraIcon"></i>
+                    <img id="profileImage" src="" style="display: none;" alt="Profile">
+                </div>
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                <button class="upload-btn" onclick="document.getElementById('imageUpload').click()">
+                    <i class="fas fa-upload"></i> Upload Photo
+                </button>
+                <div id="uploadStatus" class="upload-progress"></div>
+            </div>
+            
+            <label>Username</label>
+            <input id="usernameInput" type="text" placeholder="Choose username">
+            
+            <label>Password</label>
+            <input id="passwordInput" type="password" placeholder="Create password">
+            
+            <label>Gender</label>
+            <select id="genderSelect" class="gender-select">
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+            
+            <button id="createBtn" class="btn">Create Account →</button>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+    <div class="popup-card">
+        <div class="popup-icon" id="popupIcon">✅</div>
+        <div class="popup-title" id="popupTitle"></div>
+        <div class="popup-msg" id="popupMsg"></div>
+        <div class="popup-id" id="popupId"></div>
+    </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+    Processing...
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, get, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    authDomain: "apni-duniya-b53d7.firebaseapp.com",
+    databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId: "apni-duniya-b53d7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Cloudinary Configuration
+const CLOUD_NAME = 'dty6vadm9';
+const UPLOAD_PRESET = 'examform';
+const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+
+// DOM Elements
+const welcomePopup = document.getElementById('welcomePopup');
+const signupContainer = document.getElementById('signupContainer');
+const showSignupBtn = document.getElementById('showSignupBtn');
+const popup = document.getElementById('popup');
+const popupIcon = document.getElementById('popupIcon');
+const popupTitle = document.getElementById('popupTitle');
+const popupMsg = document.getElementById('popupMsg');
+const popupId = document.getElementById('popupId');
+const loading = document.getElementById('loading');
+
+// Form Elements
+const step1 = document.getElementById('step1');
+const step2 = document.getElementById('step2');
+const step3 = document.getElementById('step3');
+const step4 = document.getElementById('step4');
+
+const nameInput = document.getElementById('nameInput');
+const dobInput = document.getElementById('dobInput');
+const mobileInput = document.getElementById('mobileInput');
+const aadhaarInput = document.getElementById('aadhaarInput');
+const classSelect = document.getElementById('classSelect');
+const fatherInput = document.getElementById('fatherInput');
+const motherInput = document.getElementById('motherInput');
+const next1Btn = document.getElementById('next1Btn');
+
+const previewDetails = document.getElementById('previewDetails');
+const confirmPreviewBtn = document.getElementById('confirmPreviewBtn');
+const editPreviewBtn = document.getElementById('editPreviewBtn');
+
+const mobile2Input = document.getElementById('mobile2Input');
+const emailInput = document.getElementById('emailInput');
+const verifyEmailBtn = document.getElementById('verifyEmailBtn');
+
+// Profile Elements
+const imageUpload = document.getElementById('imageUpload');
+const profileImage = document.getElementById('profileImage');
+const cameraIcon = document.getElementById('cameraIcon');
+const uploadStatus = document.getElementById('uploadStatus');
+const usernameInput = document.getElementById('usernameInput');
+const passwordInput = document.getElementById('passwordInput');
+const genderSelect = document.getElementById('genderSelect');
+const createBtn = document.getElementById('createBtn');
+
+// Variables
+let isEmailVerified = false;
+let profileImageUrl = '';
+
+// Show signup forms
+showSignupBtn.addEventListener('click', () => {
+    welcomePopup.style.display = 'none';
+    signupContainer.style.display = 'block';
+});
+
+// Input validations
+mobileInput.addEventListener('input', () => {
+    mobileInput.value = mobileInput.value.replace(/\D/g, '').slice(0, 10);
+});
+
+aadhaarInput.addEventListener('input', () => {
+    aadhaarInput.value = aadhaarInput.value.replace(/\D/g, '').slice(0, 12);
+});
+
+// Show popup function
+function showPopup(icon, title, msg = '', id = '') {
+    popupIcon.innerText = icon;
+    popupTitle.innerText = title;
+    popupMsg.innerText = msg;
+    popupId.innerText = id;
+    popup.style.display = 'flex';
+    setTimeout(() => popup.style.display = 'none', 3000);
+}
+
+// Image Upload to Cloudinary
+imageUpload.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+        showPopup('❌', 'Invalid File', 'Please select an image file');
+        return;
+    }
+    
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+        showPopup('❌', 'File Too Large', 'Image size should be less than 2MB');
+        return;
+    }
+    
+    uploadStatus.innerText = 'Uploading...';
+    loading.style.display = 'flex';
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', UPLOAD_PRESET);
+    
+    try {
+        const response = await fetch(CLOUDINARY_URL, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.secure_url) {
+            profileImageUrl = data.secure_url;
+            profileImage.src = profileImageUrl;
+            profileImage.style.display = 'block';
+            cameraIcon.style.display = 'none';
+            uploadStatus.innerText = '✅ Upload successful!';
+            showPopup('✅', 'Success', 'Photo uploaded successfully');
+        } else {
+            throw new Error('Upload failed');
+        }
+    } catch (error) {
+        uploadStatus.innerText = '❌ Upload failed';
+        showPopup('❌', 'Error', 'Failed to upload image');
+        console.error('Upload error:', error);
+    } finally {
+        loading.style.display = 'none';
+    }
+});
+
+// Step 1 validation
+next1Btn.addEventListener('click', () => {
+    const errors = [];
+    
+    if (!nameInput.value.trim()) errors.push('Name is required');
+    if (!dobInput.value) errors.push('Date of Birth is required');
+    if (mobileInput.value.length !== 10) errors.push('Mobile number must be 10 digits');
+    if (aadhaarInput.value.length !== 12) errors.push('Aadhaar number must be 12 digits');
+    if (!classSelect.value) errors.push('Please select class');
+    if (!fatherInput.value.trim()) errors.push('Father\'s name is required');
+    if (!motherInput.value.trim()) errors.push('Mother\'s name is required');
+    
+    if (errors.length > 0) {
+        showPopup('❌', 'Incomplete Form', errors.join('\n'));
+        return;
+    }
+    
+    // Show preview
+    previewDetails.innerHTML = `
+        <div class="preview-row"><span class="preview-label">Name:</span><span class="preview-value">${nameInput.value}</span></div>
+        <div class="preview-row"><span class="preview-label">DOB:</span><span class="preview-value">${dobInput.value}</span></div>
+        <div class="preview-row"><span class="preview-label">Mobile:</span><span class="preview-value">${mobileInput.value}</span></div>
+        <div class="preview-row"><span class="preview-label">Aadhaar:</span><span class="preview-value">${aadhaarInput.value.replace(/\d{8}/, 'XXXXXXXX')}</span></div>
+        <div class="preview-row"><span class="preview-label">Class:</span><span class="preview-value">${classSelect.value}</span></div>
+        <div class="preview-row"><span class="preview-label">Father:</span><span class="preview-value">${fatherInput.value}</span></div>
+        <div class="preview-row"><span class="preview-label">Mother:</span><span class="preview-value">${motherInput.value}</span></div>
+    `;
+    
+    step1.style.display = 'none';
+    step2.style.display = 'block';
+});
+
+// Edit preview
+editPreviewBtn.addEventListener('click', () => {
+    step2.style.display = 'none';
+    step1.style.display = 'block';
+});
+
+// Confirm preview and go to step 3
+confirmPreviewBtn.addEventListener('click', () => {
+    mobile2Input.value = mobileInput.value;
+    step2.style.display = 'none';
+    step3.style.display = 'block';
+});
+
+// Verify Email (Simple Demo)
+verifyEmailBtn.addEventListener('click', () => {
+    const email = emailInput.value.trim();
+    
+    if (!email) {
+        showPopup('❌', 'Email Required', 'Please enter your email address');
+        return;
+    }
+    
+    if (!email.endsWith('@gmail.com')) {
+        showPopup('❌', 'Invalid Email', 'Please use Gmail address only');
+        return;
+    }
+    
+    isEmailVerified = true;
+    showPopup('✅', 'Email Verified', 'Proceed to create your profile');
+    
+    // Move to step 4
+    step3.style.display = 'none';
+    step4.style.display = 'block';
+});
+
+// Generate School ID
+async function generateSchoolId() {
+    const year = new Date().getFullYear();
+    const snap = await get(ref(db, 'students'));
+    const used = [];
+    
+    if (snap.exists()) {
+        snap.forEach(child => {
+            const id = child.key;
+            const num = parseInt(id.split('-')[2]);
+            if (!isNaN(num)) used.push(num);
+        });
+    }
+    
+    let n = 1;
+    while (used.includes(n)) n++;
+    return `MMPSM-${year}-${n.toString().padStart(3, '0')}`;
+}
+
+// Create account
+createBtn.addEventListener('click', async () => {
+    // Validate fields
+    if (!usernameInput.value.trim()) {
+        showPopup('❌', 'Required', 'Please choose a username');
+        return;
+    }
+    
+    if (!passwordInput.value.trim()) {
+        showPopup('❌', 'Required', 'Please create a password');
+        return;
+    }
+    
+    if (passwordInput.value.length < 6) {
+        showPopup('❌', 'Weak Password', 'Password must be at least 6 characters');
+        return;
+    }
+    
+    if (!genderSelect.value) {
+        showPopup('❌', 'Required', 'Please select gender');
+        return;
+    }
+    
+    if (!isEmailVerified) {
+        showPopup('❌', 'Verification Required', 'Please verify your email first');
+        step4.style.display = 'none';
+        step3.style.display = 'block';
+        return;
+    }
+    
+    loading.style.display = 'flex';
+    
+    try {
+        const schoolId = await generateSchoolId();
+        const timestamp = new Date().toISOString();
+        
+        // Save to Firebase
+        await set(ref(db, `students/${schoolId}`), {
+            // Personal Details
+            name: nameInput.value,
+            dob: dobInput.value,
+            mobile: mobileInput.value,
+            aadhaar: aadhaarInput.value,
+            class: classSelect.value,
+            fatherName: fatherInput.value,
+            motherName: motherInput.value,
+            
+            // Contact Details
+            email: emailInput.value,
+            
+            // Account Details
+            username: usernameInput.value,
+            password: passwordInput.value,
+            gender: genderSelect.value,
+            photoURL: profileImageUrl || '',
+            
+            // School Details
+            schoolId: schoolId,
+            status: 'active',
+            
+            // Timestamps
+            createdAt: timestamp,
+            createdAtServer: serverTimestamp(),
+            updatedAt: timestamp
+        });
+        
+        // Save session
+        await set(ref(db, 'session/currentUser'), {
+            schoolId: schoolId,
+            name: nameInput.value,
+            photoURL: profileImageUrl || '',
+            lastLogin: timestamp
+        });
+        
+        loading.style.display = 'none';
+        
+        showPopup('🎉', 'Signup Successful!', 'Student Account Created', schoolId);
+        
+        // Redirect to profile
+        setTimeout(() => {
+            window.location.href = `profile.html?id=${schoolId}`;
+        }, 3000);
+        
+    } catch (error) {
+        loading.style.display = 'none';
+        showPopup('❌', 'Error', 'Something went wrong. Please try again.');
+        console.error('Firebase Error:', error);
+    }
+});
+
+// Auto-fill mobile in step 3
+mobileInput.addEventListener('change', () => {
+    mobile2Input.value = mobileInput.value;
+});
+
+// Click on preview to upload
+document.getElementById('profilePreview').addEventListener('click', () => {
+    imageUpload.click();
+});
+</script>
+</body>
+</html>

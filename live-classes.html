@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Video</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #f5f7fa;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Main container */
+.app-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+/* Fixed Video Section */
+.video-section {
+    flex-shrink: 0;
+    background: #000;
+    width: 100%;
+}
+
+video {
+    width: 100%;
+    display: block;
+    max-height: 35vh;
+    min-height: 240px;
+    object-fit: contain;
+    background: #000;
+}
+
+/* Scrollable Content - Like, Comment Button and Comments */
+.scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    background: white;
+    padding: 0 0 16px 0;
+}
+
+/* Custom scrollbar */
+.scrollable-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+/* Action Buttons */
+.action-section {
+    display: flex;
+    justify-content: space-around;
+    padding: 12px;
+    background: white;
+    border-bottom: 1px solid #eef2f6;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 5;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    font-size: 13px;
+    color: #4a5568;
+    transition: all 0.2s ease;
+    padding: 4px 0;
+}
+
+.action-btn i {
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
+.action-btn:hover {
+    color: #0a2a66;
+}
+
+/* Comment Section */
+.comment-section {
+    padding: 16px;
+    background: white;
+}
+
+/* Compact Input Area */
+.comment-input-area {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.comment-input-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.comment-input-wrapper textarea {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 10px 16px;
+    resize: none;
+    font-size: 13px;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    background: #f8fafc;
+}
+
+.comment-input-wrapper textarea:focus {
+    outline: none;
+    border-color: #0a2a66;
+    background: white;
+    box-shadow: 0 0 0 2px rgba(10, 42, 102, 0.1);
+}
+
+.comment-input-wrapper textarea::placeholder {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.post-btn {
+    background: #0a2a66;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    height: 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+    box-shadow: 0 2px 4px rgba(10, 42, 102, 0.2);
+}
+
+.post-btn:hover {
+    background: #143b8c;
+}
+
+.post-btn:active {
+    transform: scale(0.98);
+}
+
+/* Comments List */
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.comment-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f4f9;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.comment-item img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-content b {
+    color: #0a2a66;
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.comment-content p {
+    color: #1e293b;
+    font-size: 13px;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+/* Empty State */
+.no-comments {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+    font-size: 13px;
+    background: #f8fafc;
+    border-radius: 12px;
+    margin: 10px 0;
+}
+
+.no-comments i {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: #cbd5e1;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-container {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 320px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-container h3 {
+    color: #0a2a66;
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.modal-container input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 13px;
+}
+
+.modal-container input:focus {
+    outline: none;
+    border-color: #0a2a66;
+    box-shadow: 0 0 0 2px rgba(10, 42, 102, 0.1);
+}
+
+.modal-container button {
+    background: #0a2a66;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    width: 100%;
+}
+
+.modal-container button:hover {
+    background: #143b8c;
+}
+
+/* Toast */
+.toast-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 2000;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        top: -50px;
+        opacity: 0;
+    }
+    to {
+        top: 20px;
+        opacity: 1;
+    }
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #94a3b8;
+}
+</style>
+</head>
+
+<body>
+<div class="app-container">
+    <!-- Fixed Video Section - Never Scrolls -->
+    <div class="video-section">
+        <video controls playsinline>
+            <source src="video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- Scrollable Content - Like, Comment Button and Comments -->
+    <div class="scrollable-content">
+        <!-- Action Buttons (Sticky) -->
+        <div class="action-section">
+            <div class="action-btn" id="likeBtn">
+                <i class="fa-regular fa-thumbs-up"></i>
+                <span id="likeCount">0</span>
+            </div>
+            <div class="action-btn" onclick="focusComment()">
+                <i class="fa-regular fa-comment"></i>
+                <span>Comment</span>
+            </div>
+        </div>
+
+        <!-- Comment Section -->
+        <div class="comment-section">
+            <!-- Compact Input -->
+            <div class="comment-input-area">
+                <div class="comment-input-wrapper">
+                    <textarea id="commentInput" placeholder="Write a comment..." rows="1"></textarea>
+                </div>
+                <button class="post-btn" onclick="postComment()">Post</button>
+            </div>
+            
+            <!-- Comments List -->
+            <div class="comments-list" id="commentList">
+                <div class="loading">Loading comments...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- VERIFICATION MODAL -->
+<div class="modal-overlay" id="verifyModal">
+    <div class="modal-container">
+        <h3>Verification Required</h3>
+        <input type="text" id="idInput" placeholder="Enter Teacher/Student ID">
+        <button onclick="verifyUser()">Verify</button>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, get, push, set, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId: "apni-duniya-b53d7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let verifiedUser = null;
+
+function showToast(message) {
+    const existingToast = document.querySelector('.toast-message');
+    if (existingToast) existingToast.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast-message';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Load like count
+onValue(ref(db, "video/likesCount"), snap => {
+    document.getElementById("likeCount").innerText = snap.val() || 0;
+});
+
+// Load comments
+onValue(ref(db, "video/comments"), snap => {
+    const list = document.getElementById("commentList");
+    list.innerHTML = "";
+    
+    if (!snap.exists()) {
+        list.innerHTML = '<div class="no-comments"><i class="fa-regular fa-comment-dots"></i><br>No comments yet. Be the first to comment!</div>';
+        return;
+    }
+    
+    // Convert to array and sort by time (newest first)
+    const comments = [];
+    snap.forEach(child => {
+        comments.push({ id: child.key, ...child.val() });
+    });
+    comments.sort((a, b) => (b.time || 0) - (a.time || 0));
+    
+    comments.forEach(d => {
+        list.innerHTML += `
+        <div class="comment-item">
+            <img src="${d.photo || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(d.name) + '&background=0a2a66&color=fff&size=36'}">
+            <div class="comment-content">
+                <b>${d.name}</b>
+                <p>${d.text}</p>
+            </div>
+        </div>`;
+    });
+});
+
+function showVerifyModal() {
+    document.getElementById("verifyModal").style.display = "flex";
+    document.getElementById("idInput").value = "";
+}
+
+function closeVerifyModal() {
+    document.getElementById("verifyModal").style.display = "none";
+}
+
+window.verifyUser = async () => {
+    const id = document.getElementById("idInput").value.trim();
+    if (!id) {
+        showToast("Please enter an ID");
+        return;
+    }
+
+    let snap = await get(ref(db, "teachers/" + id));
+    if (snap.exists()) {
+        verifiedUser = { id: id, ...snap.val(), role: "teacher" };
+        sessionStorage.setItem("videoUser", JSON.stringify(verifiedUser));
+        closeVerifyModal();
+        showToast(`Welcome, ${snap.val().name || 'Teacher'}!`);
+        return;
+    }
+
+    snap = await get(ref(db, "students/" + id));
+    if (snap.exists()) {
+        verifiedUser = { id: id, ...snap.val(), role: "student" };
+        sessionStorage.setItem("videoUser", JSON.stringify(verifiedUser));
+        closeVerifyModal();
+        showToast(`Welcome, ${snap.val().name || 'Student'}!`);
+        return;
+    }
+
+    showToast("Invalid ID. Please try again.");
+};
+
+const saved = sessionStorage.getItem("videoUser");
+if (saved) verifiedUser = JSON.parse(saved);
+
+document.getElementById("likeBtn").onclick = async () => {
+    if (!verifiedUser) {
+        showVerifyModal();
+        return;
+    }
+
+    const likeRef = ref(db, "video/likes/" + verifiedUser.id);
+    const snap = await get(likeRef);
+
+    if (snap.exists()) {
+        showToast("You have already liked this video");
+        return;
+    }
+
+    await set(likeRef, true);
+    await runTransaction(ref(db, "video/likesCount"), current => {
+        return (current || 0) + 1;
+    });
+    showToast("Like recorded!");
+};
+
+window.postComment = async () => {
+    if (!verifiedUser) {
+        showVerifyModal();
+        return;
+    }
+
+    const text = document.getElementById("commentInput").value.trim();
+    if (!text) {
+        showToast("Please write a comment");
+        return;
+    }
+
+    await push(ref(db, "video/comments"), {
+        name: verifiedUser.name || verifiedUser.role || "User",
+        photo: verifiedUser.photoURL || "",
+        text: text,
+        time: Date.now()
+    });
+
+    document.getElementById("commentInput").value = "";
+    showToast("Comment posted!");
+    
+    // Reset textarea height
+    const textarea = document.getElementById('commentInput');
+    textarea.style.height = '40px';
+};
+
+window.focusComment = () => {
+    if (!verifiedUser) {
+        showVerifyModal();
+        return;
+    }
+    document.getElementById("commentInput").focus();
+};
+
+// Auto-resize textarea
+document.getElementById('commentInput').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight > 40 ? Math.min(this.scrollHeight, 80) : 40) + 'px';
+});
+
+window.onclick = (event) => {
+    const modal = document.getElementById("verifyModal");
+    if (event.target === modal) {
+        closeVerifyModal();
+    }
+};
+</script>
+
+</body>
+</html>

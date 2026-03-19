@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>पाठ्यक्रम | M.M Public School Mundeshwari</title>
+    <link rel="icon" type="image/png" href="https://mmpublicschool.github.io/mmpsm/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: #f8fafd;
+            min-height: 100vh;
+            padding: 0 0 30px 0;
+            width: 100%;
+            overflow-x: hidden;
+            color: #1e293b;
+        }
+
+        /* ===== हेडर ===== */
+        .header {
+            background: linear-gradient(145deg, #08306b, #0f3b7a);
+            color: white;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 6px 18px rgba(0, 20, 50, 0.2);
+            backdrop-filter: blur(2px);
+        }
+
+        .menu-icon {
+            font-size: 22px;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transition: all 0.2s ease;
+        }
+
+        .menu-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .school-box {
+            text-align: center;
+            flex: 1;
+        }
+
+        .school-top {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+        }
+
+        .school-bottom {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 3px;
+            font-weight: 400;
+        }
+
+        .right-placeholder {
+            width: 44px;
+        }
+
+        /* ===== साइड मेनू (सिर्फ एक मेनू) ===== */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            z-index: 1000;
+            transition: left 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 4px 0 30px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+        }
+
+        .side-menu.active {
+            left: 0;
+        }
+
+        .menu-head {
+            background: linear-gradient(125deg, #0b2f5e, #1a4a8b);
+            color: white;
+            padding: 30px 18px 25px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+        }
+
+        .menu-logo {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 4px solid #ffc164;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .menu-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .menu-user-name {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+        }
+
+        .menu-tagline {
+            font-size: 13px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 16px 24px;
+            color: #1e293b;
+            text-decoration: none;
+            border-bottom: 1px solid #edf2f9;
+            font-weight: 550;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .menu-item i {
+            width: 24px;
+            color: #1e4b8f;
+            font-size: 1.25rem;
+        }
+
+        .menu-item.active {
+            background: #e8f0fe;
+            color: #08306b;
+            border-left: 5px solid #ff9800;
+        }
+
+        .menu-item:hover {
+            background: #f1f6fd;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(2px);
+        }
+
+        .menu-overlay.active {
+            display: block;
+        }
+
+        /* ===== मुख्य शीर्षक ===== */
+        .page-header {
+            padding: 22px 18px 8px 18px;
+            font-size: 26px;
+            font-weight: 800;
+            color: #08306b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .page-header i {
+            background: #ffeed9;
+            padding: 10px;
+            border-radius: 18px;
+            color: #b45f06;
+        }
+
+        /* ===== नियम कार्ड (छोटे और सटीक) ===== */
+        .rule-row {
+            padding: 8px 18px 16px 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .rule-mini-card {
+            flex: 1 1 250px;
+            background: white;
+            border-radius: 24px;
+            padding: 18px 16px;
+            box-shadow: 0 6px 14px rgba(0, 20, 30, 0.05);
+            border-left: 7px solid;
+            transition: all 0.15s ease;
+        }
+
+        .rule-mini-card.sarkari {
+            border-left-color: #0a2a66;
+        }
+
+        .rule-mini-card.private {
+            border-left-color: #e67e22;
+        }
+
+        .rule-mini-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .rule-mini-header i {
+            font-size: 22px;
+            background: #f0f5ff;
+            padding: 8px;
+            border-radius: 14px;
+            color: #08306b;
+        }
+
+        .rule-mini-header h4 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0b2f5e;
+        }
+
+        .rule-bullet {
+            list-style: none;
+        }
+
+        .rule-bullet li {
+            font-size: 13.5px;
+            padding: 6px 0;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            border-bottom: 1px dashed #dde3ed;
+            color: #2c3e50;
+        }
+
+        .rule-bullet i {
+            color: #0f3b7a;
+            font-size: 13px;
+            margin-top: 3px;
+            min-width: 18px;
+        }
+
+        /* ===== सिलेबस कंटेनर (स्मूथ) ===== */
+        .syllabus-container {
+            padding: 8px 16px 10px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .class-group {
+            background: white;
+            border-radius: 30px;
+            padding: 22px 18px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 30, 70, 0.05);
+        }
+
+        .class-badge {
+            background: #08306b;
+            color: white;
+            padding: 6px 22px;
+            border-radius: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            margin-bottom: 22px;
+            font-size: 18px;
+            border: 1px solid #ffe1a4;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 18px;
+        }
+
+        .subject-card {
+            background: #fafcff;
+            border-radius: 22px;
+            padding: 16px 16px;
+            border: 1px solid #eef2f8;
+            transition: 0.1s ease;
+        }
+
+        .subject-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: #0c3b75;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #ffe4b5;
+            padding-bottom: 8px;
+        }
+
+        .subject-title i {
+            color: #f57c00;
+            background: #fff1dd;
+            padding: 6px;
+            border-radius: 12px;
+            font-size: 15px;
+        }
+
+        .chapter-list {
+            list-style: none;
+        }
+
+        .chapter-list li {
+            font-size: 13px;
+            padding: 6px 0 6px 0;
+            color: #1e2f44;
+            display: flex;
+            gap: 8px;
+            align-items: baseline;
+            border-bottom: 1px dashed #dfe6f0;
+        }
+
+        .chapter-list i {
+            color: #ff9800;
+            font-size: 11px;
+            margin-top: 5px;
+            min-width: 16px;
+        }
+
+        .book-tag {
+            margin-top: 14px;
+            background: #e9f0fb;
+            padding: 8px 12px;
+            border-radius: 16px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #08306b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .book-tag i {
+            color: #e67e22;
+        }
+
+        /* ===== टेक्स्ट एडजस्ट ===== */
+        @media (max-width: 600px) {
+            .subject-grid {
+                grid-template-columns: 1fr;
+            }
+            .page-header {
+                font-size: 22px;
+                padding: 18px 16px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== हेडर ===== -->
+    <header class="header">
+        <div class="menu-icon" id="menuBtn">
+            <i class="fa-solid fa-book-open"></i>   <!-- सिर्फ एक मेनू आइकन -->
+        </div>
+        <div class="school-box">
+            <div class="school-top">M. M PUBLIC SCHOOL</div>
+            <div class="school-bottom">मुंडेश्वरी, बिहार</div>
+        </div>
+        <div class="right-placeholder"></div>
+    </header>
+
+    <!-- ===== साइड मेनू (केवल सिलेबस विकल्प) ===== -->
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-head">
+            <div class="menu-logo">
+                <img src="https://mmpublicschool.github.io/mmpsm/logo.png" alt="School Logo" onerror="this.src='https://via.placeholder.com/90x90?text=School';">
+            </div>
+            <div class="menu-user-name">M.M Public School</div>
+            <div class="menu-tagline">पाठ्यक्रम 2026</div>
+        </div>
+        <div class="menu-items">
+            <a href="#" class="menu-item active"><i class="fa-solid fa-book-open"></i> सिलेबस (BSEB)</a>
+            <!-- बाकी मेनू हटा दिए गए, सिर्फ एक एक्टिव मेनू -->
+        </div>
+    </div>
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- ===== हेडिंग ===== -->
+    <div class="page-header">
+        <i class="fa-solid fa-list-check"></i>
+        <span>बिहार बोर्ड पाठ्यक्रम 2026 (NCRT + SCERT)</span>
+    </div>
+
+    <!-- ===== सरकारी बनाम प्राइवेट नियम (छोटे और साफ) ===== -->
+    <div class="rule-row">
+        <div class="rule-mini-card sarkari">
+            <div class="rule-mini-header">
+                <i class="fa-solid fa-landmark"></i>
+                <h4>सरकारी स्कूल</h4>
+            </div>
+            <ul class="rule-bullet">
+                <li><i class="fa-regular fa-circle-check"></i> NCERT / SCERT बिहार की किताबें निःशुल्क</li>
+                <li><i class="fa-regular fa-circle-check"></i> BSEB पैटर्न: 50% बहुविकल्पी + 50% विषयपरक</li>
+                <li><i class="fa-regular fa-circle-check"></i> हिंदी/गणित/विज्ञान/सा.विज्ञान अनिवार्य</li>
+                <li><i class="fa-regular fa-circle-check"></i> शिक्षक: बिहार TET अनिवार्य</li>
+            </ul>
+        </div>
+
+        <div class="rule-mini-card private">
+            <div class="rule-mini-header">
+                <i class="fa-solid fa-building-columns"></i>
+                <h4>प्राइवेट स्कूल</h4>
+            </div>
+            <ul class="rule-bullet">
+                <li><i class="fa-regular fa-circle-check"></i> BSEB सिलेबस + अतिरिक्त किताबें (RD, Lakhmir, S Chand)</li>
+                <li><i class="fa-regular fa-circle-check"></i> NCERT + BTBC (बिहार SCERT) दोनों चल सकते हैं</li>
+                <li><i class="fa-regular fa-circle-check"></i> संस्कृत/कंप्यूटर/अतिरिक्त विषय जोड़ सकते हैं</li>
+                <li><i class="fa-regular fa-circle-check"></i> शिक्षक योग्यता: BSEB मानक</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ===== मुख्य पाठ्यक्रम सूची (केवल अध्याय और विषय) ===== -->
+    <div class="syllabus-container">
+
+        <!-- प्राइमरी कक्षाएँ I-V -->
+        <div class="class-group">
+            <div class="class-badge"><i class="fa-regular fa-star"></i> कक्षा 1 - 5 (प्राथमिक)</div>
+            <div class="subject-grid">
+                <div class="subject-card">
+                    <div class="subject-title"><i class="fa-solid fa-book"></i> हिंदी</div>
+                    <ul class="chapter-list">
+                        <li><i class="fa-regular fa-circle"></i> वर्णमाला, मात्राएँ, शब्द</li>
+                        <li><i class="fa-regular fa-circle"></i> कहानियाँ (NCERT रिमझिम) </li>
+                        <li><i class="fa-regular fa-circle"></i> व्याकरण: संज्ञा, सर्वनाम</li>
+                    </ul>
+                    <div class="book-tag"><i class="fa-solid fa-book"></i> NCERT रिमझिम, SCERT</div>
+                </div>
+                <div class="subject-card">
+                    <div class="subject-title"><i class="fa-solid fa-book"></i> English</div>
+                    <ul class="chapter-list">
+                        <li><i class="fa-regular fa-circle"></i> Alphabet, words, sentences</li>
+                        <li><i class="fa-regular fa-circle"></i> Rhymes & stories (Marigold)</li>
+                        <li><i class="fa-regular fa-circle"></i> Noun, Pronoun, Verb</li>
+                    </ul>
+                    <div class="book-tag"><i class="fa-solid fa-book"></i> NCERT Marigold</div>
+                </div>
+                <div class="subject-card">
+                    <div class="subject-title"><i class="fa-solid fa-calculator"></i> गणित</div>
+                    <ul class="chapter-list">
+                        <li><i class="fa-regular fa-circle"></i> 1-1000 तक संख्याएँ</li>
+                        <li><i class="fa-regular fa-circle"></i> जोड़, घटाना, गुणा</li>
+                        <li><i class="fa-regular fa-circle"></i> आकार, माप, पैसा</li>
+                    </ul>
+                    <div class="book-tag"><i class="fa-solid fa-book"></i> NCERT Math-Magic</div>
+                </div>
+                <div class="subject-card">
+                    <div class="subject-title"><i class="fa-solid fa-flask"></i> EVS</div>
+                    <ul class="chapter-list">
+                        <li><i class="fa-regular fa-circle"></i> परिवार, पौधे, जानवर</li>
+                        <li><i class="fa-regular fa-circle"></i> भोजन, पानी, आश्रय</li>
+                    </ul>
+                    <div class="book-tag"><i class="fa-solid fa-book"></i> NCERT Looking Around</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- मध्य कक्षा 6-8 -->
+        <div class="class-group">
+            <div class="class-badge"><i class="fa-regular fa-star"></i> कक्षा 6 - 8 (मध्य)</div>
+            <div class="subject-grid">
+                <div class="subject-card"><div class="subject-title"><i class="fa-solid fa-book"></i> हिंदी</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> वसंत (गद्य), दूर्वा (पद्य)</li><li><i class="fa-regular fa-circle"></i> संधि, समास, अलंकार</li><li><i class="fa-regular fa-circle"></i> पत्र, निबंध</li></ul></div>
+                <div class="subject-card"><div class="subject-title"><i class="fa-solid fa-book"></i> English</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> Honeydew, It So Happened</li><li><i class="fa-regular fa-circle"></i> Tenses, Voice, Narration</li><li><i class="fa-regular fa-circle"></i> Letter, Essay</li></ul></div>
+                <div class="subject-card"><div class="subject-title"><i class="fa-solid fa-calculator"></i> Maths</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> पूर्णांक, भिन्न, दशमलव</li><li><i class="fa-regular fa-circle"></i> बीजगणित, ज्यामिति</li><li><i class="fa-regular fa-circle"></i> अनुपात, आँकड़े</li></ul></div>
+                <div class="subject-card"><div class="subject-title"><i class="fa-solid fa-flask"></i> Science</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> भोजन, पदार्थ, जीव</li><li><i class="fa-regular fa-circle"></i> गति, प्रकाश, बिजली</li></ul></div>
+                <div class="subject-card"><div class="subject-title"><i class="fa-solid fa-globe"></i> सामाजिक विज्ञान</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> प्राचीन भारत (इतिहास)</li><li><i class="fa-regular fa-circle"></i> पृथ्वी, पर्यावरण (भूगोल)</li><li><i class="fa-regular fa-circle"></i> संविधान (नागरिक शास्त्र)</li></ul></div>
+                <div class="subject-card"><div class="subject-title"><i class="fa-solid fa-language"></i> संस्कृत</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> शब्द रूप, धातु रूप</li><li><i class="fa-regular fa-circle"></i> अनुवाद, श्लोक</li></ul></div>
+            </div>
+        </div>
+
+        <!-- माध्यमिक 9-10 -->
+        <div class="class-group">
+            <div class="class-badge"><i class="fa-regular fa-star"></i> कक्षा 9 - 10 (BSEB)</div>
+            <div class="subject-grid">
+                <div class="subject-card"><div class="subject-title">हिंदी (100)</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> गोधूलि भाग 1,2 (गद्य/पद्य)</li><li><i class="fa-regular fa-circle"></i> व्याकरण: संधि, समास, अलंकार</li><li><i class="fa-regular fa-circle"></i> पत्र, निबंध, अपठित</li></ul><div class="book-tag">NCERT क्षितिज + BTBC</div></div>
+                <div class="subject-card"><div class="subject-title">English (100)</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> First Flight, Footprints</li><li><i class="fa-regular fa-circle"></i> Tenses, Voice, Narration</li><li><i class="fa-regular fa-circle"></i> Letter, Essay, Unseen</li></ul></div>
+                <div class="subject-card"><div class="subject-title">गणित (100)</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> बहुपद, रैखिक समीकरण</li><li><i class="fa-regular fa-circle"></i> त्रिभुज, वृत्त (ज्यामिति)</li><li><i class="fa-regular fa-circle"></i> त्रिकोणमिति, निर्देशांक</li><li><i class="fa-regular fa-circle"></i> क्षेत्रमिति, सांख्यिकी</li></ul></div>
+                <div class="subject-card"><div class="subject-title">विज्ञान (100)</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> प्रकाश, विद्युत, गति (भौतिक)</li><li><i class="fa-regular fa-circle"></i> रासायनिक अभिक्रिया, अम्ल-क्षार</li><li><i class="fa-regular fa-circle"></i> जैव प्रक्रम, नियंत्रण (जीव)</li></ul></div>
+                <div class="subject-card"><div class="subject-title">सामाजिक विज्ञान</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> राष्ट्रवाद, विश्व युद्ध (इतिहास)</li><li><i class="fa-regular fa-circle"></i> लोकतंत्र, अधिकार (राज)</li><li><i class="fa-regular fa-circle"></i> संसाधन, कृषि (भूगोल)</li><li><i class="fa-regular fa-circle"></i> विकास, मुद्रा (अर्थशास्त्र)</li></ul></div>
+            </div>
+        </div>
+
+        <!-- उच्च माध्यमिक XI-XII (विज्ञान) -->
+        <div class="class-group">
+            <div class="class-badge"><i class="fa-regular fa-star"></i> कक्षा 11-12 विज्ञान (BSEB)</div>
+            <div class="subject-grid">
+                <div class="subject-card"><div class="subject-title">भौतिकी</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> स्थिरवैद्युतिकी, धारा विद्युत</li><li><i class="fa-regular fa-circle"></i> चुंबकत्व, प्रेरण</li><li><i class="fa-regular fa-circle"></i> प्रकाशिकी, आधुनिक भौतिकी</li></ul></div>
+                <div class="subject-card"><div class="subject-title">रसायन</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> ठोस अवस्था, विलयन</li><li><i class="fa-regular fa-circle"></i> कार्बनिक: एल्कोहॉल, एल्डिहाइड</li><li><i class="fa-regular fa-circle"></i> जैव-अणु, बहुलक</li></ul></div>
+                <div class="subject-card"><div class="subject-title">जीवविज्ञान</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> प्रजनन, आनुवंशिकी</li><li><i class="fa-regular fa-circle"></i> जैव-प्रौद्योगिकी, पारिस्थितिकी</li></ul></div>
+                <div class="subject-card"><div class="subject-title">गणित</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> कलन, सदिश, त्रिविम</li><li><i class="fa-regular fa-circle"></i> प्रायिकता, रैखिक प्रोग्रामन</li></ul></div>
+            </div>
+        </div>
+
+        <!-- कॉमर्स XI-XII -->
+        <div class="class-group">
+            <div class="class-badge"><i class="fa-regular fa-star"></i> कक्षा 11-12 कॉमर्स (BSEB)</div>
+            <div class="subject-grid">
+                <div class="subject-card"><div class="subject-title">लेखाशास्त्र</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> जर्नल, लेजर, तलपट</li><li><i class="fa-regular fa-circle"></i> वित्तीय विवरण, ह्रास</li></ul></div>
+                <div class="subject-card"><div class="subject-title">व्यवसाय अध्ययन</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> व्यवसाय के प्रकार, संगठन</li><li><i class="fa-regular fa-circle"></i> वित्त, विपणन</li></ul></div>
+                <div class="subject-card"><div class="subject-title">अर्थशास्त्र</div><ul class="chapter-list"><li><i class="fa-regular fa-circle"></i> सांख्यिकी, व्यष्टि/समष्टि</li><li><i class="fa-regular fa-circle"></i> भारतीय आर्थिक विकास</li></ul></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const overlay = document.getElementById('menuOverlay');
+
+        menuBtn.addEventListener('click', () => {
+            sideMenu.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        overlay.addEventListener('click', () => {
+            sideMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // optional: smooth escape
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sideMenu.classList.contains('active')) {
+                sideMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>

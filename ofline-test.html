@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BSEB Class 12 · ऑफलाइन टेस्ट</title>
+    <link rel="manifest" href="manifest.json">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+        }
+        
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            height: 700px;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px 16px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            background: #f8fafd;
+        }
+        
+        .screen::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding: 0 4px;
+            flex-shrink: 0;
+            background: white;
+            border-radius: 20px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            background: #f1f5f9;
+            border: none;
+            color: #475569;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .back-btn:hover {
+            background: #e2e8f0;
+            transform: scale(0.95);
+        }
+        
+        .back-btn:active {
+            transform: scale(0.9);
+        }
+        
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+        
+        .header-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .stream-section {
+            margin-bottom: 24px;
+            background: white;
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stream-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .stream-title i {
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+        
+        .subject-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .subject-card {
+            background: #ffffff;
+            border: 1px solid #e9eef2;
+            border-radius: 18px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+        }
+        
+        .subject-card:active {
+            transform: scale(0.98);
+        }
+        
+        .subject-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+        
+        .subject-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-size: 1.3rem;
+        }
+        
+        .subject-info {
+            min-width: 0;
+        }
+        
+        .subject-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+        
+        .subject-info p {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+        
+        .chapter-count {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .chapter-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .chapter-item {
+            background: white;
+            border: 1px solid #e9eef2;
+            border-radius: 16px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .chapter-item:hover {
+            background: #f8fafc;
+            border-color: #667eea;
+            transform: translateX(2px);
+        }
+        
+        .chapter-item:active {
+            transform: scale(0.98);
+        }
+        
+        .chapter-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #334155;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 220px;
+        }
+        
+        .chapter-name i {
+            color: #667eea;
+            margin-right: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .question-count {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .timer-container {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 20px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .timer-display {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 24px;
+            padding: 20px 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e9eef2;
+        }
+        
+        .q-text {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .option-item {
+            background: #f8fafc;
+            border: 1.5px solid #e9eef2;
+            border-radius: 16px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option-item:hover {
+            background: #f1f5f9;
+        }
+        
+        .option-item.selected {
+            background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+            border-color: #667eea;
+        }
+        
+        .option-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+        }
+        
+        .option-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #334155;
+            flex: 1;
+        }
+        
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .progress-bg {
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 20px;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-row {
+            display: flex;
+            gap: 10px;
+            margin: 12px 0;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            background: white;
+            border: 1.5px solid #e9eef2;
+            padding: 12px 0;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+        
+        .nav-btn:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+        
+        .nav-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .result-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 28px;
+            padding: 20px;
+        }
+        
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 25px 30px -12px rgba(102, 126, 234, 0.4);
+            position: relative;
+        }
+        
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border-radius: 100px;
+            background: white;
+        }
+        
+        .score-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .score-label {
+            color: #64748b;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .action-btn, .secondary-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+        
+        .secondary-btn {
+            background: white;
+            border: 2px solid #e9eef2;
+            color: #475569;
+        }
+        
+        .dialog-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .dialog-box {
+            background: white;
+            width: 280px;
+            border-radius: 28px;
+            padding: 24px 20px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .dialog-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .dialog-btn {
+            flex: 1;
+            padding: 12px 0;
+            border-radius: 14px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="appContainer"></div>
+
+<script>
+    (function() {
+        const STORAGE_KEYS = {
+            SUBJECTS: 'bihar_board_12_complete',
+            ANSWERS: 'student_answers',
+            TEST_ACTIVE: 'test_active',
+            START_TIME: 'start_time'
+        };
+
+        // Complete Bihar Board Class 12 Data with ALL Chapters
+        const BIHAR_BOARD_COMPLETE = {
+            // ========== LANGUAGE SUBJECTS ==========
+            hindi_gadya: {
+                name: "हिंदी – दिगंत भाग-2 (गद्य)",
+                icon: "fa-book-open",
+                stream: "language",
+                chapters: {
+                    ch1: { name: "बातचीत", questions: [] },
+                    ch2: { name: "उसने कहा था", questions: [] },
+                    ch3: { name: "संपूर्ण क्रांति", questions: [] },
+                    ch4: { name: "अर्द्धनारीश्वर", questions: [] },
+                    ch5: { name: "रोज", questions: [] },
+                    ch6: { name: "एक लेख और एक पत्र", questions: [] },
+                    ch7: { name: "ओ सदानीरा", questions: [] },
+                    ch8: { name: "सिपाही की माँ", questions: [] },
+                    ch9: { name: "प्रगीत और समाज", questions: [] },
+                    ch10: { name: "जूठन", questions: [] },
+                    ch11: { name: "हँसते हुए मेरा अकेलापन", questions: [] },
+                    ch12: { name: "तिरिछ", questions: [] },
+                    ch13: { name: "शिक्षा", questions: [] }
+                }
+            },
+            hindi_padya: {
+                name: "हिंदी – दिगंत भाग-2 (पद्य)",
+                icon: "fa-feather",
+                stream: "language",
+                chapters: {
+                    ch1: { name: "कड़बड़", questions: [] },
+                    ch2: { name: "सूरदास", questions: [] },
+                    ch3: { name: "तुलसीदास", questions: [] },
+                    ch4: { name: "छप्पय", questions: [] },
+                    ch5: { name: "तुमुल कोलाहल कलह में", questions: [] },
+                    ch6: { name: "पुत्र वियोग", questions: [] },
+                    ch7: { name: "ऊषा", questions: [] },
+                    ch8: { name: "जन-जन का चेहरा", questions: [] },
+                    ch9: { name: "अधिनायक", questions: [] },
+                    ch10: { name: "प्यारे नन्हे बेटे को", questions: [] },
+                    ch11: { name: "हार-जीत", questions: [] },
+                    ch12: { name: "गाँव का घर", questions: [] }
+                }
+            },
+            english_prose: {
+                name: "ENGLISH PROSE",
+                icon: "fa-language",
+                stream: "language",
+                chapters: {
+                    ch1: { name: "1. Indian Civilization And Culture", questions: [] },
+                    ch2: { name: "2. Bharat Is My Home", questions: [] },
+                    ch3: { name: "3. A Pinch Of Snuff", questions: [] },
+                    ch4: { name: "4. I Have A Dream", questions: [] },
+                    ch5: { name: "5. Ideas That Have Helped Mankind", questions: [] },
+                    ch6: { name: "6. The Artist", questions: [] },
+                    ch7: { name: "7. A Child Is Born", questions: [] },
+                    ch8: { name: "8. How Free Is The Press", questions: [] },
+                    ch9: { name: "9. The Earth", questions: [] },
+                    ch10: { name: "10. India Through A Traveller's Eyes", questions: [] },
+                    ch11: { name: "11. A Marriage Proposal", questions: [] }
+                }
+            },
+            english_poetry: {
+                name: "ENGLISH POETRY",
+                icon: "fa-feather-alt",
+                stream: "language",
+                chapters: {
+                    ch1: { name: "1. Sweetest Love, I Do Not Goe", questions: [] },
+                    ch2: { name: "2. Song Of Myself", questions: [] },
+                    ch3: { name: "3. Now The Leaves Are Failing Fast", questions: [] },
+                    ch4: { name: "4. Ode To Autumn", questions: [] },
+                    ch5: { name: "5. An Epitaph", questions: [] },
+                    ch6: { name: "6. The Soldier", questions: [] },
+                    ch7: { name: "7. Macavity: The Mystery Cat", questions: [] },
+                    ch8: { name: "8. Fire Hymn", questions: [] },
+                    ch9: { name: "9. Snake", questions: [] },
+                    ch10: { name: "10. My Grandmother's House", questions: [] }
+                }
+            },
+            urdu: {
+                name: "उर्दू",
+                icon: "fa-pen-fancy",
+                stream: "language",
+                chapters: {
+                    ch1: { name: "ग़ज़ल", questions: [] },
+                    ch2: { name: "नज़्म", questions: [] },
+                    ch3: { name: "अफ़साना", questions: [] },
+                    ch4: { name: "मज़मून", questions: [] },
+                    ch5: { name: "खतूत", questions: [] }
+                }
+            },
+            sanskrit: {
+                name: "संस्कृत",
+                icon: "fa-om",
+                stream: "language",
+                chapters: {
+                    ch1: { name: "नीतिशतकम्", questions: [] },
+                    ch2: { name: "हितोपदेश", questions: [] },
+                    ch3: { name: "कथा भाग", questions: [] },
+                    ch4: { name: "व्याकरण", questions: [] },
+                    ch5: { name: "अनुवाद", questions: [] }
+                }
+            },
+            
+            // ========== ARTS STREAM ==========
+            history: {
+                name: "इतिहास",
+                icon: "fa-landmark",
+                stream: "arts",
+                chapters: {
+                    ch1: { name: "ईंट, मनके और अस्थियाँ", questions: [] },
+                    ch2: { name: "राजा, किसान और नगर", questions: [] },
+                    ch3: { name: "रिश्तेदारी, जाति और वर्ग", questions: [] },
+                    ch4: { name: "विचारक, विश्वास और इमारतें", questions: [] },
+                    ch5: { name: "यात्रियों की नजर से", questions: [] },
+                    ch6: { name: "भक्ति-सूफी परंपराएँ", questions: [] },
+                    ch7: { name: "विजयनगर साम्राज्य", questions: [] },
+                    ch8: { name: "किसान, जमींदार और राज्य", questions: [] },
+                    ch9: { name: "राजा और इतिहास", questions: [] },
+                    ch10: { name: "औपनिवेशिक भारत", questions: [] },
+                    ch11: { name: "विद्रोही और राज", questions: [] },
+                    ch12: { name: "औपनिवेशिक शहर", questions: [] },
+                    ch13: { name: "महात्मा गांधी और राष्ट्रवाद", questions: [] },
+                    ch14: { name: "विभाजन को समझना", questions: [] },
+                    ch15: { name: "संविधान निर्माण", questions: [] }
+                }
+            },
+            geography: {
+                name: "भूगोल",
+                icon: "fa-earth-asia",
+                stream: "arts",
+                chapters: {
+                    ch1: { name: "मानव भूगोल का परिचय", questions: [] },
+                    ch2: { name: "जनसंख्या", questions: [] },
+                    ch3: { name: "मानव बस्तियाँ", questions: [] },
+                    ch4: { name: "प्राथमिक क्रियाएँ", questions: [] },
+                    ch5: { name: "द्वितीयक क्रियाएँ", questions: [] },
+                    ch6: { name: "तृतीयक क्रियाएँ", questions: [] },
+                    ch7: { name: "परिवहन और संचार", questions: [] },
+                    ch8: { name: "अंतरराष्ट्रीय व्यापार", questions: [] },
+                    ch9: { name: "मानव विकास", questions: [] },
+                    ch10: { name: "भारत की जनसंख्या", questions: [] },
+                    ch11: { name: "भूमि संसाधन", questions: [] },
+                    ch12: { name: "जल संसाधन", questions: [] },
+                    ch13: { name: "खनिज संसाधन", questions: [] },
+                    ch14: { name: "सतत विकास", questions: [] }
+                }
+            },
+            political_science: {
+                name: "राजनीति विज्ञान",
+                icon: "fa-gavel",
+                stream: "arts",
+                chapters: {
+                    ch1: { name: "शीत युद्ध का दौर", questions: [] },
+                    ch2: { name: "द्विध्रुवीयता का अंत", questions: [] },
+                    ch3: { name: "अमेरिकी वर्चस्व", questions: [] },
+                    ch4: { name: "वैकल्पिक शक्ति केंद्र", questions: [] },
+                    ch5: { name: "समकालीन दक्षिण एशिया", questions: [] },
+                    ch6: { name: "अंतरराष्ट्रीय संगठन", questions: [] },
+                    ch7: { name: "सुरक्षा", questions: [] },
+                    ch8: { name: "पर्यावरण", questions: [] },
+                    ch9: { name: "वैश्वीकरण", questions: [] },
+                    ch10: { name: "राष्ट्र निर्माण की चुनौतियाँ", questions: [] },
+                    ch11: { name: "एक दल का प्रभुत्व", questions: [] }
+                }
+            },
+            economics_arts: {
+                name: "अर्थशास्त्र",
+                icon: "fa-chart-line",
+                stream: "arts",
+                chapters: {
+                    ch1: { name: "राष्ट्रीय आय", questions: [] },
+                    ch2: { name: "मुद्रा और बैंकिंग", questions: [] },
+                    ch3: { name: "आय निर्धारण", questions: [] },
+                    ch4: { name: "सरकारी बजट", questions: [] },
+                    ch5: { name: "भुगतान संतुलन", questions: [] },
+                    ch6: { name: "स्वतंत्रता के समय भारतीय अर्थव्यवस्था", questions: [] },
+                    ch7: { name: "आर्थिक सुधार", questions: [] },
+                    ch8: { name: "मानव पूंजी निर्माण", questions: [] },
+                    ch9: { name: "ग्रामीण विकास", questions: [] },
+                    ch10: { name: "रोजगार", questions: [] }
+                }
+            },
+            sociology: {
+                name: "समाजशास्त्र",
+                icon: "fa-users",
+                stream: "arts",
+                chapters: {
+                    ch1: { name: "भारतीय समाज का परिचय", questions: [] },
+                    ch2: { name: "जनसांख्यिकीय संरचना", questions: [] },
+                    ch3: { name: "सामाजिक संस्थाएँ", questions: [] },
+                    ch4: { name: "असमानता", questions: [] },
+                    ch5: { name: "सांस्कृतिक परिवर्तन", questions: [] },
+                    ch6: { name: "सामाजिक आंदोलन", questions: [] }
+                }
+            },
+            psychology: {
+                name: "मनोविज्ञान",
+                icon: "fa-brain",
+                stream: "arts",
+                chapters: {
+                    ch1: { name: "मनोवैज्ञानिक विशेषताएँ", questions: [] },
+                    ch2: { name: "व्यक्तित्व", questions: [] },
+                    ch3: { name: "जीवन चुनौतियाँ", questions: [] },
+                    ch4: { name: "मानसिक विकार", questions: [] },
+                    ch5: { name: "उपचार विधियाँ", questions: [] }
+                }
+            },
+            
+            // ========== SCIENCE STREAM ==========
+            physics: {
+                name: "भौतिकी",
+                icon: "fa-atom",
+                stream: "science",
+                chapters: {
+                    ch1: { name: "विद्युत आवेश एवं क्षेत्र", questions: [] },
+                    ch2: { name: "विद्युत विभव", questions: [] },
+                    ch3: { name: "धारा विद्युत", questions: [] },
+                    ch4: { name: "गतिमान आवेश और चुम्बकत्व", questions: [] },
+                    ch5: { name: "चुम्बकत्व और पदार्थ", questions: [] },
+                    ch6: { name: "विद्युतचुंबकीय प्रेरण", questions: [] },
+                    ch7: { name: "प्रत्यावर्ती धारा", questions: [] },
+                    ch8: { name: "विद्युतचुंबकीय तरंगें", questions: [] },
+                    ch9: { name: "किरण प्रकाशिकी", questions: [] },
+                    ch10: { name: "तरंग प्रकाशिकी", questions: [] },
+                    ch11: { name: "विकिरण का द्वैत स्वभाव", questions: [] },
+                    ch12: { name: "परमाणु", questions: [] },
+                    ch13: { name: "नाभिक", questions: [] },
+                    ch14: { name: "अर्धचालक", questions: [] }
+                }
+            },
+            chemistry: {
+                name: "रसायन विज्ञान",
+                icon: "fa-flask",
+                stream: "science",
+                chapters: {
+                    ch1: { name: "ठोस अवस्था", questions: [] },
+                    ch2: { name: "विलयन", questions: [] },
+                    ch3: { name: "विद्युत रसायन", questions: [] },
+                    ch4: { name: "रासायनिक गतिकी", questions: [] },
+                    ch5: { name: "सतह रसायन", questions: [] },
+                    ch6: { name: "तत्वों का निष्कर्षण", questions: [] },
+                    ch7: { name: "p-ब्लॉक तत्व", questions: [] },
+                    ch8: { name: "d एवं f ब्लॉक", questions: [] },
+                    ch9: { name: "समन्वय यौगिक", questions: [] },
+                    ch10: { name: "हैलोएल्केन", questions: [] },
+                    ch11: { name: "एल्कोहल एवं फिनॉल", questions: [] },
+                    ch12: { name: "एल्डिहाइड एवं कीटोन", questions: [] },
+                    ch13: { name: "अमीन", questions: [] },
+                    ch14: { name: "जैव अणु", questions: [] },
+                    ch15: { name: "पॉलिमर", questions: [] },
+                    ch16: { name: "दैनिक जीवन की रसायन", questions: [] }
+                }
+            },
+            biology: {
+                name: "जीव विज्ञान",
+                icon: "fa-dna",
+                stream: "science",
+                chapters: {
+                    ch1: { name: "जीवों में प्रजनन", questions: [] },
+                    ch2: { name: "पुष्पीय पौधों में लैंगिक प्रजनन", questions: [] },
+                    ch3: { name: "मानव प्रजनन", questions: [] },
+                    ch4: { name: "प्रजनन स्वास्थ्य", questions: [] },
+                    ch5: { name: "वंशागति सिद्धांत", questions: [] },
+                    ch6: { name: "आणविक आधार", questions: [] },
+                    ch7: { name: "विकासवाद", questions: [] },
+                    ch8: { name: "मानव स्वास्थ्य और रोग", questions: [] },
+                    ch9: { name: "जैव प्रौद्योगिकी सिद्धांत", questions: [] },
+                    ch10: { name: "जैव प्रौद्योगिकी अनुप्रयोग", questions: [] },
+                    ch11: { name: "जीव और जनसंख्या", questions: [] },
+                    ch12: { name: "पारिस्थितिकी तंत्र", questions: [] },
+                    ch13: { name: "जैव विविधता संरक्षण", questions: [] }
+                }
+            },
+            mathematics: {
+                name: "गणित",
+                icon: "fa-calculator",
+                stream: "science",
+                chapters: {
+                    ch1: { name: "संबंध एवं फलन", questions: [] },
+                    ch2: { name: "व्युत्क्रम त्रिकोणमितीय फलन", questions: [] },
+                    ch3: { name: "मैट्रिक्स", questions: [] },
+                    ch4: { name: "सारणिक", questions: [] },
+                    ch5: { name: "सततता एवं अवकलनीयता", questions: [] },
+                    ch6: { name: "अवकलज अनुप्रयोग", questions: [] },
+                    ch7: { name: "समाकलन", questions: [] },
+                    ch8: { name: "अवकल समीकरण", questions: [] },
+                    ch9: { name: "वेक्टर बीजगणित", questions: [] },
+                    ch10: { name: "त्रिविमीय ज्यामिति", questions: [] },
+                    ch11: { name: "रैखिक प्रोग्रामिंग", questions: [] },
+                    ch12: { name: "प्रायिकता", questions: [] }
+                }
+            },
+            computer_science: {
+                name: "कंप्यूटर विज्ञान",
+                icon: "fa-laptop-code",
+                stream: "science",
+                chapters: {
+                    ch1: { name: "पायथन पुनरावृत्ति", questions: [] },
+                    ch2: { name: "फंक्शन", questions: [] },
+                    ch3: { name: "फाइल हैंडलिंग", questions: [] },
+                    ch4: { name: "डेटा संरचना", questions: [] },
+                    ch5: { name: "MySQL", questions: [] },
+                    ch6: { name: "नेटवर्किंग", questions: [] }
+                }
+            },
+            
+            // ========== COMMERCE STREAM ==========
+            accountancy: {
+                name: "लेखाशास्त्र",
+                icon: "fa-file-invoice",
+                stream: "commerce",
+                chapters: {
+                    ch1: { name: "साझेदारी फर्म के खाते", questions: [] },
+                    ch2: { name: "लाभांश परिवर्तन", questions: [] },
+                    ch3: { name: "साझेदार का प्रवेश", questions: [] },
+                    ch4: { name: "सेवानिवृत्ति", questions: [] },
+                    ch5: { name: "मृत्यु", questions: [] },
+                    ch6: { name: "फर्म का विघटन", questions: [] },
+                    ch7: { name: "शेयर पूंजी", questions: [] },
+                    ch8: { name: "डिबेंचर", questions: [] },
+                    ch9: { name: "वित्तीय विवरण", questions: [] },
+                    ch10: { name: "अनुपात विश्लेषण", questions: [] },
+                    ch11: { name: "कैश फ्लो स्टेटमेंट", questions: [] }
+                }
+            },
+            business_studies: {
+                name: "व्यवसाय अध्ययन",
+                icon: "fa-briefcase",
+                stream: "commerce",
+                chapters: {
+                    ch1: { name: "प्रबंधन का स्वरूप", questions: [] },
+                    ch2: { name: "प्रबंधन के सिद्धांत", questions: [] },
+                    ch3: { name: "व्यवसाय वातावरण", questions: [] },
+                    ch4: { name: "योजना", questions: [] },
+                    ch5: { name: "संगठन", questions: [] },
+                    ch6: { name: "स्टाफिंग", questions: [] },
+                    ch7: { name: "निर्देशन", questions: [] },
+                    ch8: { name: "नियंत्रण", questions: [] },
+                    ch9: { name: "वित्त प्रबंधन", questions: [] },
+                    ch10: { name: "वित्तीय बाजार", questions: [] },
+                    ch11: { name: "विपणन प्रबंधन", questions: [] },
+                    ch12: { name: "उपभोक्ता संरक्षण", questions: [] }
+                }
+            },
+            economics_commerce: {
+                name: "अर्थशास्त्र (कॉमर्स)",
+                icon: "fa-chart-pie",
+                stream: "commerce",
+                chapters: {
+                    ch1: { name: "राष्ट्रीय आय", questions: [] },
+                    ch2: { name: "मुद्रा एवं बैंकिंग", questions: [] },
+                    ch3: { name: "सरकारी बजट", questions: [] },
+                    ch4: { name: "भुगतान संतुलन", questions: [] }
+                }
+            },
+            entrepreneurship: {
+                name: "उद्यमिता",
+                icon: "fa-rocket",
+                stream: "commerce",
+                chapters: {
+                    ch1: { name: "उद्यमिता अवसर", questions: [] },
+                    ch2: { name: "उद्यम योजना", questions: [] },
+                    ch3: { name: "संसाधन प्रबंधन", questions: [] },
+                    ch4: { name: "विपणन", questions: [] }
+                }
+            },
+            
+            // ========== EXTRA SUBJECTS ==========
+            physical_education: {
+                name: "शारीरिक शिक्षा",
+                icon: "fa-person-running",
+                stream: "extra",
+                chapters: {
+                    ch1: { name: "खेल आयोजन प्रबंधन", questions: [] },
+                    ch2: { name: "योग एवं जीवन शैली", questions: [] },
+                    ch3: { name: "प्रशिक्षण विधियाँ", questions: [] },
+                    ch4: { name: "खेल चोट", questions: [] }
+                }
+            },
+            home_science: {
+                name: "गृह विज्ञान",
+                icon: "fa-house",
+                stream: "extra",
+                chapters: {
+                    ch1: { name: "पोषण", questions: [] },
+                    ch2: { name: "वस्त्र", questions: [] },
+                    ch3: { name: "परिवार संसाधन", questions: [] }
+                }
+            },
+            music: {
+                name: "संगीत",
+                icon: "fa-music",
+                stream: "extra",
+                chapters: {
+                    ch1: { name: "राग", questions: [] },
+                    ch2: { name: "ताल", questions: [] },
+                    ch3: { name: "भारतीय संगीत परिचय", questions: [] }
+                }
+            },
+            fine_arts: {
+                name: "ललित कला",
+                icon: "fa-paintbrush",
+                stream: "extra",
+                chapters: {
+                    ch1: { name: "भारतीय चित्रकला", questions: [] },
+                    ch2: { name: "आधुनिक कला", questions: [] }
+                }
+            },
+            agriculture: {
+                name: "कृषि",
+                icon: "fa-seedling",
+                stream: "extra",
+                chapters: {
+                    ch1: { name: "मृदा", questions: [] },
+                    ch2: { name: "फसल उत्पादन", questions: [] },
+                    ch3: { name: "कृषि प्रबंधन", questions: [] }
+                }
+            }
+        };
+
+        // State Management
+        let state = {
+            subjects: {},
+            currentSubject: null,
+            currentChapter: null,
+            questions: [],
+            currentIndex: 0,
+            answers: {},
+            testActive: false,
+            timerInterval: null,
+            totalSeconds: 600
+        };
+
+        // Load/Save functions
+        function loadSubjects() {
+            const stored = localStorage.getItem(STORAGE_KEYS.SUBJECTS);
+            if (stored) {
+                return JSON.parse(stored);
+            } else {
+                localStorage.setItem(STORAGE_KEYS.SUBJECTS, JSON.stringify(BIHAR_BOARD_COMPLETE));
+                return BIHAR_BOARD_COMPLETE;
+            }
+        }
+
+        // Dialog function
+        function showDialog(message, onConfirm, onCancel = null) {
+            const container = document.getElementById('appContainer');
+            const dialogHtml = `
+                <div class="dialog-overlay" id="dialogOverlay">
+                    <div class="dialog-box">
+                        <i class="fas fa-question-circle" style="font-size: 2.5rem; color: #667eea;"></i>
+                        <p>${message}</p>
+                        <div class="dialog-btns">
+                            <button class="dialog-btn" id="dialogConfirm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:white;">हाँ</button>
+                            ${onCancel ? '<button class="dialog-btn" id="dialogCancel" style="background:#f1f5f9;">नहीं</button>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', dialogHtml);
+            document.getElementById('dialogConfirm')?.addEventListener('click', () => {
+                document.getElementById('dialogOverlay')?.remove();
+                if (onConfirm) onConfirm();
+            });
+            if (onCancel) {
+                document.getElementById('dialogCancel')?.addEventListener('click', () => {
+                    document.getElementById('dialogOverlay')?.remove();
+                    onCancel();
+                });
+            }
+        }
+
+        // Render Subjects
+        function renderSubjects() {
+            state.subjects = loadSubjects();
+            
+            const streams = {
+                language: { title: "भाषा विषय", icon: "fa-language", subjects: [] },
+                arts: { title: "कला संकाय", icon: "fa-palette", subjects: [] },
+                science: { title: "विज्ञान संकाय", icon: "fa-flask", subjects: [] },
+                commerce: { title: "वाणिज्य संकाय", icon: "fa-chart-simple", subjects: [] },
+                extra: { title: "अतिरिक्त विषय", icon: "fa-star", subjects: [] }
+            };
+            
+            for (let [key, sub] of Object.entries(state.subjects)) {
+                if (sub.stream && streams[sub.stream]) {
+                    streams[sub.stream].subjects.push({ key, ...sub });
+                }
+            }
+            
+            let html = `<div class="screen">
+                <div class="header-row">
+                    <div class="header-left">
+                        <div class="app-title">Bihar Board 12</div>
+                    </div>
+                    <span class="header-badge"><i class="fas fa-book-open"></i> ${Object.keys(state.subjects).length} विषय</span>
+                </div>`;
+            
+            for (let [streamKey, stream] of Object.entries(streams)) {
+                if (stream.subjects.length > 0) {
+                    html += `<div class="stream-section">
+                        <div class="stream-title">
+                            <i class="fas ${stream.icon}"></i>
+                            <span>${stream.title}</span>
+                        </div>
+                        <div class="subject-grid">`;
+                    
+                    stream.subjects.forEach(sub => {
+                        const chapterCount = Object.keys(sub.chapters || {}).length;
+                        html += `
+                            <div class="subject-card" data-subject="${sub.key}">
+                                <div class="subject-left">
+                                    <div class="subject-icon">
+                                        <i class="fas ${sub.icon}"></i>
+                                    </div>
+                                    <div class="subject-info">
+                                        <h3>${sub.name}</h3>
+                                        <p><i class="fas fa-layer-group"></i> ${chapterCount} अध्याय</p>
+                                    </div>
+                                </div>
+                                <span class="chapter-count">${chapterCount}</span>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `</div></div>`;
+                }
+            }
+            
+            html += `</div>`;
+            document.getElementById('appContainer').innerHTML = html;
+
+            document.querySelectorAll('.subject-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const subjectKey = card.dataset.subject;
+                    state.currentSubject = subjectKey;
+                    renderChapters(subjectKey);
+                });
+            });
+        }
+
+        // Render Chapters
+        function renderChapters(subjectKey) {
+            const subject = state.subjects[subjectKey];
+            if (!subject) return;
+
+            let chaptersHtml = '';
+            const chapters = subject.chapters || {};
+            
+            if (Object.keys(chapters).length === 0) {
+                chaptersHtml = '<div style="text-align:center; padding:40px 0; color:#64748b;"><i class="fas fa-folder-open" style="font-size: 3rem; opacity:0.3;"></i><br>कोई अध्याय नहीं</div>';
+            } else {
+                for (let [chapterId, chapter] of Object.entries(chapters)) {
+                    const questionCount = chapter.questions ? chapter.questions.length : 0;
+                    chaptersHtml += `
+                        <div class="chapter-item" data-chapter="${chapterId}">
+                            <span class="chapter-name"><i class="fas fa-bookmark"></i>${chapter.name}</span>
+                            <span class="question-count"><i class="fas fa-question-circle"></i> ${questionCount}</span>
+                        </div>
+                    `;
+                }
+            }
+
+            const html = `
+                <div class="screen">
+                    <div class="header-row">
+                        <div class="header-left">
+                            <button class="back-btn" id="backToSubjects"><i class="fas fa-arrow-left"></i></button>
+                            <div class="app-title">${subject.name}</div>
+                        </div>
+                        <span class="header-badge"><i class="fas fa-list"></i> अध्याय</span>
+                    </div>
+                    <div class="chapter-list">
+                        ${chaptersHtml}
+                    </div>
+                </div>
+            `;
+            document.getElementById('appContainer').innerHTML = html;
+
+            document.getElementById('backToSubjects')?.addEventListener('click', renderSubjects);
+
+            document.querySelectorAll('.chapter-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const chapterId = item.dataset.chapter;
+                    const chapter = state.subjects[subjectKey].chapters[chapterId];
+                    if (chapter && chapter.questions && chapter.questions.length > 0) {
+                        state.currentChapter = chapterId;
+                        state.questions = chapter.questions;
+                        state.answers = {};
+                        state.currentIndex = 0;
+                        localStorage.setItem(STORAGE_KEYS.TEST_ACTIVE, 'true');
+                        localStorage.removeItem(STORAGE_KEYS.START_TIME);
+                        startTimer();
+                        renderTest(chapter.name);
+                    } else {
+                        showDialog('इस अध्याय में अभी कोई प्रश्न नहीं है। कृपया एडमिन पैनल से प्रश्न जोड़ें।', () => {});
+                    }
+                });
+            });
+        }
+
+        // Timer functions
+        function startTimer() {
+            if (state.timerInterval) clearInterval(state.timerInterval);
+            const startTime = parseInt(localStorage.getItem(STORAGE_KEYS.START_TIME) || Date.now());
+            if (!localStorage.getItem(STORAGE_KEYS.START_TIME)) {
+                localStorage.setItem(STORAGE_KEYS.START_TIME, startTime.toString());
+            }
+            state.timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const remaining = Math.max(0, state.totalSeconds - elapsed);
+                if (remaining <= 0) {
+                    clearInterval(state.timerInterval);
+                    submitTest();
+                }
+                const timerEl = document.getElementById('timerDisplay');
+                if (timerEl) {
+                    const mins = Math.floor(remaining / 60);
+                    const secs = remaining % 60;
+                    timerEl.innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+                }
+            }, 500);
+        }
+
+        function submitTest() {
+            clearInterval(state.timerInterval);
+            const qs = state.questions;
+            const ans = state.answers;
+            let correct = 0;
+            qs.forEach((q, i) => {
+                if (ans[i] && ans[i] === q.answer) correct++;
+            });
+            const total = qs.length;
+            const percent = ((correct / total) * 100).toFixed(0);
+            localStorage.setItem('last_result', JSON.stringify({ correct, total, percent }));
+            localStorage.removeItem(STORAGE_KEYS.TEST_ACTIVE);
+            localStorage.removeItem(STORAGE_KEYS.START_TIME);
+            renderResult(correct, total, percent);
+        }
+
+        function renderTest(chapterName) {
+            const q = state.questions[state.currentIndex];
+            if (!q) return;
+            const selected = state.answers[state.currentIndex] || '';
+            let optsHtml = '';
+            q.options.forEach((opt, i) => {
+                const letter = String.fromCharCode(65 + i);
+                const isChecked = (selected === opt) ? 'checked' : '';
+                optsHtml += `
+                    <div class="option-item ${isChecked ? 'selected' : ''}" data-index="${i}">
+                        <input type="radio" name="opt" value="${opt.replace(/"/g, '&quot;')}" ${isChecked}>
+                        <span class="option-text">${letter}. ${opt}</span>
+                    </div>
+                `;
+            });
+            const progress = ((state.currentIndex + 1) / state.questions.length) * 100;
+            const html = `
+                <div class="screen">
+                    <div class="header-row">
+                        <div class="header-left">
+                            <button class="back-btn" id="backToChapters"><i class="fas fa-arrow-left"></i></button>
+                            <div class="app-title">${chapterName || 'प्रश्न'}</div>
+                        </div>
+                        <span class="header-badge"><i class="fas fa-question"></i> ${state.currentIndex+1}/${state.questions.length}</span>
+                    </div>
+                    <div class="timer-container">
+                        <span><i class="far fa-clock"></i> शेष समय</span>
+                        <span class="timer-display" id="timerDisplay">10:00</span>
+                    </div>
+                    <div class="question-card">
+                        <div class="q-text">${q.question}</div>
+                        <div class="options">
+                            ${optsHtml}
+                        </div>
+                    </div>
+                    <div class="progress-row">
+                        <span style="font-size:0.85rem; color:#64748b;"><i class="fas fa-chart-line"></i>प्रगति</span>
+                        <div class="progress-bg"><div class="progress-fill" style="width:${progress}%"></div></div>
+                    </div>
+                    <div class="nav-row">
+                        <button class="nav-btn" id="prevBtn" ${state.currentIndex === 0 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> पिछला</button>
+                        <button class="nav-btn" id="nextBtn">${state.currentIndex === state.questions.length-1 ? 'समीक्षा' : 'अगला'} <i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <button class="nav-btn primary" id="submitBtn"><i class="fas fa-check-circle"></i> टेस्ट सबमिट करें</button>
+                </div>
+            `;
+            document.getElementById('appContainer').innerHTML = html;
+
+            document.getElementById('backToChapters')?.addEventListener('click', () => {
+                clearInterval(state.timerInterval);
+                localStorage.removeItem(STORAGE_KEYS.TEST_ACTIVE);
+                renderChapters(state.currentSubject);
+            });
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const radio = item.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                        state.answers[state.currentIndex] = radio.value;
+                        document.querySelectorAll('.option-item').forEach(oi => oi.classList.remove('selected'));
+                        item.classList.add('selected');
+                    }
+                });
+            });
+
+            document.getElementById('prevBtn')?.addEventListener('click', () => {
+                if (state.currentIndex > 0) {
+                    state.currentIndex--;
+                    renderTest(chapterName);
+                }
+            });
+
+            document.getElementById('nextBtn')?.addEventListener('click', () => {
+                if (state.currentIndex < state.questions.length - 1) {
+                    state.currentIndex++;
+                    renderTest(chapterName);
+                }
+            });
+
+            document.getElementById('submitBtn')?.addEventListener('click', () => {
+                showDialog('क्या आप टेस्ट सबमिट करना चाहते हैं?', () => {
+                    submitTest();
+                }, () => {});
+            });
+        }
+
+        function renderResult(correct, total, percent) {
+            const html = `
+                <div class="screen">
+                    <div class="header-row">
+                        <div class="header-left">
+                            <div class="app-title">परिणाम</div>
+                        </div>
+                        <span class="header-badge"><i class="fas fa-check-circle"></i> पूर्ण</span>
+                    </div>
+                    <div class="result-content">
+                        <div class="score-circle">
+                            <span class="score-number">${correct}</span>
+                            <span class="score-label">${total} में से</span>
+                        </div>
+                        <div style="font-size:2rem; font-weight:700; color:#1e293b;">${percent}%</div>
+                        <div style="width:100%;">
+                            <button class="action-btn" id="homeBtn"><i class="fas fa-home"></i> विषय सूची</button>
+                            <button class="secondary-btn" id="restartBtn"><i class="fas fa-redo-alt"></i> पुनः प्रयास</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('appContainer').innerHTML = html;
+            document.getElementById('homeBtn')?.addEventListener('click', renderSubjects);
+            document.getElementById('restartBtn')?.addEventListener('click', () => {
+                state.answers = {};
+                state.currentIndex = 0;
+                localStorage.setItem(STORAGE_KEYS.TEST_ACTIVE, 'true');
+                localStorage.removeItem(STORAGE_KEYS.START_TIME);
+                startTimer();
+                const subject = state.subjects[state.currentSubject];
+                const chapter = subject?.chapters[state.currentChapter];
+                renderTest(chapter?.name || 'प्रश्न');
+            });
+        }
+
+        // Initialize
+        window.addEventListener('load', renderSubjects);
+    })();
+</script>
+</body>
+</html>

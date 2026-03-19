@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Directory | M.M Public School</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#eef2f6,#e0e9f2);
+overflow-x:hidden;
+}
+
+/* ===== HEADER ===== */
+.header{
+background:#0a2a66;
+padding:25px 15px 20px;
+text-align:center;
+color:white;
+box-shadow:0 4px 15px rgba(0,0,0,0.15);
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.header h1{
+font-size:22px;
+font-weight:700;
+margin-bottom:15px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+}
+
+.header h1 i{
+color:#ffd966;
+}
+
+/* ===== SEARCH ===== */
+.search-box{
+max-width:500px;
+margin:0 auto;
+position:relative;
+}
+
+.search-box i{
+position:absolute;
+left:18px;
+top:50%;
+transform:translateY(-50%);
+color:#0a2a66;
+font-size:15px;
+opacity:0.7;
+}
+
+.search-box input{
+width:100%;
+padding:14px 18px 14px 48px;
+border-radius:50px;
+border:none;
+outline:none;
+font-size:15px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+background:white;
+}
+
+.search-box input:focus{
+box-shadow:0 5px 20px rgba(10,42,102,0.2);
+}
+
+.search-box input::placeholder{
+color:#999;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+max-width:500px;
+margin:20px auto 40px;
+padding:0 15px;
+}
+
+/* ===== LOADING ===== */
+.loading{
+text-align:center;
+padding:50px 20px;
+background:white;
+border-radius:24px;
+box-shadow:0 5px 20px rgba(0,0,0,0.05);
+}
+
+.loading i{
+font-size:45px;
+color:#0a2a66;
+margin-bottom:15px;
+animation:pulse 1.5s ease infinite;
+}
+
+.loading p{
+color:#666;
+font-size:15px;
+}
+
+@keyframes pulse{
+0%{opacity:0.6;transform:scale(1);}
+50%{opacity:1;transform:scale(1.1);}
+100%{opacity:0.6;transform:scale(1);}
+}
+
+/* ===== CARD ===== */
+.teacher-card{
+background:white;
+border-radius:24px;
+padding:20px 18px 18px;
+margin-bottom:20px;
+box-shadow:0 5px 20px rgba(0,0,0,0.05);
+position:relative;
+transition:0.2s ease;
+animation:fadeIn 0.4s ease;
+border:1px solid #f0f5fa;
+}
+
+.teacher-card:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+/* ===== PHOTO WITH LOADING ===== */
+.photo-wrapper{
+width:100px;
+height:100px;
+border-radius:50%;
+overflow:hidden;
+margin:0 auto 12px;
+border:4px solid white;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+background:#f5f7fa;
+position:relative;
+}
+
+.photo-wrapper.loading::before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:linear-gradient(90deg,#f0f2f5 25%,#e4e9f0 50%,#f0f2f5 75%);
+background-size:200% 100%;
+animation:shimmer 1.5s infinite;
+}
+
+.photo-wrapper.loading::after{
+content:'';
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:30px;
+height:30px;
+border:3px solid rgba(10,42,102,0.15);
+border-top-color:#0a2a66;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes shimmer{
+0%{background-position:200% 0;}
+100%{background-position:-200% 0;}
+}
+
+@keyframes spin{
+0%{transform:translate(-50%,-50%) rotate(0deg);}
+100%{transform:translate(-50%,-50%) rotate(360deg);}
+}
+
+.photo-wrapper img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+/* ===== BADGE ===== */
+.badge{
+position:absolute;
+top:15px;
+right:15px;
+background:#1e7e34;
+color:white;
+font-size:11px;
+padding:4px 12px;
+border-radius:20px;
+font-weight:600;
+letter-spacing:0.3px;
+display:flex;
+align-items:center;
+gap:4px;
+}
+
+.badge i{
+font-size:10px;
+}
+
+/* ===== INFO ===== */
+.teacher-info{
+text-align:center;
+}
+
+.teacher-name{
+font-size:20px;
+font-weight:700;
+color:#0a2a66;
+margin-bottom:4px;
+}
+
+.teacher-subject{
+font-size:14px;
+color:#1e7e34;
+font-weight:500;
+margin-bottom:15px;
+background:#e8f3e9;
+display:inline-block;
+padding:5px 18px;
+border-radius:30px;
+}
+
+/* ===== CONTACT BUTTONS - NO UNDERLINE ===== */
+.contact-btns{
+display:flex;
+gap:15px;
+justify-content:center;
+margin-top:5px;
+}
+
+.contact-btns a{
+text-decoration:none;
+display:inline-flex;
+}
+
+.contact-btn{
+width:48px;
+height:48px;
+border-radius:50%;
+border:none;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+color:white;
+cursor:pointer;
+transition:0.2s;
+box-shadow:0 5px 12px rgba(0,0,0,0.1);
+}
+
+.contact-btn:hover{
+transform:scale(1.1);
+box-shadow:0 8px 18px rgba(0,0,0,0.15);
+}
+
+.call-btn{background:#1e7e34;}
+.email-btn{background:#0a2a66;}
+.whatsapp-btn{background:#25D366;}
+
+/* ===== EMPTY / NO RESULTS ===== */
+.empty{
+text-align:center;
+padding:50px 20px;
+background:white;
+border-radius:24px;
+box-shadow:0 5px 20px rgba(0,0,0,0.05);
+color:#666;
+}
+
+.empty i{
+font-size:55px;
+color:#0a2a66;
+opacity:0.4;
+margin-bottom:15px;
+}
+
+.empty p{
+font-size:16px;
+font-weight:500;
+color:#444;
+}
+
+/* ===== STATS ===== */
+.stats{
+display:flex;
+justify-content:space-between;
+background:white;
+border-radius:24px;
+padding:15px 20px;
+margin-bottom:20px;
+box-shadow:0 5px 20px rgba(0,0,0,0.05);
+border:1px solid #f0f5fa;
+}
+
+.stat-item{
+text-align:center;
+}
+
+.stat-value{
+font-size:24px;
+font-weight:700;
+color:#0a2a66;
+line-height:1.2;
+}
+
+.stat-label{
+font-size:13px;
+color:#666;
+margin-top:4px;
+}
+
+/* ===== YEAR BADGE ===== */
+.year-badge{
+background:rgba(255,255,255,0.15);
+padding:5px 14px;
+border-radius:30px;
+font-size:13px;
+display:flex;
+align-items:center;
+gap:6px;
+margin-left:10px;
+}
+
+.year-badge i{
+font-size:12px;
+color:#ffd966;
+}
+
+/* ===== NO UNDERLINE FOR ALL LINKS ===== */
+a, a:hover, a:visited, a:focus, a:active{
+text-decoration:none;
+outline:none;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:400px){
+.teacher-name{font-size:18px;}
+.contact-btn{width:44px;height:44px;font-size:16px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>
+<i class="fa-solid fa-chalkboard-user"></i> Teacher Directory
+<span class="year-badge"><i class="fa-regular fa-calendar"></i> 2026</span>
+</h1>
+<div class="search-box">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input type="text" id="searchInput" placeholder="Search by name or subject...">
+</div>
+</div>
+
+<div class="container" id="teacherContainer">
+<div class="loading">
+<i class="fa-regular fa-hourglass-half"></i>
+<p>Loading teachers...</p>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+authDomain: "apni-duniya-b53d7.firebaseapp.com",
+databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+projectId: "apni-duniya-b53d7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const container = document.getElementById("teacherContainer");
+const searchInput = document.getElementById("searchInput");
+
+let teachersData = [];
+
+function getInitials(name){
+if(!name) return '?';
+return name.split(' ').map(word=>word[0]).join('').substring(0,2).toUpperCase();
+}
+
+async function loadTeachers(){
+try{
+const snap = await get(ref(db,"teachers"));
+
+if(!snap.exists()){
+container.innerHTML="<div class='empty'><i class='fa-regular fa-face-frown'></i><p>No teachers found</p></div>";
+return;
+}
+
+teachersData = [];
+
+snap.forEach(child=>{
+teachersData.push({
+id:child.key,
+...child.val()
+});
+});
+
+showStats(teachersData.length);
+renderTeachers(teachersData);
+
+}catch(error){
+console.error("Error loading teachers:",error);
+container.innerHTML="<div class='empty'><i class='fa-regular fa-circle-exclamation'></i><p>Error loading teachers</p></div>";
+}
+}
+
+function showStats(count){
+const statsHtml = `
+<div class="stats">
+<div class="stat-item">
+<div class="stat-value">${count}</div>
+<div class="stat-label">Total Teachers</div>
+</div>
+<div class="stat-item">
+<div class="stat-value">2026</div>
+<div class="stat-label">Session</div>
+</div>
+</div>
+`;
+container.innerHTML = statsHtml;
+}
+
+function renderTeachers(data){
+if(data.length===0){
+container.innerHTML += "<div class='empty'><i class='fa-regular fa-user-slash'></i><p>No matching teacher found</p></div>";
+return;
+}
+
+let teachersHtml = "";
+
+data.forEach(teacher=>{
+const photoUrl = teacher.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(teacher.name)}&background=0a2a66&color=fff&size=100&bold=true`;
+
+teachersHtml += `
+<div class="teacher-card">
+<div class="badge"><i class="fa-regular fa-circle-check"></i> Verified</div>
+
+<div class="photo-wrapper" id="photo-${teacher.id}">
+<img src="${photoUrl}" 
+onload="this.parentElement.classList.remove('loading')" 
+onerror="this.parentElement.classList.remove('loading');this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(teacher.name)}&background=0a2a66&color=fff&size=100&bold=true'"
+loading="lazy">
+</div>
+
+<div class="teacher-info">
+<div class="teacher-name">${teacher.name}</div>
+<div class="teacher-subject"><i class="fa-regular fa-bookmark"></i> ${teacher.subject || 'General'}</div>
+
+<div class="contact-btns">
+
+${teacher.mobile ? `
+<a href="tel:${teacher.mobile}" aria-label="Call ${teacher.name}">
+<button class="contact-btn call-btn" title="Call">
+<i class="fa-solid fa-phone"></i>
+</button>
+</a>
+` : ''}
+
+${teacher.email ? `
+<a href="mailto:${teacher.email}" aria-label="Email ${teacher.name}">
+<button class="contact-btn email-btn" title="Email">
+<i class="fa-solid fa-envelope"></i>
+</button>
+</a>
+` : ''}
+
+${teacher.mobile ? `
+<a href="https://wa.me/91${teacher.mobile}" target="_blank" aria-label="WhatsApp ${teacher.name}" rel="noopener noreferrer">
+<button class="contact-btn whatsapp-btn" title="WhatsApp">
+<i class="fa-brands fa-whatsapp"></i>
+</button>
+</a>
+` : ''}
+
+</div>
+</div>
+</div>
+`;
+});
+
+container.innerHTML += teachersHtml;
+
+// Add loading class to all photo wrappers
+document.querySelectorAll('.photo-wrapper').forEach(el=>{
+el.classList.add('loading');
+});
+}
+
+searchInput.addEventListener("input",()=>{
+const value = searchInput.value.toLowerCase().trim();
+
+if(value === ''){
+container.innerHTML = '';
+showStats(teachersData.length);
+renderTeachers(teachersData);
+return;
+}
+
+const filtered = teachersData.filter(t=>
+(t.name && t.name.toLowerCase().includes(value)) ||
+(t.subject && t.subject.toLowerCase().includes(value))
+);
+
+container.innerHTML = `<div class="stats"><div class="stat-item"><div class="stat-value">${filtered.length}</div><div class="stat-label">Results</div></div><div class="stat-item"><div class="stat-value">2026</div><div class="stat-label">Session</div></div></div>`;
+renderTeachers(filtered);
+});
+
+// Remove loading from already loaded images
+window.addEventListener('load',()=>{
+document.querySelectorAll('.photo-wrapper').forEach(el=>{
+const img = el.querySelector('img');
+if(img && img.complete){
+el.classList.remove('loading');
+}
+});
+});
+
+loadTeachers();
+</script>
+
+</body>
+</html>
