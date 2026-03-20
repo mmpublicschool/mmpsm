@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>M.M Public School | Student Profile</title>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    background: #f0f4fa;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    padding-bottom: 70px;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    width: 100%;
+}
+
+.menu-icon {
+    font-size: 20px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    flex-shrink: 0;
+    transition: 0.2s;
+}
+
+.menu-icon:hover {
+    background: rgba(255,255,255,0.25);
+    transform: rotate(90deg);
+}
+
+.school-box {
+    text-align: center;
+    flex: 1;
+}
+
+.school-top {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.school-bottom {
+    font-size: 11px;
+    opacity: 0.9;
+    margin-top: 2px;
+}
+
+.right-icons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.right-icons i {
+    font-size: 18px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: 0.2s;
+}
+
+.right-icons i:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.right-icons a {
+    color: white;
+    text-decoration: none;
+}
+
+.notification-icon {
+    position: relative;
+}
+
+.notif-count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ff4444;
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid white;
+}
+
+/* Delete icon same as others */
+.delete-icon {
+    color: white !important;
+}
+
+.delete-icon:hover {
+    background: rgba(255,255,255,0.25) !important;
+    color: white !important;
+}
+
+/* ===== SIDE MENU ===== */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -340px;
+    width: 300px;
+    height: 100vh;
+    background: white;
+    z-index: 2000;
+    transition: left 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 0 40px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.menu-head {
+    background: linear-gradient(145deg, #0a2a66, #1e4b8f, #0a2a66);
+    color: white;
+    padding: 35px 20px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    border-bottom: 4px solid #ffd700;
+}
+
+.menu-logo {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 4px solid #ffd700;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.menu-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.menu-user-name {
+    font-size: 20px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.menu-user-class {
+    font-size: 14px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-weight: 600;
+}
+
+.menu-items {
+    padding: 15px 0;
+    background: #f8faff;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 22px;
+    color: #2c3e50;
+    text-decoration: none;
+    border-bottom: 1px solid #eef2f6;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.menu-item:hover {
+    background: linear-gradient(90deg, #e8edff, transparent);
+    padding-left: 28px;
+    color: #0a2a66;
+}
+
+.menu-item i {
+    width: 24px;
+    font-size: 18px;
+    color: #0a2a66;
+}
+
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1999;
+    display: none;
+    backdrop-filter: blur(5px);
+}
+
+.menu-overlay.active {
+    display: block;
+}
+
+/* ===== NOTIFICATION POPUP ===== */
+.notif-popup {
+    position: fixed;
+    top: 70px;
+    right: 12px;
+    width: 300px;
+    max-height: 400px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    z-index: 1500;
+    display: none;
+    overflow: hidden;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notif-head {
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.notif-head button {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: 0.2s;
+}
+
+#notifList {
+    max-height: 330px;
+    overflow-y: auto;
+}
+
+.notif-item {
+    padding: 14px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+}
+
+.notif-item .time {
+    font-size: 10px;
+    color: #999;
+    margin-top: 6px;
+}
+
+.empty-msg {
+    padding: 30px 20px;
+    text-align: center;
+    color: #666;
+    font-size: 13px;
+}
+
+.bell-blink i {
+    animation: bellShake 1s infinite;
+}
+
+@keyframes bellShake {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(15deg); }
+    75% { transform: rotate(-15deg); }
+}
+
+/* ===== DELETE DIALOG ===== */
+.delete-dialog {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+    padding: 16px;
+}
+
+.delete-box {
+    background: white;
+    padding: 28px;
+    border-radius: 28px;
+    width: 90%;
+    max-width: 340px;
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.delete-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #fee2e2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 28px;
+    color: #dc3545;
+}
+
+.delete-title {
+    font-weight: 800;
+    font-size: 20px;
+    color: #0a2a66;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.delete-step {
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
+    background: #f8f9fa;
+    padding: 6px 12px;
+    border-radius: 40px;
+    display: inline-block;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.delete-select, .delete-textarea, .delete-input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #e9ecef;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    outline: none;
+    background: #f8f9fa;
+}
+
+.delete-select:focus, .delete-textarea:focus, .delete-input:focus {
+    border-color: #0a2a66;
+    background: white;
+}
+
+.delete-textarea {
+    min-height: 80px;
+    resize: none;
+}
+
+.delete-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.delete-cancel, .delete-ok {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.delete-cancel {
+    background: #f0f0f0;
+    color: #495057;
+}
+
+.delete-ok {
+    background: #dc3545;
+    color: white;
+}
+
+.delete-ok:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}
+
+/* ===== PROFILE HERO ===== */
+.hero {
+    padding: 28px 16px;
+    background: linear-gradient(135deg, #0a2a66, #1e4b8f);
+    color: white;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    margin-bottom: 10px;
+}
+
+.hero-box {
+    text-align: center;
+}
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    border: 4px solid white;
+    overflow: hidden;
+    background: white;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-image i {
+    font-size: 50px;
+    line-height: 100px;
+    color: #0a2a66;
+}
+
+.hero-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.hero-title i {
+    font-size: 16px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.hero-subtitle {
+    font-size: 13px;
+    background: rgba(255,255,255,0.15);
+    padding: 6px 16px;
+    border-radius: 40px;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.tap-hint {
+    font-size: 10px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 10px;
+}
+
+/* ===== ABOUT SECTION ===== */
+.about-section {
+    margin: 16px 16px 20px;
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    border: 1px solid rgba(10,42,102,0.08);
+}
+
+.about-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.about-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0a2a66;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.about-edit {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #f0f4fa;
+    color: #0a2a66;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.about-content {
+    color: #495057;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+    margin-top: 8px;
+    padding-left: 4px;
+}
+
+/* ===== CARDS ===== */
+.apps-section {
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.app-card {
+    background: white;
+    padding: 16px;
+    border-radius: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    cursor: pointer;
+    border: 1px solid rgba(10,42,102,0.08);
+    transition: 0.2s;
+    position: relative;
+}
+
+.app-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(10,42,102,0.1);
+    border-color: #0a2a66;
+}
+
+.card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #f0f4fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #0a2a66;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.card-value-main {
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 4px;
+    word-break: break-word;
+    padding-right: 40px;
+}
+
+.card-sub {
+    font-size: 12px;
+    color: #0a2a66;
+    background: #e8f0fe;
+    padding: 4px 10px;
+    border-radius: 30px;
+    display: inline-block;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.card-limit {
+    font-size: 11px;
+    color: #0a2a66;
+    background: #e8f0fe;
+    padding: 4px 10px;
+    border-radius: 30px;
+    display: inline-block;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.gmail-sub {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+    font-style: italic;
+}
+
+.card-actions {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.edit-icon, .view-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #f8f9fa;
+    color: #0a2a66;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.edit-icon:hover, .view-icon:hover {
+    background: #0a2a66;
+    color: white;
+}
+
+.edit-icon.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 10px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-top: 1px solid #f0f0f0;
+}
+
+.nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #999;
+    font-size: 11px;
+    padding: 6px;
+    gap: 4px;
+}
+
+.nav-item.active {
+    color: #0a2a66;
+}
+
+.nav-item i {
+    font-size: 18px;
+}
+
+/* ===== TOAST ===== */
+.toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #212529;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 6000;
+    display: none;
+    animation: toastIn 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+#deleteBtn {
+    transform: translateY(5px);
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="menu-icon" id="menuBtn">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+    <div class="school-box">
+        <div class="school-top">M. M PUBLIC SCHOOL</div>
+        <div class="school-bottom">MUNDESHWARI</div>
+    </div>
+    <div class="right-icons">
+        <div class="notification-icon" id="openNotif">
+            <i class="fa-regular fa-bell"></i>
+            <span class="notif-count" id="notifCount">0</span>
+        </div>
+        <i class="fa-solid fa-trash-can delete-icon" id="deleteBtn" title="Delete Account"></i>
+        <i class="fa-solid fa-arrow-right-from-bracket" id="exitBtn" title="Logout"></i>
+    </div>
+</header>
+
+<!-- SIDE MENU -->
+<div class="side-menu" id="sideMenu">
+    <div class="menu-head">
+        <div class="menu-logo">
+            <img id="menuStudentPhoto" src="logo.png" alt="Student" onerror="this.src='logo.png';">
+        </div>
+        <div class="menu-user-name" id="menuStudentName">Loading...</div>
+        <div class="menu-user-class" id="menuStudentClass">Loading...</div>
+    </div>
+    
+    <div class="menu-items">
+        <a href="index.html" class="menu-item"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+        <a href="notes.html" class="menu-item"><i class="fa-solid fa-book"></i> <span>Notes</span></a>
+        <a href="profile.html" class="menu-item"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
+    </div>
+</div>
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<!-- NOTIFICATION POPUP -->
+<div class="notif-popup" id="notifPopup">
+    <div class="notif-head">
+        <span><i class="fa-regular fa-bell"></i> Notifications</span>
+        <button id="clearNotif">Clear</button>
+    </div>
+    <div id="notifList"></div>
+</div>
+
+<!-- EXIT CONFIRM DIALOG -->
+<div class="delete-dialog" id="exitConfirmDialog">
+    <div class="delete-box">
+        <div class="delete-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+        <div class="delete-title">Logout</div>
+        <div class="delete-step">Are you sure you want to logout?</div>
+        <div class="delete-actions">
+            <button class="delete-cancel" id="cancelExit">Cancel</button>
+            <button class="delete-ok" id="confirmExit">Logout</button>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE ACCOUNT DIALOG - STEP 1: REASON SELECT -->
+<div class="delete-dialog" id="deleteStep1Dialog">
+    <div class="delete-box">
+        <div class="delete-icon"><i class="fa-solid fa-trash-can"></i></div>
+        <div class="delete-title">Delete Account</div>
+        <div class="delete-step">Step 1/3: Select Reason</div>
+        
+        <select id="deleteReasonSelect" class="delete-select">
+            <option value="">-- Select Reason --</option>
+            <option value="not_using">Not using account</option>
+            <option value="difficult">Too difficult to use</option>
+            <option value="privacy">Privacy concerns</option>
+            <option value="duplicate">Created duplicate account</option>
+            <option value="other">Other reason</option>
+        </select>
+        
+        <div class="delete-actions">
+            <button class="delete-cancel" id="cancelDeleteStep1">Cancel</button>
+            <button class="delete-ok" id="nextDeleteStep2">Next</button>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE ACCOUNT DIALOG - STEP 2: REASON DETAIL -->
+<div class="delete-dialog" id="deleteStep2Dialog">
+    <div class="delete-box">
+        <div class="delete-icon"><i class="fa-solid fa-pen"></i></div>
+        <div class="delete-title">Delete Account</div>
+        <div class="delete-step">Step 2/3: Tell us more (optional)</div>
+        
+        <textarea id="deleteReasonDetail" class="delete-textarea" placeholder="Please share your reason..."></textarea>
+        
+        <div class="delete-actions">
+            <button class="delete-cancel" id="cancelDeleteStep2">Cancel</button>
+            <button class="delete-ok" id="nextDeleteStep3">Next</button>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE ACCOUNT DIALOG - STEP 3: PASSWORD VERIFY -->
+<div class="delete-dialog" id="deleteStep3Dialog">
+    <div class="delete-box">
+        <div class="delete-icon"><i class="fa-solid fa-lock"></i></div>
+        <div class="delete-title">Delete Account</div>
+        <div class="delete-step">Step 3/3: Verify Password</div>
+        
+        <input type="password" id="deletePassword" class="delete-input" placeholder="Enter your password">
+        
+        <div class="delete-actions">
+            <button class="delete-cancel" id="cancelDeleteStep3">Cancel</button>
+            <button class="delete-ok" id="confirmDeleteAccount">Delete Forever</button>
+        </div>
+    </div>
+</div>
+
+<!-- DETAIL POPUP -->
+<div class="delete-dialog" id="detailPopup">
+    <div class="delete-box">
+        <div class="delete-icon" id="detailIcon"><i class="fa-solid fa-circle-info"></i></div>
+        <div class="delete-title" id="detailTitle">Information</div>
+        <div class="delete-step" id="detailContent"></div>
+        <div class="delete-actions">
+            <button class="delete-ok" onclick="document.getElementById('detailPopup').style.display='none'">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- VERIFY DIALOG -->
+<div class="delete-dialog" id="verifyDialog">
+    <div class="delete-box">
+        <div class="delete-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="delete-title">Verify School ID</div>
+        <div class="delete-step">Enter your School ID to continue</div>
+        <input type="text" id="verifyInput" class="delete-input" placeholder="School ID">
+        <div class="delete-actions">
+            <button class="delete-cancel" id="verifyCancel">Cancel</button>
+            <button class="delete-ok" id="verifySubmit">Verify</button>
+        </div>
+    </div>
+</div>
+
+<!-- VERIFY USERNAME DIALOG -->
+<div class="delete-dialog" id="verifyUsernameDialog">
+    <div class="delete-box">
+        <div class="delete-icon"><i class="fa-solid fa-key"></i></div>
+        <div class="delete-title">Change Password</div>
+        <div class="delete-step">Enter username and School ID</div>
+        <input type="text" id="verifyUsernameInput" class="delete-input" placeholder="Username">
+        <input type="text" id="verifySchoolIdInput" class="delete-input" placeholder="School ID">
+        <div class="delete-actions">
+            <button class="delete-cancel" id="verifyUsernameCancel">Cancel</button>
+            <button class="delete-ok" id="verifyUsernameSubmit">Verify</button>
+        </div>
+    </div>
+</div>
+
+<!-- CHANGE PASSWORD DIALOG -->
+<div class="delete-dialog" id="changePasswordDialog">
+    <div class="delete-box">
+        <div class="delete-icon"><i class="fa-solid fa-lock"></i></div>
+        <div class="delete-title">Change Password</div>
+        <div class="delete-step">Enter new password</div>
+        <input type="password" id="newPasswordInput" class="delete-input" placeholder="New password">
+        <input type="password" id="confirmPasswordInput" class="delete-input" placeholder="Confirm password">
+        <div class="delete-actions">
+            <button class="delete-cancel" id="cancelPassword">Cancel</button>
+            <button class="delete-ok" id="savePassword">Update</button>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT DIALOG -->
+<div class="delete-dialog" id="editDialog">
+    <div class="delete-box">
+        <div class="delete-icon"><i class="fa-solid fa-pen"></i></div>
+        <div class="delete-title" id="editTitle">Edit</div>
+        <div class="delete-step" id="editSubtitle">Make your changes</div>
+        <div style="background:#e8f0fe; padding:8px 12px; border-radius:40px; margin-bottom:16px; font-size:12px; color:#0a2a66; text-align:center;" id="editLimitInfo"></div>
+        <input type="text" id="editInput" class="delete-input" placeholder="Enter new value">
+        <div class="delete-actions">
+            <button class="delete-cancel" id="cancelEdit">Cancel</button>
+            <button class="delete-ok" id="saveEdit">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast">✅ Updated</div>
+
+<!-- PROFILE HERO -->
+<section class="hero">
+    <div class="hero-box">
+        <div class="profile-image" id="profileImageContainer">
+            <img id="profileImage" src="" alt="Profile" style="display: none;">
+            <i class="fa-solid fa-user" id="defaultProfileIcon"></i>
+        </div>
+        <div class="hero-title">
+            <span id="nameText">Lav Kumar</span>
+            <i class="fa-solid fa-pencil" id="editNameBtn"></i>
+        </div>
+        <div class="hero-subtitle" id="schoolIdText">MMPSM-2026-001</div>
+        <div class="tap-hint"><i class="fa-regular fa-hand-pointer"></i> Tap cards for more info</div>
+    </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section class="about-section">
+    <div class="about-header">
+        <div class="about-title"><i class="fa-regular fa-note-sticky"></i> About Me</div>
+        <div class="about-edit" id="editAboutBtn"><i class="fa-solid fa-pen"></i></div>
+    </div>
+    <div class="about-content" id="aboutText">Hello, I am a student at M.M Public School Mundeshwari.</div>
+</section>
+
+<!-- CARDS SECTION -->
+<section class="apps-section">
+    
+    <!-- Mobile -->
+    <div class="app-card" onclick="showDetail('mobile')">
+        <div class="card-icon"><i class="fa-solid fa-phone"></i></div>
+        <div class="card-content">
+            <span class="card-label">Mobile Number</span>
+            <div class="card-value-main" id="mobileText">9153531472</div>
+            <span class="card-limit" id="mobileLimit">3/3 left</span>
+        </div>
+        <div class="card-actions">
+            <div class="edit-icon" id="editMobileBtn" onclick="event.stopPropagation(); editField('mobile')"><i class="fa-solid fa-pen"></i></div>
+            <div class="view-icon"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+    </div>
+    
+    <!-- Email -->
+    <div class="app-card" onclick="showDetail('email')">
+        <div class="card-icon"><i class="fa-solid fa-envelope"></i></div>
+        <div class="card-content">
+            <span class="card-label">Email</span>
+            <div class="card-value-main" id="emailText">lavkushkumar912025@gmail.com</div>
+            <div class="gmail-sub">Gmail Account</div>
+            <span class="card-limit" id="emailLimit">5/5 left</span>
+        </div>
+        <div class="card-actions">
+            <div class="edit-icon" id="editEmailBtn" onclick="event.stopPropagation(); editField('email')"><i class="fa-solid fa-pen"></i></div>
+            <div class="view-icon"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+    </div>
+    
+    <!-- Username -->
+    <div class="app-card" onclick="showDetail('username')">
+        <div class="card-icon"><i class="fa-solid fa-user"></i></div>
+        <div class="card-content">
+            <span class="card-label">Username</span>
+            <div class="card-value-main" id="usernameText">lav123</div>
+            <span class="card-sub">School ID verify</span>
+        </div>
+        <div class="card-actions">
+            <div class="edit-icon" onclick="event.stopPropagation(); verifyAndEdit()"><i class="fa-solid fa-pen"></i></div>
+            <div class="view-icon"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+    </div>
+    
+    <!-- Password -->
+    <div class="app-card" onclick="showDetail('password')">
+        <div class="card-icon"><i class="fa-solid fa-lock"></i></div>
+        <div class="card-content">
+            <span class="card-label">Password</span>
+            <div class="card-value-main">••••••••</div>
+            <span class="card-sub">Username + School ID</span>
+        </div>
+        <div class="card-actions">
+            <div class="edit-icon" onclick="event.stopPropagation(); verifyUsernameAndSchoolId()"><i class="fa-solid fa-key"></i></div>
+            <div class="view-icon"><i class="fa-regular fa-eye" onclick="event.stopPropagation(); verifyForPasswordView()"></i></div>
+        </div>
+    </div>
+    
+    <!-- Aadhaar -->
+    <div class="app-card" onclick="showDetail('aadhaar')">
+        <div class="card-icon"><i class="fa-solid fa-id-card"></i></div>
+        <div class="card-content">
+            <span class="card-label">Aadhaar Number</span>
+            <div class="card-value-main" id="aadhaarText">XXXX-XXXX-1234</div>
+            <span class="card-sub">School ID verify</span>
+        </div>
+        <div class="card-actions">
+            <div class="view-icon"><i class="fa-regular fa-eye" onclick="event.stopPropagation(); verifyForAadhaar()"></i></div>
+        </div>
+    </div>
+    
+    <!-- Date of Birth -->
+    <div class="app-card" onclick="showDetail('dob')">
+        <div class="card-icon"><i class="fa-solid fa-calendar"></i></div>
+        <div class="card-content">
+            <span class="card-label">Date of Birth</span>
+            <div class="card-value-main" id="dobText">15-08-2010</div>
+            <span class="card-sub">Read only</span>
+        </div>
+        <div class="card-actions">
+            <div class="view-icon"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+    </div>
+    
+    <!-- Class -->
+    <div class="app-card" onclick="showDetail('class')">
+        <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div class="card-content">
+            <span class="card-label">Class</span>
+            <div class="card-value-main" id="classText">10th</div>
+            <span class="card-sub">Read only</span>
+        </div>
+        <div class="card-actions">
+            <div class="view-icon"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+    </div>
+    
+    <!-- Gender -->
+    <div class="app-card" onclick="showDetail('gender')">
+        <div class="card-icon"><i class="fa-solid fa-venus-mars"></i></div>
+        <div class="card-content">
+            <span class="card-label">Gender</span>
+            <div class="card-value-main" id="genderText">Male</div>
+            <span class="card-sub">Read only</span>
+        </div>
+        <div class="card-actions">
+            <div class="view-icon"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+    </div>
+    
+    <!-- Father's Name -->
+    <div class="app-card" onclick="showDetail('father')">
+        <div class="card-icon"><i class="fa-solid fa-user-tie"></i></div>
+        <div class="card-content">
+            <span class="card-label">Father's Name</span>
+            <div class="card-value-main" id="fatherText">Shyam Kumar</div>
+            <span class="card-sub">Read only</span>
+        </div>
+        <div class="card-actions">
+            <div class="view-icon"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+    </div>
+    
+    <!-- Mother's Name -->
+    <div class="app-card" onclick="showDetail('mother')">
+        <div class="card-icon"><i class="fa-solid fa-user"></i></div>
+        <div class="card-content">
+            <span class="card-label">Mother's Name</span>
+            <div class="card-value-main" id="motherText">Sunita Devi</div>
+            <span class="card-sub">Read only</span>
+        </div>
+        <div class="card-actions">
+            <div class="view-icon"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+    </div>
+    
+</section>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="notes.html" class="nav-item"><i class="fa-solid fa-book"></i><span>Notes</span></a>
+    <a href="profile.html" class="nav-item active"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+</nav>
+
+<!-- Cloudinary -->
+<script src="https://upload-widget.cloudinary.com/global/all.js"></script>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, get, onValue, remove, update, push, set } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+    databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+    projectId: "apni-duniya-b53d7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Cloudinary
+const CLOUD_NAME = 'dty6vadm9';
+const UPLOAD_PRESET = 'examform';
+
+let currentField = '';
+let schoolId = '';
+let studentData = {};
+
+// Toast
+function showToast(msg, icon = '✅') {
+    const toast = document.getElementById('toast');
+    toast.innerHTML = `${icon} ${msg}`;
+    toast.style.display = 'block';
+    setTimeout(() => toast.style.display = 'none', 2000);
+}
+
+// Time ago
+function timeAgo(ts) {
+    if (!ts) return 'Just now';
+    const diff = Math.floor((Date.now() - ts) / 60000);
+    if(diff < 1) return 'Just now';
+    if(diff < 60) return diff + ' min ago';
+    const hours = Math.floor(diff / 60);
+    if(hours < 24) return hours + ' hours ago';
+    return Math.floor(hours / 24) + ' days ago';
+}
+
+// Check login
+async function checkLogin() {
+    try {
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'student-login.html';
+            return false;
+        }
+        
+        const user = JSON.parse(currentUser);
+        if (!user.schoolId) {
+            window.location.href = 'student-login.html';
+            return false;
+        }
+        
+        schoolId = user.schoolId;
+        
+        const studentSnap = await get(ref(db, 'students/' + schoolId));
+        if (!studentSnap.exists()) {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'student-login.html';
+            return false;
+        }
+        
+        studentData = studentSnap.val();
+        loadProfile();
+        loadNotifications();
+        return true;
+        
+    } catch (error) {
+        console.error('Check error:', error);
+        window.location.href = 'student-login.html';
+        return false;
+    }
+}
+
+// Load profile
+function loadProfile() {
+    onValue(ref(db, 'students/' + schoolId), (snap) => {
+        const d = snap.val();
+        if(!d) return;
+        
+        studentData = d;
+        
+        document.getElementById('nameText').innerText = d.name || 'Lav Kumar';
+        document.getElementById('schoolIdText').innerText = schoolId;
+        
+        document.getElementById('menuStudentName').innerText = d.name || 'Student';
+        document.getElementById('menuStudentClass').innerText = (d.class || 'Class') + ' • Student';
+        
+        document.getElementById('mobileText').innerText = d.mobile || 'Not set';
+        document.getElementById('emailText').innerText = d.email || 'Not set';
+        document.getElementById('usernameText').innerText = d.username || 'Not set';
+        document.getElementById('dobText').innerText = d.dob || 'Not set';
+        document.getElementById('genderText').innerText = d.gender || 'Not set';
+        document.getElementById('classText').innerText = d.class || 'Not set';
+        document.getElementById('fatherText').innerText = d.fatherName || 'Not set';
+        document.getElementById('motherText').innerText = d.motherName || 'Not set';
+        
+        if (d.aadhaar) {
+            document.getElementById('aadhaarText').innerText = d.aadhaar.replace(/(\d{4})\d{4}(\d{4})/, '$1XXXX$2');
+        }
+        
+        document.getElementById('aboutText').innerHTML = d.about || 'Hello, I am a student at M.M Public School Mundeshwari.';
+        
+        if (d.photoURL) {
+            document.getElementById('profileImage').src = d.photoURL;
+            document.getElementById('profileImage').style.display = 'block';
+            document.getElementById('defaultProfileIcon').style.display = 'none';
+            document.getElementById('menuStudentPhoto').src = d.photoURL;
+        }
+        
+        updateLimits(d);
+    });
+}
+
+// Update limits
+function updateLimits(d) {
+    const mobileLeft = Math.max(0, 3 - (d.mobileEdits || 0));
+    document.getElementById('mobileLimit').innerHTML = mobileLeft + '/3 left';
+    document.getElementById('editMobileBtn').classList.toggle('disabled', mobileLeft === 0);
+    
+    const emailLeft = Math.max(0, 5 - (d.emailEdits || 0));
+    document.getElementById('emailLimit').innerHTML = emailLeft + '/5 left';
+    document.getElementById('editEmailBtn').classList.toggle('disabled', emailLeft === 0);
+}
+
+// Load notifications - ONLY for this user
+function loadNotifications() {
+    if (!schoolId) return;
+    
+    onValue(ref(db, `notifications/${schoolId}`), (snap) => {
+        const list = document.getElementById('notifList');
+        const count = document.getElementById('notifCount');
+        list.innerHTML = '';
+        let arr = [];
+        let unread = 0;
+
+        snap.forEach((c) => {
+            const n = c.val();
+            arr.push(n);
+            if (!n.read) unread++;
+        });
+
+        if (arr.length === 0) {
+            list.innerHTML = '<div class="empty-msg"><i class="fa-regular fa-bell-slash"></i> No notifications</div>';
+            count.innerText = '0';
+            return;
+        }
+
+        arr.sort((a, b) => b.time - a.time);
+        
+        arr.slice(0, 8).forEach((n) => {
+            list.innerHTML += `
+                <div class="notif-item">
+                    <div>${n.text || 'Notification'}</div>
+                    <div class="time"><i class="fa-regular fa-clock"></i> ${timeAgo(n.time)}</div>
+                </div>`;
+        });
+
+        count.innerText = unread > 9 ? '9+' : unread;
+        if (unread > 0) document.getElementById('openNotif').classList.add('bell-blink');
+    });
+}
+
+// Show detail
+window.showDetail = (field) => {
+    const popup = document.getElementById('detailPopup');
+    const title = document.getElementById('detailTitle');
+    const content = document.getElementById('detailContent');
+    const icon = document.getElementById('detailIcon');
+    
+    let val = studentData[field] || 'Not set';
+    if (field === 'aadhaar' && studentData.aadhaar) {
+        val = studentData.aadhaar;
+    }
+    if (field === 'password') val = '••••••••';
+    
+    title.innerText = field.toUpperCase().replace('_', ' ');
+    content.innerHTML = val;
+    popup.style.display = 'flex';
+};
+
+// Edit field
+window.editField = (field) => {
+    currentField = field;
+    const dialog = document.getElementById('editDialog');
+    document.getElementById('editTitle').innerText = 'Edit ' + field.charAt(0).toUpperCase() + field.slice(1);
+    
+    let remaining = 0;
+    let limitText = '';
+    
+    if (field === 'mobile') {
+        remaining = Math.max(0, 3 - (studentData.mobileEdits || 0));
+        limitText = `You have ${remaining} out of 3 changes left`;
+    } else if (field === 'email') {
+        remaining = Math.max(0, 5 - (studentData.emailEdits || 0));
+        limitText = `You have ${remaining} out of 5 changes left`;
+    } else if (field === 'name') {
+        remaining = Math.max(0, 10 - (studentData.nameEdits || 0));
+        limitText = `You have ${remaining} out of 10 changes left`;
+    } else {
+        limitText = 'No limits';
+    }
+    
+    document.getElementById('editLimitInfo').innerHTML = limitText;
+    document.getElementById('editInput').value = studentData[field] || '';
+    dialog.style.display = 'flex';
+};
+
+// Save edit
+document.getElementById('saveEdit').onclick = async () => {
+    const newVal = document.getElementById('editInput').value.trim();
+    if (!newVal) {
+        showToast('Cannot be empty', '❌');
+        return;
+    }
+    
+    let updateData = {};
+    updateData[currentField] = newVal;
+    
+    if (currentField === 'mobile') {
+        if (!/^\d{10}$/.test(newVal)) {
+            showToast('Mobile must be 10 digits', '❌');
+            return;
+        }
+        if ((studentData.mobileEdits || 0) >= 3) {
+            showToast('Maximum mobile changes reached', '❌');
+            return;
+        }
+        updateData.mobileEdits = (studentData.mobileEdits || 0) + 1;
+    }
+    if (currentField === 'email') {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newVal)) {
+            showToast('Invalid email', '❌');
+            return;
+        }
+        if ((studentData.emailEdits || 0) >= 5) {
+            showToast('Maximum email changes reached', '❌');
+            return;
+        }
+        updateData.emailEdits = (studentData.emailEdits || 0) + 1;
+    }
+    if (currentField === 'name') {
+        if ((studentData.nameEdits || 0) >= 10) {
+            showToast('Maximum name changes reached', '❌');
+            return;
+        }
+        updateData.nameEdits = (studentData.nameEdits || 0) + 1;
+    }
+    if (currentField === 'about') {
+        // No limits for about
+    }
+    
+    await update(ref(db, 'students/' + schoolId), updateData);
+    
+    // Add notification
+    const notifRef = ref(db, `notifications/${schoolId}`);
+    const newNotif = push(notifRef);
+    await set(newNotif, {
+        text: currentField.charAt(0).toUpperCase() + currentField.slice(1) + ' updated',
+        time: Date.now(),
+        read: false
+    });
+    
+    document.getElementById('editDialog').style.display = 'none';
+    showToast('Updated successfully', '✅');
+};
+
+// Menu
+document.getElementById('menuBtn').onclick = () => {
+    document.getElementById('sideMenu').classList.add('active');
+    document.getElementById('menuOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+};
+
+document.getElementById('menuOverlay').onclick = () => {
+    document.getElementById('sideMenu').classList.remove('active');
+    document.getElementById('menuOverlay').classList.remove('active');
+    document.body.style.overflow = 'auto';
+};
+
+// Notifications
+const notifPopup = document.getElementById('notifPopup');
+document.getElementById('openNotif').onclick = (e) => {
+    e.stopPropagation();
+    notifPopup.style.display = 'block';
+    
+    // Mark all as read
+    const notifRef = ref(db, `notifications/${schoolId}`);
+    onValue(notifRef, (snap) => {
+        snap.forEach((child) => {
+            update(ref(db, `notifications/${schoolId}/${child.key}`), { read: true });
+        });
+    }, { onlyOnce: true });
+};
+
+document.addEventListener('click', (e) => {
+    if (!notifPopup.contains(e.target) && !document.getElementById('openNotif').contains(e.target)) {
+        notifPopup.style.display = 'none';
+    }
+});
+
+// Clear notifications
+document.getElementById('clearNotif').onclick = () => {
+    document.getElementById('clearConfirmDialog').style.display = 'flex';
+};
+
+// Exit
+document.getElementById('exitBtn').onclick = () => {
+    document.getElementById('exitConfirmDialog').style.display = 'flex';
+};
+
+document.getElementById('confirmExit').onclick = () => {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'student-login.html';
+};
+
+document.getElementById('cancelExit').onclick = () => {
+    document.getElementById('exitConfirmDialog').style.display = 'none';
+};
+
+// DELETE ACCOUNT - 3 STEP PROCESS
+let deleteReason = '';
+let deleteDetail = '';
+
+// Step 1
+document.getElementById('deleteBtn').onclick = () => {
+    document.getElementById('deleteStep1Dialog').style.display = 'flex';
+};
+
+document.getElementById('cancelDeleteStep1').onclick = () => {
+    document.getElementById('deleteStep1Dialog').style.display = 'none';
+};
+
+document.getElementById('nextDeleteStep2').onclick = () => {
+    const reason = document.getElementById('deleteReasonSelect').value;
+    if (!reason) {
+        alert('Please select a reason');
+        return;
+    }
+    deleteReason = reason;
+    document.getElementById('deleteStep1Dialog').style.display = 'none';
+    document.getElementById('deleteStep2Dialog').style.display = 'flex';
+};
+
+// Step 2
+document.getElementById('cancelDeleteStep2').onclick = () => {
+    document.getElementById('deleteStep2Dialog').style.display = 'none';
+    deleteReason = '';
+    deleteDetail = '';
+};
+
+document.getElementById('nextDeleteStep3').onclick = () => {
+    deleteDetail = document.getElementById('deleteReasonDetail').value;
+    document.getElementById('deleteStep2Dialog').style.display = 'none';
+    document.getElementById('deleteStep3Dialog').style.display = 'flex';
+};
+
+// Step 3
+document.getElementById('cancelDeleteStep3').onclick = () => {
+    document.getElementById('deleteStep3Dialog').style.display = 'none';
+    deleteReason = '';
+    deleteDetail = '';
+    document.getElementById('deletePassword').value = '';
+};
+
+document.getElementById('confirmDeleteAccount').onclick = async () => {
+    const password = document.getElementById('deletePassword').value;
+    
+    if (!password) {
+        alert('Please enter your password');
+        return;
+    }
+    
+    if (password !== studentData.password) {
+        alert('Incorrect password');
+        return;
+    }
+    
+    // Save deletion reason
+    await set(ref(db, `deleted_accounts/${schoolId}`), {
+        reason: deleteReason,
+        detail: deleteDetail,
+        deletedAt: Date.now(),
+        studentData: {
+            name: studentData.name,
+            mobile: studentData.mobile,
+            email: studentData.email
+        }
+    });
+    
+    // Delete account
+    await remove(ref(db, 'students/' + schoolId));
+    await remove(ref(db, `notifications/${schoolId}`));
+    
+    localStorage.removeItem('currentUser');
+    showToast('Account deleted', '👋');
+    
+    setTimeout(() => {
+        window.location.href = 'student-login.html';
+    }, 1500);
+};
+
+// Edit buttons
+document.getElementById('editNameBtn').onclick = () => editField('name');
+document.getElementById('editAboutBtn').onclick = () => editField('about');
+document.getElementById('editMobileBtn').onclick = (e) => {
+    e.stopPropagation();
+    editField('mobile');
+};
+document.getElementById('editEmailBtn').onclick = (e) => {
+    e.stopPropagation();
+    editField('email');
+};
+
+// Verify functions
+window.verifyAndEdit = () => {
+    document.getElementById('verifyDialog').style.display = 'flex';
+    document.getElementById('verifySubmit').onclick = async () => {
+        const id = document.getElementById('verifyInput').value.trim();
+        if (id === schoolId) {
+            document.getElementById('verifyDialog').style.display = 'none';
+            document.getElementById('verifyInput').value = '';
+            editField('username');
+        } else {
+            alert('Incorrect School ID');
+        }
+    };
+};
+
+window.verifyForAadhaar = () => {
+    document.getElementById('verifyDialog').style.display = 'flex';
+    document.getElementById('verifySubmit').onclick = async () => {
+        const id = document.getElementById('verifyInput').value.trim();
+        if (id === schoolId) {
+            document.getElementById('verifyDialog').style.display = 'none';
+            document.getElementById('verifyInput').value = '';
+            
+            const detailPopup = document.getElementById('detailPopup');
+            document.getElementById('detailIcon').innerHTML = '<i class="fa-solid fa-id-card"></i>';
+            document.getElementById('detailTitle').innerText = 'AADHAAR NUMBER';
+            document.getElementById('detailContent').innerHTML = studentData.aadhaar || 'Not provided';
+            detailPopup.style.display = 'flex';
+        } else {
+            alert('Incorrect School ID');
+        }
+    };
+};
+
+window.verifyForPasswordView = () => {
+    document.getElementById('verifyDialog').style.display = 'flex';
+    document.getElementById('verifySubmit').onclick = async () => {
+        const id = document.getElementById('verifyInput').value.trim();
+        if (id === schoolId) {
+            document.getElementById('verifyDialog').style.display = 'none';
+            document.getElementById('verifyInput').value = '';
+            
+            const detailPopup = document.getElementById('detailPopup');
+            document.getElementById('detailIcon').innerHTML = '<i class="fa-solid fa-lock"></i>';
+            document.getElementById('detailTitle').innerText = 'PASSWORD';
+            document.getElementById('detailContent').innerHTML = studentData.password || 'Not set';
+            detailPopup.style.display = 'flex';
+        } else {
+            alert('Incorrect School ID');
+        }
+    };
+};
+
+window.verifyUsernameAndSchoolId = () => {
+    document.getElementById('verifyUsernameDialog').style.display = 'flex';
+    
+    document.getElementById('verifyUsernameSubmit').onclick = async () => {
+        const username = document.getElementById('verifyUsernameInput').value.trim();
+        const id = document.getElementById('verifySchoolIdInput').value.trim();
+        
+        if (id === schoolId && username === studentData.username) {
+            document.getElementById('verifyUsernameDialog').style.display = 'none';
+            document.getElementById('verifyUsernameInput').value = '';
+            document.getElementById('verifySchoolIdInput').value = '';
+            document.getElementById('changePasswordDialog').style.display = 'flex';
+        } else {
+            alert('Incorrect username or School ID');
+        }
+    };
+};
+
+// Save password
+document.getElementById('savePassword').onclick = async () => {
+    const newPass = document.getElementById('newPasswordInput').value.trim();
+    const confirmPass = document.getElementById('confirmPasswordInput').value.trim();
+    
+    if (!newPass || newPass.length < 6) {
+        alert('Password must be at least 6 characters');
+        return;
+    }
+    if (newPass !== confirmPass) {
+        alert('Passwords do not match');
+        return;
+    }
+    
+    await update(ref(db, 'students/' + schoolId), { password: newPass });
+    
+    // Add notification
+    const notifRef = ref(db, `notifications/${schoolId}`);
+    const newNotif = push(notifRef);
+    await set(newNotif, {
+        text: 'Password changed',
+        time: Date.now(),
+        read: false
+    });
+    
+    document.getElementById('changePasswordDialog').style.display = 'none';
+    document.getElementById('newPasswordInput').value = '';
+    document.getElementById('confirmPasswordInput').value = '';
+    showToast('Password updated', '✅');
+};
+
+// Cancel buttons
+document.getElementById('cancelEdit').onclick = () => {
+    document.getElementById('editDialog').style.display = 'none';
+};
+
+document.getElementById('cancelPassword').onclick = () => {
+    document.getElementById('changePasswordDialog').style.display = 'none';
+    document.getElementById('newPasswordInput').value = '';
+    document.getElementById('confirmPasswordInput').value = '';
+};
+
+document.getElementById('verifyCancel').onclick = () => {
+    document.getElementById('verifyDialog').style.display = 'none';
+    document.getElementById('verifyInput').value = '';
+};
+
+document.getElementById('verifyUsernameCancel').onclick = () => {
+    document.getElementById('verifyUsernameDialog').style.display = 'none';
+    document.getElementById('verifyUsernameInput').value = '';
+    document.getElementById('verifySchoolIdInput').value = '';
+};
+
+// Close dialogs on outside click
+document.getElementById('exitConfirmDialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('exitConfirmDialog')) {
+        document.getElementById('exitConfirmDialog').style.display = 'none';
+    }
+});
+
+document.getElementById('deleteStep1Dialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('deleteStep1Dialog')) {
+        document.getElementById('deleteStep1Dialog').style.display = 'none';
+    }
+});
+
+document.getElementById('deleteStep2Dialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('deleteStep2Dialog')) {
+        document.getElementById('deleteStep2Dialog').style.display = 'none';
+    }
+});
+
+document.getElementById('deleteStep3Dialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('deleteStep3Dialog')) {
+        document.getElementById('deleteStep3Dialog').style.display = 'none';
+    }
+});
+
+document.getElementById('detailPopup').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('detailPopup')) {
+        document.getElementById('detailPopup').style.display = 'none';
+    }
+});
+
+document.getElementById('editDialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('editDialog')) {
+        document.getElementById('editDialog').style.display = 'none';
+    }
+});
+
+document.getElementById('verifyDialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('verifyDialog')) {
+        document.getElementById('verifyDialog').style.display = 'none';
+        document.getElementById('verifyInput').value = '';
+    }
+});
+
+document.getElementById('verifyUsernameDialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('verifyUsernameDialog')) {
+        document.getElementById('verifyUsernameDialog').style.display = 'none';
+        document.getElementById('verifyUsernameInput').value = '';
+        document.getElementById('verifySchoolIdInput').value = '';
+    }
+});
+
+document.getElementById('changePasswordDialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('changePasswordDialog')) {
+        document.getElementById('changePasswordDialog').style.display = 'none';
+        document.getElementById('newPasswordInput').value = '';
+        document.getElementById('confirmPasswordInput').value = '';
+    }
+});
+
+// Clear notification dialog
+const clearConfirmDialog = document.createElement('div');
+clearConfirmDialog.className = 'delete-dialog';
+clearConfirmDialog.id = 'clearConfirmDialog';
+clearConfirmDialog.innerHTML = `
+    <div class="delete-box">
+        <div class="delete-icon"><i class="fa-solid fa-bell"></i></div>
+        <div class="delete-title">Clear Notifications</div>
+        <div class="delete-step">All notifications will be permanently removed.</div>
+        <div class="delete-actions">
+            <button class="delete-cancel" id="cancelClearNotif">Cancel</button>
+            <button class="delete-ok" id="confirmClearNotif">Clear</button>
+        </div>
+    </div>
+`;
+document.body.appendChild(clearConfirmDialog);
+
+document.getElementById('clearNotif').onclick = () => {
+    document.getElementById('clearConfirmDialog').style.display = 'flex';
+};
+
+document.getElementById('confirmClearNotif').onclick = async () => {
+    await set(ref(db, `notifications/${schoolId}`), null);
+    document.getElementById('clearConfirmDialog').style.display = 'none';
+    notifPopup.style.display = 'none';
+    showToast('Notifications cleared', '🗑️');
+};
+
+document.getElementById('cancelClearNotif').onclick = () => {
+    document.getElementById('clearConfirmDialog').style.display = 'none';
+};
+
+document.getElementById('clearConfirmDialog').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('clearConfirmDialog')) {
+        document.getElementById('clearConfirmDialog').style.display = 'none';
+    }
+});
+
+// Photo upload
+document.getElementById('profileImageContainer').onclick = () => {
+    if ((studentData.photoEdits || 0) >= 50) {
+        alert('Maximum photo changes (50) reached');
+        return;
+    }
+    
+    const widget = cloudinary.createUploadWidget({
+        cloudName: CLOUD_NAME,
+        uploadPreset: UPLOAD_PRESET,
+        sources: ['local', 'camera'],
+        multiple: false,
+        maxFileSize: 2000000,
+        cropping: true,
+        croppingAspectRatio: 1,
+        croppingShowDimensions: true,
+        styles: {
+            palette: {
+                window: "#FFFFFF",
+                windowBorder: "#0a2a66",
+                tabIcon: "#0a2a66",
+                menuIcons: "#0a2a66",
+                textDark: "#000000",
+                textLight: "#FFFFFF",
+                link: "#0a2a66",
+                action: "#0a2a66",
+                inactiveTabIcon: "#8E9FBF",
+                error: "#F44235",
+                inProgress: "#0a2a66",
+                complete: "#20B832",
+                sourceBg: "#F4F6F9"
+            }
+        }
+    }, async (error, result) => {
+        if (!error && result && result.event === "success") {
+            const imageUrl = result.info.secure_url;
+            
+            await update(ref(db, 'students/' + schoolId), {
+                photoURL: imageUrl,
+                photoEdits: (studentData.photoEdits || 0) + 1
+            });
+            
+            // Add notification
+            const notifRef = ref(db, `notifications/${schoolId}`);
+            const newNotif = push(notifRef);
+            await set(newNotif, {
+                text: 'Profile photo updated',
+                time: Date.now(),
+                read: false
+            });
+            
+            showToast('Photo updated', '✅');
+        }
+    });
+    
+    widget.open();
+};
+
+// Start
+checkLogin();
+</script>
+</body>
+</html>
