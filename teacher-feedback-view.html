@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MMPS · Teacher Feedback Hub</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+        background: linear-gradient(145deg, #f0f5fe 0%, #eef2fa 100%);
+        min-height: 100vh;
+        padding: 24px 18px;
+    }
+
+    .main-wrapper {
+        max-width: 520px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    /* ----- modern header ----- */
+    .header {
+        margin-bottom: 28px;
+        text-align: left;
+    }
+    .header h1 {
+        font-size: 1.85rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #0a2a44, #1f4e7a);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        letter-spacing: -0.4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .header h1 i {
+        background: none;
+        -webkit-background-clip: unset;
+        background-clip: unset;
+        color: #1f5e9e;
+        font-size: 1.7rem;
+    }
+    .badge-school {
+        background: rgba(31, 94, 158, 0.12);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: 40px;
+        font-size: 0.75rem;
+        color: #1a4972;
+        margin-top: 10px;
+        backdrop-filter: blur(2px);
+        width: fit-content;
+        font-weight: 500;
+    }
+
+    /* ===== UNIQUE LOADER (no spin, elegant pulse + dancing bars) ===== */
+    .loading-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2100;
+        transition: all 0.2s ease;
+    }
+    .loading-overlay.active {
+        display: flex;
+    }
+    .unique-loader-box {
+        background: #ffffffdd;
+        backdrop-filter: blur(12px);
+        padding: 32px 36px;
+        border-radius: 56px;
+        text-align: center;
+        box-shadow: 0 25px 45px rgba(0, 20, 40, 0.15), 0 0 0 1px rgba(255,255,240,0.3);
+        border: 1px solid rgba(255,255,245,0.7);
+        transition: all 0.2s;
+    }
+    .charming-bars {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 20px;
+        height: 50px;
+    }
+    .charming-bars span {
+        width: 10px;
+        height: 28px;
+        background: #1f5e9e;
+        border-radius: 20px;
+        display: inline-block;
+        animation: elegantRise 1.2s infinite ease-in-out;
+        opacity: 0.7;
+    }
+    .charming-bars span:nth-child(1) { animation-delay: 0s; background: #2c6eae; height: 22px; }
+    .charming-bars span:nth-child(2) { animation-delay: 0.15s; background: #1f5e9e; height: 36px; }
+    .charming-bars span:nth-child(3) { animation-delay: 0.3s; background: #3b7eb8; height: 28px; }
+    .charming-bars span:nth-child(4) { animation-delay: 0.45s; background: #0f4c7a; height: 42px; }
+    .charming-bars span:nth-child(5) { animation-delay: 0.6s; background: #558fc7; height: 24px; }
+    
+    @keyframes elegantRise {
+        0% { transform: scaleY(0.6); opacity: 0.5; }
+        50% { transform: scaleY(1.2); opacity: 1; background: #3a7bb5; }
+        100% { transform: scaleY(0.6); opacity: 0.5; }
+    }
+    .unique-loader-box p {
+        font-weight: 560;
+        color: #0b2e48;
+        font-size: 0.9rem;
+        letter-spacing: 0.3px;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    .unique-loader-box p i {
+        font-size: 0.85rem;
+        color: #2a6b9e;
+    }
+
+    /* teacher scroll */
+    .section-label {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+    .section-label span {
+        font-weight: 600;
+        color: #113355;
+        font-size: 0.85rem;
+        background: #eef2fc;
+        padding: 5px 12px;
+        border-radius: 30px;
+    }
+    .scroll-hint {
+        font-size: 0.65rem;
+        color: #587a9c;
+        text-align: right;
+        margin-bottom: 6px;
+        display: flex;
+        gap: 6px;
+        justify-content: flex-end;
+    }
+    .teacher-scroll {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 6px 2px 20px;
+        margin-bottom: 20px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+    .teacher-scroll::-webkit-scrollbar {
+        height: 3px;
+        background: #dce5f0;
+        border-radius: 10px;
+    }
+    .teacher-scroll::-webkit-scrollbar-thumb {
+        background: #9cb4d0;
+        border-radius: 10px;
+    }
+    .teacher-card {
+        min-width: 106px;
+        background: white;
+        padding: 14px 6px 10px;
+        border-radius: 32px;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0,0,0,0.03);
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        border: 1px solid #e5edf6;
+    }
+    .teacher-card.active {
+        border: 2px solid #1f5e9e;
+        background: #f9fcff;
+        transform: translateY(-4px);
+        box-shadow: 0 15px 25px -12px rgba(26, 73, 116, 0.2);
+    }
+    .teacher-card img {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 8px;
+        border: 3px solid white;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+        background: #eef3fc;
+    }
+    .teacher-card .name {
+        font-weight: 700;
+        font-size: 0.78rem;
+        color: #1a3a58;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 2px;
+    }
+    .teacher-card .avg {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #e6a017;
+        margin-top: 4px;
+    }
+
+    /* stats modern card */
+    .stats-card {
+        background: linear-gradient(115deg, #0f2f48 0%, #173e5c 100%);
+        border-radius: 32px;
+        padding: 18px 24px;
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 12px 20px -8px rgba(0,0,0,0.2);
+    }
+    .stat-item {
+        text-align: center;
+        flex: 1;
+    }
+    .stat-value {
+        font-size: 1.7rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: white;
+        margin-bottom: 4px;
+    }
+    .stat-label {
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        font-weight: 500;
+        opacity: 0.75;
+        color: #cde3f5;
+    }
+
+    /* feedback cards */
+    .feedback-card {
+        background: white;
+        border-radius: 28px;
+        padding: 20px;
+        margin-bottom: 18px;
+        transition: all 0.2s;
+        border: 1px solid #eef3fc;
+        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.02);
+    }
+    .student-row {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    .student-row img {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        background: #edf3fa;
+    }
+    .student-info {
+        flex: 1;
+    }
+    .student-name {
+        font-weight: 800;
+        font-size: 1rem;
+        color: #102b41;
+    }
+    .rating-stars {
+        color: #f4b942;
+        font-size: 1rem;
+        margin: 10px 0 8px;
+        letter-spacing: 2px;
+    }
+    .feedback-text {
+        background: #f7fafd;
+        padding: 12px 16px;
+        border-radius: 22px;
+        font-size: 0.85rem;
+        line-height: 1.45;
+        color: #1f405f;
+        margin: 10px 0 8px;
+        border-left: 3px solid #cbddee;
+    }
+    .meta-info {
+        font-size: 0.68rem;
+        color: #6f8daa;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 8px;
+    }
+
+    /* empty state refined */
+    .empty-state {
+        text-align: center;
+        background: #ffffffcc;
+        backdrop-filter: blur(4px);
+        border-radius: 48px;
+        padding: 48px 24px;
+        margin-top: 16px;
+        border: 1px solid #e3edf6;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+    }
+    .empty-state i {
+        font-size: 3.2rem;
+        color: #8dabc9;
+        opacity: 0.7;
+        margin-bottom: 18px;
+        background: #ecf3fa;
+        padding: 16px;
+        border-radius: 60px;
+    }
+    .empty-state p {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #2a577b;
+    }
+    .empty-state small {
+        display: block;
+        font-size: 0.7rem;
+        margin-top: 8px;
+        color: #7d99b5;
+    }
+
+    /* footer note */
+    .footnote {
+        margin-top: 24px;
+        text-align: center;
+        font-size: 0.7rem;
+        color: #89a2bd;
+    }
+</style>
+</head>
+<body>
+
+<!-- UNIQUE LOADER OVERLAY - NO SPINNING CIRCLE, JUST ELEGANT BARS + SOFT PULSE -->
+<div class="loading-overlay" id="pageLoader">
+    <div class="unique-loader-box">
+        <div class="charming-bars">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <p><i class="fa-solid fa-message"></i> Gathering feedback records</p>
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <div class="header">
+        <h1><i class="fa-solid fa-pen-to-square"></i> Feedback Hub</h1>
+        <div class="badge-school">
+            <i class="fa-solid fa-building-columns"></i> M.M Public School · Mundeshwari
+            <i class="fa-solid fa-star" style="font-size: 10px;"></i>
+        </div>
+    </div>
+
+    <!-- stats panel -->
+    <div id="statsCard" class="stats-card" style="display: none;">
+        <div class="stat-item">
+            <div class="stat-value" id="totalFeedbacks">0</div>
+            <div class="stat-label">feedbacks</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="avgRating">0.0</div>
+            <div class="stat-label">★ avg rating</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="totalTeachers">0</div>
+            <div class="stat-label">educators</div>
+        </div>
+    </div>
+
+    <!-- teacher selector -->
+    <div class="section-label">
+        <span><i class="fa-solid fa-chalkboard-user"></i> Our Teachers</span>
+    </div>
+    <div class="scroll-hint">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i> auto slide · tap any
+    </div>
+    <div class="teacher-scroll" id="teacherScroll"></div>
+
+    <!-- feedbacks container -->
+    <div id="feedbackContainer"></div>
+    <div class="footnote">
+        <i class="fa-solid fa-heart"></i> genuine voices from students
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAHAQjn4sTuR9FiGF3ljRrFEMZQjsx-SHg",
+        databaseURL: "https://apni-duniya-b53d7-default-rtdb.firebaseio.com",
+        projectId: "apni-duniya-b53d7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const teacherScrollDiv = document.getElementById("teacherScroll");
+    const feedbackContainer = document.getElementById("feedbackContainer");
+    const pageLoader = document.getElementById("pageLoader");
+    const statsCard = document.getElementById("statsCard");
+    const totalFeedbacksEl = document.getElementById("totalFeedbacks");
+    const avgRatingEl = document.getElementById("avgRating");
+    const totalTeachersEl = document.getElementById("totalTeachers");
+
+    let teachers = [];
+    let allFeedbacksMap = {};   // { teacherId: [feedbackObjects] }
+    let autoScrollTimer = null;
+
+    // ----- LOADER CONTROL -----
+    function setLoader(active) {
+        if (active) {
+            pageLoader.classList.add("active");
+        } else {
+            pageLoader.classList.remove("active");
+        }
+    }
+
+    // ----- FETCH ALL DATA FROM FIREBASE (teachers + ratings) -----
+    async function fetchAllData() {
+        setLoader(true);
+        try {
+            // 1) teachers node
+            const teachersSnap = await get(ref(db, "teachers"));
+            teachers = [];
+            if (teachersSnap.exists()) {
+                teachersSnap.forEach(child => {
+                    teachers.push({
+                        id: child.key,
+                        name: child.val().name || "Teacher",
+                        photoURL: child.val().photoURL || null,
+                        ...child.val()
+                    });
+                });
+            } else {
+                teachers = [];
+            }
+
+            // 2) teacherRatings node
+            const ratingsSnap = await get(ref(db, "teacherRatings"));
+            allFeedbacksMap = {};
+            let runningTotalFeedbacks = 0;
+            let ratingSum = 0;
+
+            if (ratingsSnap.exists()) {
+                ratingsSnap.forEach(teacherRatingNode => {
+                    const teacherId = teacherRatingNode.key;
+                    allFeedbacksMap[teacherId] = [];
+                    teacherRatingNode.forEach(singleFeedback => {
+                        const fbData = singleFeedback.val();
+                        // ensure rating field numeric fallback
+                        const ratingVal = typeof fbData.rating === 'number' ? fbData.rating : parseInt(fbData.rating) || 0;
+                        const feedbackObj = {
+                            id: singleFeedback.key,
+                            rating: ratingVal,
+                            comment: fbData.comment || "",
+                            date: fbData.date || new Date().toISOString(),
+                            studentName: fbData.studentName || "Anonymous Student",
+                            studentPhoto: fbData.studentPhoto || null,
+                            teacherId: teacherId
+                        };
+                        allFeedbacksMap[teacherId].push(feedbackObj);
+                        runningTotalFeedbacks++;
+                        ratingSum += ratingVal;
+                    });
+                });
+            }
+
+            // update stats panel
+            totalTeachersEl.innerText = teachers.length;
+            totalFeedbacksEl.innerText = runningTotalFeedbacks;
+            const avgOverall = runningTotalFeedbacks > 0 ? (ratingSum / runningTotalFeedbacks).toFixed(1) : "0.0";
+            avgRatingEl.innerText = avgOverall;
+            
+            if (teachers.length > 0) {
+                statsCard.style.display = "flex";
+            } else {
+                statsCard.style.display = "none";
+            }
+
+            renderTeacherScrollComponent();
+
+        } catch (err) {
+            console.error("Firebase load error:", err);
+            feedbackContainer.innerHTML = `<div class="empty-state"><i class="fa-solid fa-circle-xmark"></i><p>Unable to load data</p><small>check connection or refresh</small></div>`;
+            statsCard.style.display = "none";
+        } finally {
+            setLoader(false);
+        }
+    }
+
+    // compute teacher average rating from map
+    function getTeacherAvgRating(teacherId) {
+        const feedbacks = allFeedbacksMap[teacherId] || [];
+        if (feedbacks.length === 0) return "0.0";
+        const sum = feedbacks.reduce((acc, f) => acc + f.rating, 0);
+        return (sum / feedbacks.length).toFixed(1);
+    }
+
+    // render horizontal teacher list
+    function renderTeacherScrollComponent() {
+        if (!teachers.length) {
+            teacherScrollDiv.innerHTML = `<div style="padding: 12px; background:#fff; border-radius: 40px; text-align:center; width:100%;">✨ No teachers registered yet</div>`;
+            feedbackContainer.innerHTML = `<div class="empty-state"><i class="fa-solid fa-school"></i><p>No teacher data available</p><small>Please add teachers to see feedback records</small></div>`;
+            return;
+        }
+
+        teacherScrollDiv.innerHTML = "";
+        teachers.forEach(teacher => {
+            const photo = teacher.photoURL 
+                ? teacher.photoURL 
+                : `https://ui-avatars.com/api/?name=${encodeURIComponent(teacher.name)}&background=1f5e9e&color=fff&size=72&bold=true&length=2`;
+            const avg = getTeacherAvgRating(teacher.id);
+            teacherScrollDiv.insertAdjacentHTML('beforeend', `
+                <div class="teacher-card" data-teacher-id="${teacher.id}">
+                    <img src="${photo}" alt="${teacher.name}" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(teacher.name)}&background=6c8eae&color=fff&size=72'">
+                    <div class="name">${escapeHtml(teacher.name)}</div>
+                    <div class="avg">★ ${avg}</div>
+                </div>
+            `);
+        });
+
+        // add click listeners
+        document.querySelectorAll(".teacher-card").forEach(card => {
+            card.addEventListener("click", (e) => {
+                document.querySelectorAll(".teacher-card").forEach(c => c.classList.remove("active"));
+                card.classList.add("active");
+                const tid = card.getAttribute("data-teacher-id");
+                if (tid) renderFeedbacksForTeacher(tid);
+            });
+        });
+
+        // auto-select first teacher and load feedbacks
+        const firstCard = document.querySelector(".teacher-card");
+        if (firstCard) {
+            firstCard.classList.add("active");
+            const firstId = firstCard.getAttribute("data-teacher-id");
+            if (firstId) renderFeedbacksForTeacher(firstId);
+        }
+
+        // setup auto-scroll (gentle infinite loop)
+        if (autoScrollTimer) clearInterval(autoScrollTimer);
+        autoScrollTimer = setInterval(() => {
+            if (!teacherScrollDiv) return;
+            const maxScroll = teacherScrollDiv.scrollWidth - teacherScrollDiv.clientWidth;
+            if (maxScroll <= 0) return;
+            let newLeft = teacherScrollDiv.scrollLeft + 110;
+            if (newLeft >= maxScroll) {
+                newLeft = 0;
+            }
+            teacherScrollDiv.scrollTo({ left: newLeft, behavior: 'smooth' });
+        }, 3200);
+    }
+
+    // ========== DISPLAY FEEDBACKS FOR SPECIFIC TEACHER ==========
+    // HANDLES EMPTY STATE PERFECTLY: "koyi bhi data nhi hoga to likhenga thik hai"
+    function renderFeedbacksForTeacher(teacherId) {
+        setLoader(true);
+        // slight delay for smoother UX
+        setTimeout(() => {
+            try {
+                const teacher = teachers.find(t => t.id === teacherId);
+                const teacherName = teacher ? teacher.name : "Teacher";
+                const feedbackList = allFeedbacksMap[teacherId] || [];
+
+                if (!feedbackList.length) {
+                    // ❗ NO DATA scenario -> beautiful empty message
+                    feedbackContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-folder-open"></i>
+                            <p>📭 No feedback records yet</p>
+                            <small>${escapeHtml(teacherName)} hasn't received any rating or comment from students.</small>
+                            <small style="margin-top: 10px;"><i class="fa-solid fa-pen"></i> Be the first to share!</small>
+                        </div>
+                    `;
+                    setLoader(false);
+                    return;
+                }
+
+                // sort by date (newest first)
+                const sorted = [...feedbackList].sort((a, b) => new Date(b.date) - new Date(a.date));
+                let htmlBlock = '';
+
+                sorted.forEach(fb => {
+                    const starsFull = '★'.repeat(fb.rating);
+                    const starsEmpty = '☆'.repeat(5 - fb.rating);
+                    const starString = starsFull + starsEmpty;
+                    
+                    let displayDate = "recent";
+                    try {
+                        const parsedDate = new Date(fb.date);
+                        if (!isNaN(parsedDate.getTime())) {
+                            displayDate = parsedDate.toLocaleString('en-IN', {
+                                day: 'numeric', month: 'short', year: 'numeric',
+                                hour: '2-digit', minute: '2-digit'
+                            });
+                        } else {
+                            displayDate = "Just now";
+                        }
+                    } catch(e) { displayDate = "recently"; }
+
+                    const studentPhotoUrl = fb.studentPhoto 
+                        ? fb.studentPhoto 
+                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(fb.studentName)}&background=417eab&color=fff&size=54&bold=true`;
+                    
+                    const safeComment = fb.comment && fb.comment.trim() !== "" ? fb.comment : "✨ No written feedback, but rating speaks.";
+
+                    htmlBlock += `
+                        <div class="feedback-card">
+                            <div class="student-row">
+                                <img src="${studentPhotoUrl}" alt="${escapeHtml(fb.studentName)}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(fb.studentName)}&background=92b3d0&color=fff&size=54'">
+                                <div class="student-info">
+                                    <div class="student-name">${escapeHtml(fb.studentName)}</div>
+                                    <div style="font-size:0.65rem; color:#5f7f9a;"><i class="fa-solid fa-id-card"></i> student voice</div>
+                                </div>
+                            </div>
+                            <div class="rating-stars">${starString}</div>
+                            <div class="feedback-text"><i class="fa-solid fa-quote-left" style="margin-right:6px; font-size:11px;"></i> ${escapeHtml(safeComment)}</div>
+                            <div class="meta-info">
+                                <i class="fa-solid fa-calendar"></i> ${displayDate}
+                                <i class="fa-solid fa-star-half-stroke"></i> ${fb.rating}/5
+                            </div>
+                        </div>
+                    `;
+                });
+                feedbackContainer.innerHTML = htmlBlock;
+            } catch (err) {
+                console.warn("Render feedback error", err);
+                feedbackContainer.innerHTML = `<div class="empty-state"><i class="fa-solid fa-bug"></i><p>Something went wrong</p><small>try selecting teacher again</small></div>`;
+            } finally {
+                setLoader(false);
+            }
+        }, 60);
+    }
+
+    // helper to prevent XSS
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // in case of empty database, we also show appropriate messages without breaking
+    window.addEventListener('load', () => {
+        fetchAllData();
+    });
+
+    // cleanup auto-scroll on page hide/unload
+    window.addEventListener('beforeunload', () => {
+        if (autoScrollTimer) clearInterval(autoScrollTimer);
+    });
+</script>
+</body>
+</html>
